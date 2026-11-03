@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Red Scarf Adventure</title>
+    <meta name="description" content="เกม isometric 3D low poly สำหรับเรียนรู้การทำเกม — Three.js + JavaScript" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- 1) ฉาก 3D วาดลงบน canvas นี้ -->
+      <canvas id="game"></canvas>
+
+      <!-- 2) UI ที่ลอยตามตำแหน่งในโลก 3D (ตัวเลข damage, หลอดเลือดมอนสเตอร์, ฟองคำพูด) -->
+      <div id="world-ui"></div>
+
+      <!-- 3) HUD = ข้อมูลที่ติดอยู่กับหน้าจอ -->
+      <div id="hud" class="hidden">
+        <div class="status">
+          <div class="portrait" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <circle cx="32" cy="30" r="15" fill="#f2c9a0" />
+              <path d="M15 27 Q18 10 32 11 Q47 10 49 27 Q44 18 36 21 Q30 15 24 21 Q19 19 15 27Z" fill="#6b4226" />
+              <circle cx="26" cy="31" r="2.2" fill="#2b1d14" />
+              <circle cx="38" cy="31" r="2.2" fill="#2b1d14" />
+              <path d="M14 45 Q32 53 50 45 L52 52 Q32 60 12 52Z" fill="#d63a2f" />
+              <path d="M44 49 L56 60 L48 61 L40 52Z" fill="#b22a22" />
+            </svg>
+          </div>
+          <div class="bars">
+            <div class="bar hp" id="bar-hp">
+              <div class="ghost"></div>
+              <div class="fill"></div>
+              <span class="label">HP</span>
+              <span class="value">100 / 100</span>
+            </div>
+            <div class="bar stamina" id="bar-stamina">
+              <div class="ghost"></div>
+              <div class="fill"></div>
+              <div class="ticks"></div>
+              <span class="label">STAMINA</span>
+              <span class="value">100</span>
+              <div class="exhaust">
+                <svg class="loader" viewBox="0 0 36 36">
+                  <circle class="track" cx="18" cy="18" r="14" />
+                  <circle class="progress" cx="18" cy="18" r="14" />
+                  <circle class="spin" cx="18" cy="18" r="9" />
+                </svg>
+                <span class="exhaust-text">หมดแรง! <b>4.0</b>s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="objective"></div>
+        <div id="level-banner"><div class="title"></div><div class="sub"></div></div>
+        <div id="toast"></div>
+
+        <div id="controls-hint">
+          <span><kbd>WASD</kbd> เดิน</span>
+          <span><kbd>คลิกซ้าย</kbd> ฟันเบา</span>
+          <span><kbd>ค้างคลิกขวา</kbd> ชาร์จ</span>
+          <span><kbd>Space</kbd> หลบ</span>
+          <span><kbd>E</kbd> คุย/ใช้</span>
+          <span><kbd>Esc</kbd> พัก</span>
+        </div>
+      </div>
+
+      <!-- 4) กล่องบทสนทนา -->
+      <div id="dialogue" class="hidden">
+        <div class="name"></div>
+        <div class="text"></div>
+        <div class="next">E / คลิก ▶</div>
+      </div>
+
+      <!-- 5) หน้าจอต่างๆ -->
+      <div id="screen-title" class="screen">
+        <div class="panel">
+          <div class="kicker">Isometric Game Lab · ด่านฝึกหัดทำเกม</div>
+          <h1>Red Scarf<br /><span>Adventure</span></h1>
+          <p class="lead">ไค เด็กชายผ้าพันคอแดง ออกเดินทางจากเมืองโคมไฟ สู่ป่าหลากสีเพื่อปลุกศาลคริสตัล</p>
+          <button id="btn-start" class="btn primary">เริ่มผจญภัย</button>
+          <div class="controls">
+            <div><kbd>W A S D</kbd><span>เดิน</span></div>
+            <div><kbd>คลิกซ้าย</kbd> / <kbd>J</kbd><span>ฟันเบา (คอมโบ 3 จังหวะ)</span></div>
+            <div><kbd>ค้างคลิกขวา</kbd> / <kbd>K</kbd><span>ชาร์จ → ปล่อยเพื่อฟันแรง</span></div>
+            <div><kbd>Space</kbd> / <kbd>Shift</kbd><span>กลิ้งหลบ (อมตะชั่วขณะ)</span></div>
+            <div><kbd>E</kbd><span>คุยกับ NPC / ใช้ประตู</span></div>
+            <div><kbd>M</kbd> เสียง · <kbd>F3</kbd> debug<span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="screen-pause" class="screen hidden">
+        <div class="panel small">
+          <h2>พักเกม</h2>
+          <button class="btn primary" data-action="resume">เล่นต่อ</button>
+          <button class="btn" data-action="restart-level">เริ่มด่านนี้ใหม่</button>
+          <button class="btn" data-action="goto-town">กลับเมือง</button>
+          <button class="btn" data-action="goto-forest">ไปป่า</button>
+        </div>
+      </div>
+
+      <div id="screen-dead" class="screen hidden">
+        <div class="panel small">
+          <h2>ไคหมดสติ…</h2>
+          <p>ลองใช้ <b>Space</b> กลิ้งหลบวงสีแดง และอย่าใช้ stamina จนหมดหลอดนะ</p>
+          <button class="btn primary" data-action="restart-level">ลองอีกครั้ง</button>
+        </div>
+      </div>
+
+      <div id="screen-win" class="screen hidden">
+        <div class="panel small">
+          <div class="kicker">ด่านสำเร็จ!</div>
+          <h2>ศาลคริสตัลตื่นแล้ว ✨</h2>
+          <div class="stats" id="win-stats"></div>
+          <button class="btn primary" data-action="goto-town">กลับเมือง</button>
+          <button class="btn" data-action="restart-level">เล่นป่าอีกครั้ง</button>
+        </div>
+      </div>
+
+      <div id="fade"></div>
+      <pre id="debug" class="hidden"></pre>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
