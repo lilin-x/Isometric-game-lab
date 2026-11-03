@@ -214,6 +214,44 @@ ol.homework li { margin-bottom: 0.6em; }
 .level-tag.hard { background: color-mix(in srgb, var(--scarf) 18%, transparent); color: var(--scarf); }
 footer { max-width: 1180px; margin: 0 auto; padding-block: 30px 50px; color: var(--ink-2); font-size: 0.88rem; border-top: 1px solid var(--line); }
 
+/* ---------- บทที่ 10: ห้องทดลอง + ไทม์ไลน์ + เจาะลึก effect ---------- */
+.knobs { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px 18px; margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); }
+.knob { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.knob label { display: flex; justify-content: space-between; gap: 8px; font-size: 0.84rem; color: var(--ink-2); }
+.knob output { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.knob input[type="range"], .knob select { width: 100%; }
+.knob select { font-family: var(--font-body); font-size: 0.88rem; padding: 4px 6px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+.tl-fig { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; }
+.tl-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 0.82rem; color: var(--ink-2); margin-bottom: 12px; }
+.tl-legend .lg { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.tl-legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
+.nw { white-space: nowrap; }
+.t-time { background: var(--lantern); } .t-cam { background: var(--sky); } .t-obj { background: var(--scarf); } .t-env { background: var(--forest); } .t-ui { background: var(--ink-2); }
+.tl { display: grid; grid-template-columns: minmax(96px, 168px) minmax(0, 1fr); gap: 5px 12px; align-items: center; font-size: 0.84rem; }
+.tl .name { color: var(--ink); text-align: right; line-height: 1.3; }
+.tl .name small { display: block; color: var(--ink-2); font-family: var(--font-mono); font-size: 0.74rem; }
+.tl .track { position: relative; height: 20px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+.tl .bar { position: absolute; top: 4px; bottom: 4px; border-radius: 4px; }
+.tl .stopband { position: absolute; top: 0; bottom: 0; background: color-mix(in srgb, var(--lantern) 26%, transparent); }
+.tl .zero { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--ink); opacity: 0.7; }
+.tl .axis { position: relative; height: 18px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-2); }
+.tl .axis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+nav.fx-index { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 6px; max-width: 900px; }
+nav.fx-index a { font-size: 0.86rem; padding: 4px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+nav.fx-index a:hover { border-color: var(--scarf); color: var(--scarf); }
+article.fx { max-width: 900px; padding-top: 30px; margin-top: 30px; border-top: 1px dashed var(--line); scroll-margin-top: 12px; }
+article.fx > h3 { margin-top: 2px; }
+.fx-kicker { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.08em; color: var(--ink-2); }
+p.feel { color: var(--forest); font-weight: 500; margin: -4px 0 6px; }
+.fx-lbl { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--scarf); margin: 18px 0 6px; }
+article.fx ul.prose, article.fx ol { padding-left: 1.3em; }
+article.fx li { margin-bottom: 0.4em; }
+ol.recipe { max-width: 720px; padding-left: 1.4em; }
+ol.recipe li { margin-bottom: 0.7em; }
+ul.checklist { list-style: none; padding-left: 0 !important; }
+ul.checklist li { padding-left: 1.6em; position: relative; }
+ul.checklist li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 0.9em; height: 0.9em; border: 2px solid var(--forest); border-radius: 4px; }
+
 @media (max-width: 960px) {
   .hero { grid-template-columns: 1fr; padding-block: 24px 10px; }
   .collage { max-width: 560px; }
@@ -224,7 +262,14 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 30px 50px; color: var
   details.toc-mobile ol { margin: 8px 0 0; padding-left: 1.4em; font-size: 0.95rem; }
   .fsm-wrap, .grid-2 { grid-template-columns: 1fr; }
 }
+@media (max-width: 700px) {
+  .tl .axis span.minor { display: none; }
+}
 @media (max-width: 520px) {
+  .tl { grid-template-columns: minmax(0, 1fr); gap: 2px 0; }
+  .tl .name { text-align: left; margin-top: 6px; }
+  .tl .name small { display: inline; margin-left: 6px; }
+  .tl .spacer { display: none; }
   body { font-size: 16px; }
   h2 { font-size: 1.5rem; }
   .demo { padding: 12px; }
@@ -683,36 +728,474 @@ update(dt) {
       <div class="chapter-kicker">บทที่ 10</div>
       <h2>Game Feel: ทำให้การฟัน "หนักมือ"</h2>
       <div class="prose">
-        <p>ตัวเลข damage เท่ากัน แต่ความรู้สึกต่างกันลิบลับ ขึ้นอยู่กับ <b>feedback</b> ที่เกมส่งกลับมา นักพัฒนาเรียกสิ่งนี้ว่า <b>juice</b> ลองปิดเปิดทีละอย่าง แล้วกด "ฟัน!" (หรือคลิกที่ภาพ) เพื่อรู้สึกถึงความต่าง</p>
+        <p>ตัวเลข damage เท่ากัน แต่ความรู้สึกต่างกันลิบลับ ขึ้นอยู่กับ <b>feedback</b> ที่เกมส่งกลับมา นักพัฒนาเรียกสิ่งนี้ว่า <b>juice</b> ลองปิดเปิดทีละอย่าง แล้วกด "ฟัน!" (หรือคลิกที่ภาพ) เพื่อรู้สึกถึงความต่าง จากนั้นเลื่อนแถบปรับค่าด้านล่างเพื่อหาความรู้สึกที่ชอบ</p>
       </div>
       <div class="demo" id="juice-demo">
         <div class="demo-head"><span class="t">ห้องทดลอง Juice</span>
-          <div class="controls"><button class="chip-btn accent" id="juice-hit">ฟัน!</button><button class="chip-btn" id="juice-all">เปิดทั้งหมด</button><button class="chip-btn" id="juice-none">ปิดทั้งหมด</button></div></div>
+          <div class="controls"><button class="chip-btn accent" id="juice-hit">ฟัน!</button><button class="chip-btn accent" id="juice-crit">ฟันคริ! (ตัวอย่าง custom)</button><button class="chip-btn" id="juice-all">เปิดทั้งหมด</button><button class="chip-btn" id="juice-none">ปิดทั้งหมด</button></div></div>
         <div class="controls" id="juice-toggles">
           <label class="toggle"><input type="checkbox" data-j="hitstop" checked> Hit-stop</label>
           <label class="toggle"><input type="checkbox" data-j="shake" checked> สั่นจอ</label>
-          <label class="toggle"><input type="checkbox" data-j="flash" checked> กระพริบขาว</label>
+          <label class="toggle"><input type="checkbox" data-j="flash" checked> กระพริบ</label>
           <label class="toggle"><input type="checkbox" data-j="knock" checked> กระเด็น</label>
           <label class="toggle"><input type="checkbox" data-j="squash" checked> บีบตัว</label>
           <label class="toggle"><input type="checkbox" data-j="numbers" checked> ตัวเลข damage</label>
           <label class="toggle"><input type="checkbox" data-j="particles" checked> ประกายไฟ</label>
           <label class="toggle"><input type="checkbox" data-j="trail" checked> รอยดาบ</label>
         </div>
-        <canvas id="juice-canvas" aria-label="ห้องทดลองฟันสไลม์"></canvas>
+        <canvas id="juice-canvas" style="margin-top:12px" aria-label="ห้องทดลองฟันสไลม์"></canvas>
+        <div class="knobs" id="juice-knobs">
+          <div class="knob"><label for="k-hitstop">Hit-stop (วินาที) <output></output></label><input type="range" id="k-hitstop" data-k="hitstop" min="0" max="0.25" step="0.005" value="0.07"></div>
+          <div class="knob"><label for="k-shake">สั่นจอ: ความแรง <output></output></label><input type="range" id="k-shake" data-k="shake" min="0" max="1" step="0.05" value="0.5"></div>
+          <div class="knob"><label for="k-shakedecay">สั่นจอ: หายเร็ว (/วินาที) <output></output></label><input type="range" id="k-shakedecay" data-k="shakeDecay" min="0.5" max="6" step="0.1" value="2.2"></div>
+          <div class="knob"><label for="k-flash">กระพริบ: นาน (วินาที) <output></output></label><input type="range" id="k-flash" data-k="flashTime" min="0.05" max="0.6" step="0.01" value="0.17"></div>
+          <div class="knob"><label for="k-flashcolor">กระพริบ: สี <output></output></label><select id="k-flashcolor" data-k="flashColor"><option value="#ffffff">ขาว (เราทำ damage)</option><option value="#ff5a4a">แดง (เราโดน)</option><option value="#ffd34a">ทอง (คริติคอล)</option><option value="#8cf58c">เขียว (ฟื้นเลือด)</option></select></div>
+          <div class="knob"><label for="k-knock">กระเด็น: แรงเริ่มต้น <output></output></label><input type="range" id="k-knock" data-k="knock" min="0" max="700" step="10" value="260"></div>
+          <div class="knob"><label for="k-friction">กระเด็น: แรงเสียดทาน k <output></output></label><input type="range" id="k-friction" data-k="friction" min="2" max="20" step="0.5" value="9"></div>
+          <div class="knob"><label for="k-sqk">บีบตัว: ความแข็งสปริง k <output></output></label><input type="range" id="k-sqk" data-k="sqK" min="20" max="250" step="5" value="80"></div>
+          <div class="knob"><label for="k-sqc">บีบตัว: แรงหน่วง c <output></output></label><input type="range" id="k-sqc" data-k="sqC" min="1" max="30" step="0.5" value="8"></div>
+          <div class="knob"><label for="k-sqkick">บีบตัว: แรงกระแทก <output></output></label><input type="range" id="k-sqkick" data-k="sqKick" min="0" max="12" step="0.5" value="6"></div>
+          <div class="knob"><label for="k-numsize">ตัวเลข: ขนาด (px) <output></output></label><input type="range" id="k-numsize" data-k="numSize" min="12" max="48" step="1" value="26"></div>
+          <div class="knob"><label for="k-pcount">ประกายไฟ: จำนวน <output></output></label><input type="range" id="k-pcount" data-k="pCount" min="0" max="60" step="1" value="14"></div>
+          <div class="knob"><label for="k-pspeed">ประกายไฟ: ความเร็ว <output></output></label><input type="range" id="k-pspeed" data-k="pSpeed" min="50" max="600" step="10" value="200"></div>
+          <div class="knob"><label for="k-gravity">ประกายไฟ: แรงโน้มถ่วง <output></output></label><input type="range" id="k-gravity" data-k="gravity" min="-400" max="1200" step="20" value="600"></div>
+          <div class="knob"><label for="k-trail">รอยดาบ: ความยาว (เรเดียน) <output></output></label><input type="range" id="k-trail" data-k="trail" min="0.2" max="2.6" step="0.1" value="1.2"></div>
+        </div>
+        <div class="controls" style="margin-top:12px"><button class="chip-btn" id="juice-reset">กลับค่าเริ่มต้น</button><button class="chip-btn" id="juice-copy">คัดลอกค่าทั้งหมด</button></div>
+        <pre class="readout" id="juice-config" style="margin-top:10px"></pre>
+        <p class="demo-note">ปุ่ม "ฟันคริ!" ไม่ได้ใช้ effect ใหม่เลยสักตัว แค่เอาของเดิมมา "แรงขึ้นและเปลี่ยนสี" พร้อมกัน: หยุดนานขึ้น สั่นแรงขึ้น กระพริบสีทอง ตัวเลขใหญ่ ประกายไฟสองเท่า นี่คือหลักของการทำ effect custom ส่วนใหญ่</p>
       </div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>เทคนิค</th><th>ทำอะไร</th><th>ในเกมนี้</th></tr></thead>
-        <tbody>
-          <tr><td><b>Hit-stop</b></td><td>หยุดโลกเสี้ยววินาทีตอนดาบโดน สมองจะรับรู้ว่า "มีแรงปะทะ"</td><td>ฟันเบา 0.045 วิ, ฟันชาร์จสูงสุด 0.14 วิ</td></tr>
-          <tr><td><b>Screen shake</b></td><td>สั่นกล้อง ยิ่งแรงยิ่งสั่น ใช้ค่ายกกำลังสอง ให้สั่นแรงแค่ตอนต้นแล้วหายเร็ว</td><td><code>IsoCamera.shake()</code></td></tr>
-          <tr><td><b>Flash</b></td><td>เปลี่ยนสีวัสดุเป็นขาวแป๊บนึง บอกชัดว่า "ตัวนี้โดน"</td><td>ปรับ <code>material.emissive</code></td></tr>
-          <tr><td><b>Knockback</b></td><td>ผลักเป้าหมายตามทิศที่ฟัน ตัวหนักกระเด็นน้อย</td><td>แรง ÷ mass (โกเลม mass 4)</td></tr>
-          <tr><td><b>Squash &amp; stretch</b></td><td>บีบ-ยืดรูปร่าง หลักการแอนิเมชันของดิสนีย์</td><td>สไลม์บีบตัวก่อนกระโดด ยืดตัวกลางอากาศ</td></tr>
-          <tr><td><b>Telegraph</b></td><td>เตือนก่อนโจมตี ให้ผู้เล่นมีเวลาตอบสนอง (ความยุติธรรม)</td><td>วงสีแดงที่ค่อยๆ เต็ม + ท่าง้าง</td></tr>
-          <tr><td><b>Anticipation</b></td><td>ท่าเตรียมก่อนท่าจริง</td><td>โกเลมยกแขน เห็ดพองหมวก ไคดึงดาบไปด้านหลังตอนชาร์จ</td></tr>
-        </tbody>
-      </table></div>
-      <div class="prose"><p>อ่านต่อ: Masahiro Sakurai (ผู้สร้าง Kirby, Smash Bros.) อธิบาย hit-stop ไว้ใน <a href="https://www.youtube.com/watch?v=OdVkEOzdCPw" target="_blank" rel="noopener">วิดีโอนี้</a> และ Jan Willem Nijman จาก Vlambeer มีทอล์กคลาสสิก <a href="https://www.youtube.com/watch?v=AJdEqssNZ-U" target="_blank" rel="noopener">The Art of Screenshake</a></p></div>
+
+      <h3>หนึ่งการฟัน มี effect อะไรเกิดขึ้นบ้าง และนานแค่ไหน</h3>
+      <div class="prose">
+        <p>effect ทุกตัวเริ่มพร้อมกันที่ <b>contact frame</b> (จังหวะที่ดาบโดน) แต่มีอายุไม่เท่ากัน ตัวที่สั้นที่สุดบอกผู้เล่นว่า "โดนแล้ว" ตัวที่ยาวที่สุดบอกว่า "โดนเท่าไร" ตัวเลขด้านล่างมาจากเกมจริง กรณี<b>ฟันชาร์จเต็มโดนสไลม์</b></p>
+      </div>
+      <figure class="tl-fig" aria-label="ไทม์ไลน์ของ effect ในการฟันหนึ่งครั้ง">
+        <div class="tl-legend"><span class="lg"><span class="sw t-time"></span>เวลา</span><span class="lg"><span class="sw t-cam"></span>กล้อง</span><span class="lg"><span class="sw t-obj"></span>ตัวที่โดน</span><span class="lg"><span class="sw t-env"></span>รอบๆ</span><span class="lg"><span class="sw t-ui"></span>ตัวเลข/เสียง</span></div>
+        <div class="tl" id="hit-timeline"></div>
+        <figcaption>แกนล่างเป็นวินาที โดย 0 คือจังหวะที่ดาบโดน แถบสีส้มอ่อนคือช่วง hit-stop (0.144 วินาที) ระหว่างนั้นโลกหยุด การกระพริบและประกายไฟจึง "ค้าง" อยู่ แล้วค่อยเดินต่อ แต่กล้องยังสั่นได้เพราะใช้เวลาจริง</figcaption>
+      </figure>
+
+      <h3>เจาะลึกทีละ effect</h3>
+      <div class="prose"><p>แต่ละหัวข้อแบ่งเป็น 4 ส่วน: <b>หลักการ</b> (ทำไมได้ผลและทำงานยังไง), <b>ในเกมนี้</b> (โค้ดจริง), <b>ตัวเลขที่ปรับได้</b> และ <b>ทำแบบ custom</b> (ไอเดียต่อยอดพร้อมแนวทางเขียนโค้ด)</p></div>
+      <nav class="fx-index" aria-label="รายการ effect">
+        <a href="#fx-hitstop">Hit-stop</a><a href="#fx-shake">สั่นจอ</a><a href="#fx-flash">กระพริบ</a><a href="#fx-knock">กระเด็น</a><a href="#fx-squash">บีบตัว</a><a href="#fx-numbers">ตัวเลข damage</a><a href="#fx-particles">ประกายไฟ / อนุภาค</a><a href="#fx-trail">รอยดาบ</a><a href="#fx-telegraph">ท่าง้าง + วงเตือน</a><a href="#fx-custom">สร้าง effect เอง</a>
+      </nav>
+
+      <!-- ---------- Hit-stop ---------- -->
+      <article class="fx" id="fx-hitstop">
+        <div class="fx-kicker">effect 1 / 9 · ช่องทาง: เวลา</div>
+        <h3>Hit-stop (hitlag) — หยุดโลกเสี้ยววินาที</h3>
+        <p class="feel">ผู้เล่นรู้สึก: ดาบกระทบของแข็งจริงๆ มีแรงต้าน</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>ในชีวิตจริง เวลาฟันโดนอะไรสักอย่าง แรงต้านทำให้ดาบชะลอลงชั่วขณะ เกมเลียนแบบด้วยการ <b>หยุดโลกทั้งใบ 3–9 เฟรม</b> ผู้เล่นมักไม่ทันสังเกตว่าภาพหยุด แต่สมองจับได้ว่ามี "จุดปะทะ" ชัดเจน ยิ่งหยุดนาน ยิ่งรู้สึกหนัก</p>
+          <p>วิธีทำง่ายมาก: ไม่ต้องไปสั่งหยุดทีละระบบ แค่ส่ง <code>dt = 0</code> ให้ "โลก" (ตัวละคร มอนสเตอร์ อนุภาค) ส่วนกล้องและ UI ยังใช้เวลาจริง จอจึงยังสั่นได้ระหว่างหยุด ซึ่งทำให้ดูแรงขึ้นอีก</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/core/Game.js</div>
+        <pre class="code js">hitStop(seconds) {
+  // ใช้ค่ามากสุด ไม่ใช่บวกกัน: ฟันโดน 3 ตัวพร้อมกัน ไม่ควรค้างนานเป็น 3 เท่า
+  this.hitStopTimer = Math.max(this.hitStopTimer, seconds);
+}
+
+// ใน frame()
+let dt = realDt * this.timeScale;
+if (this.hitStopTimer > 0) { this.hitStopTimer -= realDt; dt = 0; }   // นับถอยหลังด้วยเวลาจริง
+this.level.update(dt);       // โลกหยุด
+this.iso.update(realDt);     // กล้องไม่หยุด</pre>
+        <div class="fx-lbl">ตัวเลขที่ปรับได้</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>เหตุการณ์</th><th class="num">ระยะเวลา</th><th>หมายเหตุ</th></tr></thead>
+          <tbody>
+            <tr><td>ฟันเบา จังหวะ 1–2</td><td class="num">0.045 วิ</td><td>≈ 3 เฟรมที่ 60 FPS ใช้บ่อยจึงต้องสั้น</td></tr>
+            <tr><td>ฟันเบา จังหวะ 3</td><td class="num">0.068 วิ</td><td>× 1.5 ให้จังหวะปิดคอมโบรู้สึกต่าง</td></tr>
+            <tr><td>ฟันชาร์จ</td><td class="num">0.072–0.144 วิ</td><td>สเกลตามระดับชาร์จ</td></tr>
+            <tr><td>ไคโดนตี</td><td class="num">0.06 วิ</td><td>ให้ผู้เล่นรู้ตัวว่าโดน</td></tr>
+          </tbody>
+        </table></div>
+        <div class="prose"><p class="dim">ช่วงแนะนำ 0.03–0.15 วินาที ถ้าเกิน 0.2 จะเริ่มรู้สึกว่าเกม "ค้าง" มากกว่า "หนัก"</p></div>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>สเกลตาม damage:</b> <code>game.hitStop(0.03 + damage * 0.0015)</code> ตีแรงหยุดนาน ตีเบาหยุดสั้น โดยอัตโนมัติ</li>
+          <li><b>Slow-motion แทนหยุดสนิท:</b> ตั้ง <code>game.timeScale = 0.25</code> แล้วค่อยคืนเป็น 1 เหมาะกับ "ฆ่ามอนสเตอร์ตัวสุดท้าย" หรือ "หลบได้ฉิวเฉียด" (ดูตัวอย่างท้ายบท)</li>
+          <li><b>สั่นตัวที่โดนระหว่างหยุด:</b> เทคนิคของ Smash Bros. ระหว่าง hit-stop ให้เลื่อนโมเดลเป้าหมายไปมา <code>Math.sin(t * 90) * 0.05</code> ภาพจะ "นิ่งแต่สะท้าน"</li>
+          <li><b>หยุดเฉพาะคนที่เกี่ยวข้อง:</b> ให้แต่ละตัวละครมี <code>localTimeScale</code> ของตัวเอง แล้วคูณ dt ก่อน update วิธีนี้มอนสเตอร์ตัวอื่นจะไม่ค้างตาม แต่ต้องแก้หลายไฟล์</li>
+        </ul>
+      </article>
+
+      <!-- ---------- Screen shake ---------- -->
+      <article class="fx" id="fx-shake">
+        <div class="fx-kicker">effect 2 / 9 · ช่องทาง: กล้อง</div>
+        <h3>Screen shake — สั่นจอ</h3>
+        <p class="feel">ผู้เล่นรู้สึก: แรงกระแทกส่งมาถึงตัวเรา</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>ทุกเฟรมเลื่อนกล้องไปแบบสุ่มนิดหน่อย แล้วค่อยๆ ลดระยะลง เกมนี้ใช้แนวคิด <b>trauma</b>: เก็บตัวเลข 0 ถึง 1 ไว้หนึ่งตัว เหตุการณ์แรงๆ บวกค่าเข้าไป ค่านี้ลดลงคงที่ทุกวินาที และ <b>ระยะสั่นจริง = trauma²</b></p>
+          <p>ทำไมต้องยกกำลังสอง? เพราะทำให้สั่นแรงมากเฉพาะช่วงแรก แล้วจางลงเร็ว (trauma 0.5 สั่นแค่ 0.25) ดูเป็นธรรมชาติกว่าลดแบบเส้นตรง และเหตุการณ์ซ้อนกันก็บวกกันได้ โดยมีเพดานที่ 1 ในเกม isometric ให้ <b>เลื่อนตำแหน่งกล้อง</b> อย่าเปลี่ยนการซูม เพราะขนาดภาพจะเต้นไปมาจนน่าเวียนหัว</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/core/IsoCamera.js</div>
+        <pre class="code js">shake(amount) {
+  this.shakeAmount = Math.min(1, this.shakeAmount + amount);   // บวกได้ แต่ไม่เกิน 1
+}
+update(dt) {
+  this.shakeAmount = Math.max(0, this.shakeAmount - dt * 2.2);  // ลดลง 2.2 ต่อวินาที
+  const s = this.shakeAmount * this.shakeAmount * 0.6;          // trauma² × 0.6 เมตร
+  this._shakeOffset.set(rand() * s, rand() * s * 0.6, rand() * s);
+  // ...บวก offset เข้ากับตำแหน่งกล้องและจุดที่มอง
+}</pre>
+        <div class="fx-lbl">ตัวเลขที่ปรับได้</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>เหตุการณ์</th><th class="num">trauma ที่บวก</th><th class="num">สั่นนานประมาณ</th></tr></thead>
+          <tbody>
+            <tr><td>ฟันเบาโดน</td><td class="num">0.08</td><td class="num">0.04 วิ (แทบไม่รู้สึก)</td></tr>
+            <tr><td>ไคโดนตี</td><td class="num">0.30</td><td class="num">0.14 วิ</td></tr>
+            <tr><td>โกเลมทุบพื้น</td><td class="num">0.45</td><td class="num">0.20 วิ</td></tr>
+            <tr><td>ฟันชาร์จเต็ม (ฟัน + คลื่นพื้น)</td><td class="num">0.35 + 0.35</td><td class="num">0.32 วิ</td></tr>
+          </tbody>
+        </table></div>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>สั่นตามทิศ (directional kick):</b> แทนที่จะสุ่มทุกทิศ ให้กล้องกระตุกไปตามทิศที่ฟัน <code>kick.copy(dir).multiplyScalar(0.3)</code> แล้วลดลงทุกเฟรม ผู้เล่นจะรู้สึกว่าแรงผลักไปทางนั้น</li>
+          <li><b>สั่นนุ่มด้วย noise:</b> ใช้ <code>Math.sin(t * 37) + Math.sin(t * 23)</code> แทน <code>Math.random()</code> จะสั่นต่อเนื่องไม่กระตุก (เกมใหญ่ใช้ Perlin noise)</li>
+          <li><b>ลดตามระยะ:</b> โกเลมทุบไกลจากเรา ควรสั่นน้อยลง <code>game.shake(0.45 * Math.max(0, 1 - dist / 15))</code></li>
+          <li><b>ตัวเลือก "ลดการสั่นจอ" ในเมนู:</b> คูณค่าก่อนส่งเข้า <code>shake()</code> บางคนเวียนหัวง่าย นี่คือเรื่อง accessibility ที่ควรมีเสมอ</li>
+        </ul>
+      </article>
+
+      <!-- ---------- Flash ---------- -->
+      <article class="fx" id="fx-flash">
+        <div class="fx-kicker">effect 3 / 9 · ช่องทาง: ตัวที่โดน</div>
+        <h3>Flash — กระพริบ</h3>
+        <p class="feel">ผู้เล่นรู้สึก: รู้ทันทีว่า "ตัวไหนโดน" แม้จอวุ่นวาย</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>วัสดุใน Three.js มีค่า <code>emissive</code> (สีที่วัตถุเปล่งแสงเอง ไม่ขึ้นกับไฟในฉาก) เราใช้ตัวแปร <code>flash</code> ที่เริ่มจาก 1 ตอนโดน แล้วลดลง 6 ต่อวินาที (≈ 0.17 วินาที) ทุกเฟรมผสมสี emissive ระหว่าง "สีเดิม" กับ "สีขาว" ตามค่านี้</p>
+          <p><b>กับดักที่มือใหม่เจอบ่อย:</b> วัสดุในเกมนี้ "ใช้ร่วมกัน" (material cache) ถ้าเปลี่ยน emissive ตรงๆ มอนสเตอร์ทุกตัวที่ใช้วัสดุเดียวกันจะขาวพร้อมกันหมด จึงต้องเรียก <code>cloneMaterials()</code> ให้แต่ละตัวมีวัสดุของตัวเอง และจำค่าเดิม (<code>e0</code>, <code>i0</code>) ไว้สำหรับคืนค่า</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/entities/Enemy.js</div>
+        <pre class="code js">// ตอนสร้าง: คัดลอกวัสดุ + จำค่าเดิม
+this.materials = cloneMaterials(this.root);
+for (const m of this.materials) { m.userData.e0 = m.emissive.clone(); m.userData.i0 = m.emissiveIntensity; }
+
+// ตอนโดน
+this.flash = 1;
+
+// ทุกเฟรม
+if (this.flash > 0) this.flash = Math.max(0, this.flash - dt * 6);
+for (const m of this.materials) {
+  m.emissive.copy(m.userData.e0).lerp(WHITE, this.flash);         // ผสมสีเดิม → ขาว
+  m.emissiveIntensity = m.userData.i0 + (1.0 - m.userData.i0) * this.flash;
+}</pre>
+        <div class="prose"><p class="dim">ระยะเวลาแนะนำ 0.08–0.25 วินาที สังเกตว่าระหว่าง hit-stop ค่า <code>flash</code> ไม่ลดลง (เพราะ dt = 0) ตัวที่โดนจึงขาวค้างอยู่ ทำให้เห็นชัดขึ้นไปอีก</p></div>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>ภาษาสี:</b> ใช้สีให้มีความหมายเดียวกันทั้งเกม เช่น ขาว = เราทำ damage, แดง = เราโดน (ไคกระพริบแดง), ทอง = คริติคอล, เขียว = ฟื้นเลือด ลองเปลี่ยนสีในห้องทดลองดู</li>
+          <li><b>กระพริบเป็นจังหวะเพื่อบอกสถานะ:</b> หลังโดนตี ไคกระพริบหาย-โผล่ทุก 0.05 วินาทีตลอดช่วงอมตะ <code>root.visible = Math.floor(invulnerable * 20) % 2 === 1</code></li>
+          <li><b>เรืองแสงต่อเนื่องบอกว่า "พร้อมแล้ว":</b> ใบดาบตอนชาร์จเต็มเต้นด้วย <code>emissiveIntensity = 2.2 + Math.sin(t * 30) * 0.6</code></li>
+          <li><b>แฟลชทั้งจอ:</b> วาง div สีขาวทับจอ แล้วค่อยๆ ลด opacity จาก 0.3 เป็น 0 ใช้กับเหตุการณ์ใหญ่มากๆ เท่านั้น และควรมีตัวเลือกปิดสำหรับคนที่ไวต่อแสง</li>
+        </ul>
+      </article>
+
+      <!-- ---------- Knockback ---------- -->
+      <article class="fx" id="fx-knock">
+        <div class="fx-kicker">effect 4 / 9 · ช่องทาง: ตัวที่โดน</div>
+        <h3>Knockback — กระเด็น</h3>
+        <p class="feel">ผู้เล่นรู้สึก: การโจมตีมีพลัง และได้ระยะหายใจหลังฟันโดน</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>ตอนโดน ให้ "ความเร็วกระแทก" (impulse) ทันที = <b>ทิศที่ฟัน × แรง ÷ มวล</b> แล้วทุกเฟรมลดความเร็วลงด้วยแรงเสียดทานแบบ exponential <code>v *= e<sup>−k·dt</sup></code> สูตรนี้ให้ผลเท่ากันทุก FPS</p>
+          <p>เคล็ดคณิตศาสตร์: ระยะที่ไถลไปทั้งหมด = <b>v₀ ÷ k</b> พอดี จึงคำนวณล่วงหน้าได้ว่ามอนสเตอร์จะกระเด็นไกลแค่ไหน และเพราะระบบชนดันตัวออกทีหลังเสมอ มอนสเตอร์ที่กระเด็นไปโดนกำแพงจึงไถลเลียบกำแพงเองโดยไม่ต้องเขียนเพิ่ม</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/entities/Enemy.js</div>
+        <pre class="code js">// ตอนโดน: ตัวหนัก (mass มาก) กระเด็นน้อย
+this.knock.copy(dir).multiplyScalar(knockback / this.mass);
+
+// ทุกเฟรม
+this.position.addScaledVector(this.knock, dt);
+this.knock.multiplyScalar(Math.exp(-8 * dt));     // k = 8</pre>
+        <div class="fx-lbl">ตัวเลขที่ปรับได้</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>กรณี</th><th class="num">v₀ = แรง ÷ มวล</th><th class="num">ระยะไถล = v₀ ÷ 8</th></tr></thead>
+          <tbody>
+            <tr><td>ฟันเบาโดนสไลม์ (มวล 1)</td><td class="num">3.0</td><td class="num">0.38 ม.</td></tr>
+            <tr><td>ฟันชาร์จเต็มโดนสไลม์</td><td class="num">10.8</td><td class="num">1.35 ม.</td></tr>
+            <tr><td>ฟันชาร์จเต็มโดนเห็ด (มวล 1.4)</td><td class="num">7.7</td><td class="num">0.96 ม.</td></tr>
+            <tr><td>ฟันชาร์จเต็มโดนโกเลม (มวล 4)</td><td class="num">2.7</td><td class="num">0.34 ม.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>ลอยขึ้นฟ้า (launcher):</b> เพิ่มความเร็วแกน y แล้วลบด้วยแรงโน้มถ่วงทุกเฟรม มอนสเตอร์จะลอยขึ้นแล้วตก เหมาะกับท่าฟันเสยขึ้น</li>
+          <li><b>ดึงเข้าหา (pull):</b> ใช้ทิศกลับด้าน <code>dir.clone().negate()</code> สำหรับท่าแส้หรือเวทแม่เหล็ก</li>
+          <li><b>กระแทกกำแพง (wall splat):</b> ถ้าระบบชนต้องดันตัวออกขณะที่ยังกระเด็นเร็วอยู่ แปลว่าชนกำแพง ให้ damage เพิ่มและสั่นจอ (ไอเดีย ยังไม่มีในเกม):</li>
+        </ul>
+        <pre class="code js">const speed = this.knock.length();
+if (this.level.collision.resolve(this.position, this.radius) &amp;&amp; speed > 6) {
+  this.health.damage(5);        // โบนัส damage จากการชนกำแพง
+  this.game.shake(0.2);
+  this.knock.set(0, 0, 0);      // หยุดทันที
+}</pre>
+      </article>
+
+      <!-- ---------- Squash & stretch ---------- -->
+      <article class="fx" id="fx-squash">
+        <div class="fx-kicker">effect 5 / 9 · ช่องทาง: ตัวที่โดน</div>
+        <h3>Squash &amp; Stretch — บีบและยืด</h3>
+        <p class="feel">ผู้เล่นรู้สึก: ตัวละครมีเนื้อหนัง ยืดหยุ่น มีชีวิต</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>เป็นหลักการแรกใน "12 หลักการแอนิเมชัน" ของดิสนีย์: <b>บีบเมื่อกระแทก ยืดเมื่อเคลื่อนที่เร็ว</b> โดยรักษาปริมาตรไว้ ถ้าเตี้ยลงต้องอ้วนขึ้น เช่น <code>sx = 1 / Math.sqrt(sy)</code></p>
+          <p>ให้มัน "เด้ง" กลับด้วย <b>สปริงหน่วง (damped spring)</b>: ความเร่ง = <code>−k × ระยะยืด − c × ความเร็ว</code> โดย k คือความแข็งของสปริง (มาก = เด้งเร็ว) และ c คือแรงหน่วง (น้อย = เด้งดึ๋งหลายรอบ) ถ้าตั้ง <code>c = 2√k</code> จะกลับที่เดิมพอดีโดยไม่เด้งเกิน (critically damped) ลองเลื่อนแถบ k และ c ในห้องทดลองดู</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/entities/TrainingDummy.js — หุ่นฟางโยกด้วยสปริง</div>
+        <pre class="code js">const k = 60, c = 6;
+this.velX += (-k * this.tiltX - c * this.velX) * dt;   // a = −kx − cv
+this.tiltX += this.velX * dt;</pre>
+        <div class="code-file">src/entities/Enemy.js — สไลม์</div>
+        <pre class="code js">if (st === 'windup') { sy = 1 - 0.35 * k; sx = 1 + 0.25 * k; }  // บีบตัวเตรียมกระโดด (เตี้ยลง อ้วนขึ้น)
+else if (st === 'attack') { sy = 1.25; sx = 0.85; }             // ยืดตัวกลางอากาศ
+else if (st === 'hurt') { sy = 0.7; sx = 1.3; }                 // โดนฟัน: แบนแป๊ะ</pre>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>ลงพื้นจากการกระโดด:</b> ตั้งค่าบีบเป็น −0.3 ทันทีที่แตะพื้น แล้วให้สปริงพากลับเอง</li>
+          <li><b>ของที่เก็บได้ (ผลไม้ เหรียญ):</b> ตอนเก็บให้ขยายเป็น 1.4 เท่าแล้วสปริงกลับ ดูน่าพอใจกว่าหายไปเฉยๆ</li>
+          <li><b>ปุ่ม UI:</b> กดแล้วบีบเหลือ 0.9 แล้วเด้งกลับ ใช้สูตรเดียวกันได้</li>
+          <li><b>สูตรสปริงใช้ได้กับทุกอย่าง:</b> ขนาด มุม ตำแหน่ง กล้อง หลอดเลือด เก็บโค้ดนี้ไว้ใช้ทั้งเกม:</li>
+        </ul>
+        <pre class="code js">// สปริงหน่วงสำหรับค่าอะไรก็ได้: เข้าหา target แบบเด้งๆ
+vel += (-k * (value - target) - c * vel) * dt;
+value += vel * dt;</pre>
+      </article>
+
+      <!-- ---------- Damage numbers ---------- -->
+      <article class="fx" id="fx-numbers">
+        <div class="fx-kicker">effect 6 / 9 · ช่องทาง: ตัวเลข / UI</div>
+        <h3>ตัวเลข damage</h3>
+        <p class="feel">ผู้เล่นรู้สึก: รู้ว่าทำได้เท่าไร และเปรียบเทียบท่าได้ (ฟันเบา 9 กับฟันชาร์จ 60)</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>ตัวเลขเป็น <b>HTML div</b> ไม่ใช่วัตถุ 3D ทุกเฟรมแปลงตำแหน่ง 3D เป็นพิกเซลด้วย <code>pos.project(camera)</code> แล้วย้าย div ไปตรงนั้น ส่วนการเด้งใช้ CSS animation 4 จังหวะ:</p>
+          <ol>
+            <li><b>เกิด</b> เล็ก 50% (0%)</li>
+            <li><b>โป่ง</b> 135% ดึงสายตา (12%)</li>
+            <li><b>นิ่ง</b> 100% ให้อ่าน (30–70%)</li>
+            <li><b>ลอยขึ้นและจาง</b> ไม่ให้รกจอ (100%)</li>
+          </ol>
+          <p>รายละเอียดเล็กที่สำคัญ: สุ่มตำแหน่งเกิด ±0.25 เมตร กันตัวเลขซ้อนทับกันตอนคอมโบ และใส่ขอบตัวหนังสือสีเข้ม (<code>-webkit-text-stroke</code>) ให้อ่านออกบนพื้นหลังทุกสี</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/style.css</div>
+        <pre class="code">@keyframes dmg-pop {
+  0%   { transform: translate(-50%, -80%)  scale(0.5);  opacity: 1; }
+  12%  { transform: translate(-50%, -125%) scale(1.35); }
+  30%  { transform: translate(-50%, -145%) scale(1); }
+  70%  { opacity: 1; }
+  100% { transform: translate(-50%, -260%) scale(0.9);  opacity: 0; }
+}
+.dmg.heavy .inner  { font-size: 34px; color: #ffb03a; }   /* ฟันชาร์จ: ใหญ่ สีส้ม + ป้าย "ชาร์จเต็ม!" */
+.dmg.player .inner { color: #ff6b5b; }                    /* ไคโดน: แดง */
+.dmg.heal .inner   { color: #8cf58c; }                    /* ฟื้นเลือด: เขียว */</pre>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>แบบใหม่ เช่น คริติคอล:</b> เพิ่ม class <code>.dmg.crit</code> ใน CSS (สีทอง ใหญ่ขึ้น) แล้วส่ง <code>kind = 'crit'</code> ให้ <code>damageNumber()</code></li>
+          <li><b>ขนาดตามความแรง:</b> ตั้ง <code>el.style.fontSize = (18 + damage * 0.3) + 'px'</code> ตัวเลขใหญ่ = แรงมาก อ่านได้โดยไม่ต้องอ่านเลข</li>
+          <li><b>รวมยอดคอมโบ:</b> ถ้าโดนตัวเดิมภายใน 0.5 วินาที ให้บวกเลขใน div เดิมแทนสร้างใหม่ (เช่น 9 → 18 → 31) จอไม่รก และรู้สึกถึงคอมโบ</li>
+          <li><b>ข้อความสถานะ:</b> ระบบเดียวกันใช้แสดงคำได้ เกมนี้มี <code>floatText()</code> แสดง "แข็งโป๊ก!", "หลบได้!", "เหนื่อย…" อยู่แล้ว</li>
+        </ul>
+      </article>
+
+      <!-- ---------- Particles ---------- -->
+      <article class="fx" id="fx-particles">
+        <div class="fx-kicker">effect 7 / 9 · ช่องทาง: รอบๆ</div>
+        <h3>ประกายไฟและอนุภาค (particles)</h3>
+        <p class="feel">ผู้เล่นรู้สึก: "วัสดุ" ของสิ่งที่โดน ประกายไฟ = ดาบกระทบ, ก้อนเมือกเขียว = สไลม์, เศษหิน = โกเลม</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>อนุภาค 1 ตัว = จุดเล็กๆ ที่มี <b>ตำแหน่ง ความเร็ว อายุ ขนาด และสี</b> ทุกเฟรมทำ 5 ขั้น: แรงโน้มถ่วงดึงลง → แรงต้านลดความเร็ว → ขยับตามความเร็ว → ย่อขนาดตามอายุ → อายุหมดก็ตาย ระบบอนุภาคทั้งระบบคือการทำแบบนี้กับหลายร้อยจุดพร้อมกัน</p>
+          <p>เพื่อไม่ให้เกมช้า ใช้ 2 เทคนิค: <b>object pool</b> (จองช่องไว้ 400 ช่องตั้งแต่ต้น ตัวไหนตายก็นำช่องมาใช้ใหม่ ไม่สร้าง/ทำลาย object ระหว่างเล่น) และ <b>InstancedMesh</b> (วาดทั้ง 400 จุดด้วยคำสั่งวาดเดียว) เกมนี้มี 2 ระบบ: <code>sparks</code> แบบ additive (ยิ่งซ้อนยิ่งสว่าง ใช้กับแสง) และ <code>debris</code> แบบมีแสงเงา (ฝุ่น หิน ใบไม้)</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/fx/Particles.js — หัวใจของการอัปเดต</div>
+        <pre class="code js">p.life -= dt;
+p.vy -= p.gravity * dt;                  // 1) แรงโน้มถ่วง
+const d = Math.exp(-p.drag * dt);        // 2) แรงต้าน
+p.vx *= d; p.vz *= d;
+p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;   // 3) ขยับ
+const t = 1 - p.life / p.maxLife;        // 0 → 1 ตลอดอายุ
+const size = p.size + (p.sizeEnd - p.size) * t;        // 4) ย่อขนาด</pre>
+        <div class="code-file">src/entities/Player.js — ประกายไฟตอนฟันโดน (พุ่งเป็นกรวยตามทิศที่ฟัน)</div>
+        <pre class="code js">game.fx.sparks.burst({
+  x, y, z, count: heavy ? 22 : 10, speed: heavy ? 7 : 5, up: 2.5,
+  colors: heavy ? [0xffd36b, 0xffffff, 0xff9d3b] : [0xffffff, 0xcfeaff, 0xffe9a8],
+  size: heavy ? 0.16 : 0.11, life: 0.35, gravity: 10,
+  dirAngle: Math.atan2(dir.z, dir.x), arc: 2.2,   // กรวยกว้าง 2.2 เรเดียน ไปทางเดียวกับดาบ
+});</pre>
+        <div class="fx-lbl">สูตรอนุภาคในเกม (ใช้เป็นจุดเริ่มต้นได้)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>สูตร</th><th class="num">จำนวน</th><th class="num">ความเร็ว</th><th class="num">gravity</th><th class="num">อายุ</th><th>เคล็ดลับ</th></tr></thead>
+          <tbody>
+            <tr><td>ประกายฟันเบา</td><td class="num">10</td><td class="num">5</td><td class="num">10</td><td class="num">0.35</td><td>additive สีขาวฟ้า</td></tr>
+            <tr><td>ประกายฟันชาร์จ</td><td class="num">22</td><td class="num">7</td><td class="num">10</td><td class="num">0.35</td><td>สีทอง ใหญ่ขึ้น 45%</td></tr>
+            <tr><td>ฝุ่นตอนกลิ้ง</td><td class="num">8</td><td class="num">2</td><td class="num">6</td><td class="num">0.5</td><td>สีน้ำตาลอ่อน ต่ำติดพื้น</td></tr>
+            <tr><td>ควันปล่องไฟ</td><td class="num">ทีละ 1</td><td class="num">0.8 ขึ้น</td><td class="num">−0.1</td><td class="num">2.6</td><td>gravity ติดลบ = ลอยขึ้น, ขยายจาก 0.18 → 0.55</td></tr>
+            <tr><td>กลีบดอกไม้ในป่า</td><td class="num">ทุก 0.12 วิ</td><td class="num">0.6</td><td class="num">0.25</td><td class="num">3.5</td><td>ตกช้ามาก + หมุน = ปลิว</td></tr>
+          </tbody>
+        </table></div>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>ตั้งคำถาม 3 ข้อ:</b> วัสดุอะไร (ไฟ ฝุ่น น้ำ เวทมนตร์ → สีและ additive หรือไม่), พุ่งทางไหน (กรวยตามทิศฟัน / รอบตัว / ขึ้นฟ้า), ตกหรือลอย (gravity บวกหรือลบ)</li>
+          <li><b>เก็บเป็น preset แล้วเรียกซ้ำ:</b></li>
+        </ul>
+        <pre class="code js">const FX_PRESETS = {
+  poison: { count: 12, speed: 1.5, up: 2, gravity: -1, life: 0.9, size: 0.12, colors: [0x8fe36b, 0x4fbf4a] },
+  ice:    { count: 18, speed: 4,   up: 1, gravity: 8,  life: 0.5, size: 0.09, colors: [0xcff4ff, 0x8fd3ff] },
+};
+game.fx.sparks.burst({ x, y: 1, z, ...FX_PRESETS.poison });</pre>
+        <ul class="prose">
+          <li><b>ปล่อยต่อเนื่อง (emitter):</b> เรียก <code>spawn()</code> ทีละนิดทุกเฟรมด้วย <code>if (Math.random() &lt; dt * rate)</code> แบบเดียวกับควันปล่องไฟ หิ่งห้อย และเหงื่อตอนไคหมดแรง</li>
+          <li><b>ไม่ต้องกลัวเยอะเกิน:</b> pool มีเพดาน ถ้าเกินช่องที่จองไว้ ตัวเก่าสุดจะถูกแทนที่ (ring buffer) เกมไม่ช้าลง แต่ภาพจะหายเร็วขึ้น</li>
+        </ul>
+      </article>
+
+      <!-- ---------- Sword trail ---------- -->
+      <article class="fx" id="fx-trail">
+        <div class="fx-kicker">effect 8 / 9 · ช่องทาง: รอบๆ</div>
+        <h3>รอยดาบ (sword trail)</h3>
+        <p class="feel">ผู้เล่นรู้สึก: ดาบเร็วและคม และเห็นชัดว่าดาบกวาดผ่านตรงไหน (= ระยะโจมตีจริง)</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p>ที่ 60 FPS ดาบกวาด 120° ในราว 6 เฟรม ตามองไม่ทัน รอยดาบจึงช่วย "วาดเส้นทาง" ให้ วิธีทำ: บนดาบมีจุดล่องหน 2 จุด คือ <b>โคนดาบ</b> และ <b>ปลายดาบ</b> ทุกเฟรมระหว่างฟัน จดตำแหน่งโลกของ 2 จุดนี้เป็นคู่ เก็บไว้ 24 คู่ แล้วเอาคู่ที่ติดกันมาต่อเป็นแถบสามเหลี่ยม (ribbon)</p>
+          <p>สีของแต่ละคู่จางตามอายุ ฝั่งปลายดาบสว่าง (k²) ฝั่งโคนดาบจาง (0.25k) และใช้ additive blending ให้ดูเป็นแสง คู่ที่อายุเกิน 0.16 วินาทีจะถูกทิ้ง รอยจึงสั้นและคม</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="code-file">src/fx/GroundFX.js — SwordTrail</div>
+        <pre class="code js">push(base, tip) {                             // เรียกทุกเฟรมจาก Player
+  if (!this.active) return;
+  this.points.unshift({ base: base.clone(), tip: tip.clone(), age: 0 });
+  if (this.points.length > this.maxPoints) this.points.pop();
+}
+update(dt) {
+  for (const p of this.points) p.age += dt;
+  // ทิ้งจุดที่แก่เกิน life แล้วสร้างจุดยอดใหม่: 2 จุดต่อคู่ สีตามอายุ
+  const k = 1 - p.age / this.life;            // 1 = ใหม่, 0 = เก่า
+  // โคนดาบ: สี × 0.25k   ปลายดาบ: สี × k²
+}</pre>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>สีตามท่าหรือธาตุ:</b> เกมนี้ใช้ฟ้าอ่อนตอนฟันเบา และทองตอนชาร์จ เรียก <code>trail.setColor()</code> เปลี่ยนได้ เช่น ดาบไฟสีส้มแดง ดาบน้ำแข็งสีฟ้าขาว</li>
+          <li><b>ความยาวตามความเร็ว:</b> ปรับ <code>life</code> ตามท่า ท่าเร็วรอยยาว ท่าช้ารอยสั้น</li>
+          <li><b>เงาซ้อนตอนกลิ้ง (afterimage):</b> ทุก 0.05 วินาที <code>clone()</code> โมเดลไค ใส่วัสดุโปร่งสีฟ้า แล้วค่อยๆ ลด opacity จนหายไป</li>
+          <li><b>กระสุนและเวทมนตร์:</b> ใช้ <code>SwordTrail</code> เดิมได้เลย แค่ push จุดซ้ายและขวาของลูกกระสุนแทนโคนและปลายดาบ</li>
+          <li><b>FPS ต่ำแล้วรอยเป็นเหลี่ยม:</b> แทรกจุดระหว่างเฟรมด้วยเส้นโค้ง Catmull-Rom รอยจะโค้งเนียนขึ้น</li>
+        </ul>
+      </article>
+
+      <!-- ---------- Telegraph & anticipation ---------- -->
+      <article class="fx" id="fx-telegraph">
+        <div class="fx-kicker">effect 9 / 9 · ช่องทาง: ตัวที่โจมตี + พื้น</div>
+        <h3>Anticipation และ Telegraph — ท่าง้างและวงเตือน</h3>
+        <p class="feel">ผู้เล่นรู้สึก: เกม "ยุติธรรม" ถ้าแพ้ก็เพราะพลาดเอง ไม่ใช่เพราะเกมโกง</p>
+        <div class="fx-lbl">หลักการ</div>
+        <div class="prose">
+          <p><b>Anticipation</b> (ท่าเตรียม) เป็นหลักการแอนิเมชันอีกข้อของดิสนีย์: ก่อนทำท่าใหญ่ต้องมีท่าเตรียม คนดูจะคาดเดาได้ว่ากำลังจะเกิดอะไร ส่วน <b>Telegraph</b> คือสัญญาณเตือน "พื้นที่อันตราย" ที่ชัดกว่าท่าทาง ในเกมนี้เป็นวงสีแดงบนพื้น 3 ชั้น: ขอบวง, พื้นจางๆ และวงในที่ขยายจาก 0 จนเต็มตามเวลา <b>วงในเต็มเมื่อไร = โดนเมื่อนั้น</b> และขอบจะกระพริบเร็วขึ้นช่วงท้าย</p>
+          <p>กติกาสำคัญ: <b>เวลาง้างต้องนานกว่าเวลาตอบสนองของคน</b> (ประมาณ 0.25 วินาที) บวกเวลาเริ่มท่าหลบ ไม่งั้นต่อให้เห็นก็หลบไม่ทัน</p>
+        </div>
+        <div class="fx-lbl">ในเกมนี้</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>มอนสเตอร์</th><th class="num">เวลาง้าง</th><th>ท่าเตรียม</th><th>วงเตือน</th></tr></thead>
+          <tbody>
+            <tr><td>สไลม์</td><td class="num">0.50 วิ</td><td>บีบตัวแบน + สั่น</td><td>วงที่จุดจะตกลงมา รัศมี 1.15 ม.</td></tr>
+            <tr><td>เห็ด</td><td class="num">0.75 วิ</td><td>หมวกพองขึ้น + สปอร์ลอย</td><td>วงรอบตัว รัศมี 2.5 ม.</td></tr>
+            <tr><td>โกเลม</td><td class="num">1.05 วิ</td><td>ยกแขนสูง + ตาสว่างขึ้น</td><td>วงด้านหน้า รัศมี 2.1 ม. ล็อกทิศครึ่งหลังของการง้าง</td></tr>
+            <tr><td>ไค (ฝั่งผู้เล่น)</td><td class="num">≤ 1.2 วิ</td><td>ดึงดาบไปด้านหลัง ตัวสั่นเมื่อชาร์จเต็ม</td><td>วงชาร์จที่เท้าค่อยๆ เต็ม</td></tr>
+          </tbody>
+        </table></div>
+        <div class="code-file">src/fx/GroundFX.js — Telegraph.show()</div>
+        <pre class="code js">show(x, z, progress) {                       // progress 0 → 1
+  this.fill.scale.setScalar(this.radius * progress);       // วงในขยายจนเต็ม
+  this.outline.material.opacity = 0.6 + 0.4 * Math.sin(progress * progress * 40);   // กระพริบเร็วขึ้นตอนท้าย
+}</pre>
+        <div class="fx-lbl">ทำแบบ custom</div>
+        <ul class="prose">
+          <li><b>รูปทรงตามท่า:</b> วงกลมสำหรับระเบิด, กรวยสำหรับพ่นไฟ (<code>RingGeometry</code> กำหนด <code>thetaLength</code>), แถบยาวสำหรับท่าพุ่งชน (<code>PlaneGeometry</code> ยาวๆ)</li>
+          <li><b>ระดับความยาก:</b> แก้แค่ <code>windup</code> ใน <code>src/config.js</code> เช่น โกเลม 1.05 → 0.7 = โหมดยาก</li>
+          <li><b>ท่าหลอก (feint):</b> สำหรับบอส ให้ง้างแล้วหยุดค้างแป๊บนึงก่อนฟาด ผู้เล่นที่กดหลบเร็วเกินจะโดน ต้องอ่านจังหวะ</li>
+          <li><b>เสียงเตือน:</b> เกมนี้เล่นเสียง <code>windup</code> ทุกครั้งที่มอนสเตอร์เริ่มง้าง ผู้เล่นที่มองจอส่วนอื่นอยู่ก็ยังรู้ตัว</li>
+        </ul>
+      </article>
+
+      <!-- ---------- Build your own ---------- -->
+      <article class="fx" id="fx-custom">
+        <div class="fx-kicker">สรุป · ทำ effect ของตัวเอง</div>
+        <h3>สูตร 5 ขั้นสำหรับสร้าง effect ใหม่</h3>
+        <ol class="recipe">
+          <li><b>ถามก่อนว่ามันบอกผู้เล่นเรื่องอะไร</b> เช่น "โดนแล้ว", "แรงแค่ไหน", "อันตรายตรงไหน", "พร้อมแล้ว" ถ้าตอบไม่ได้ อย่าเพิ่งใส่ เพราะจะกลายเป็นแค่สิ่งรบกวนสายตา</li>
+          <li><b>เลือกช่องทาง</b> จาก 5 ช่อง: เวลา (hit-stop, slow-mo) · กล้อง (สั่น) · ตัวที่โดน (กระพริบ บีบ กระเด็น) · รอบๆ (อนุภาค รอยดาบ วงเตือน) · ตัวเลขและเสียง เหตุการณ์ใหญ่ใช้หลายช่องพร้อมกัน เหตุการณ์เล็กใช้ช่องเดียวก็พอ</li>
+          <li><b>เขียนเป็น "ค่าที่ลดลงตามเวลา"</b> effect เกือบทุกตัวในบทนี้คือตัวแปรที่ตั้งค่าสูงตอนเกิดเหตุ แล้วลดลงทุกเฟรมด้วย dt (<code>flash</code>, <code>shakeAmount</code>, <code>hitStopTimer</code>, <code>knock</code>) จำรูปแบบนี้ไว้ จะทำ effect ใหม่ได้แทบทุกแบบ</li>
+          <li><b>ย้ายตัวเลขไป config และสเกลตามความแรง</b> ฟันเบาเบา ฟันชาร์จแรง ความ<b>ต่าง</b>ระหว่างเหตุการณ์สำคัญกว่าความแรงสูงสุด</li>
+          <li><b>ทดสอบแบบเปิด-ปิดเทียบกัน</b> เหมือนห้องทดลองด้านบน ถามตัวเองว่า "ถ้าไม่มี จะคิดถึงไหม" แล้วลองเล่นยาวๆ 10 นาที ดูว่าไม่เวียนหัวและไม่รกจอ</li>
+        </ol>
+
+        <h3>ตัวอย่างเต็ม 1: เพิ่ม <span class="nw">"คริติคอล"</span> ลงในเกมจริง</h3>
+        <div class="prose"><p>นี่คือสิ่งที่ปุ่ม "ฟันคริ!" ในห้องทดลองจำลองให้ดู ฟันเบามีโอกาส 10% ทำ damage 2 เท่า ไม่ต้องสร้างระบบใหม่เลย แค่<b>เรียก effect เดิมให้แรงขึ้นและเปลี่ยนสี</b> (ยังไม่ได้ใส่ในเกม ลองทำเป็นการบ้านได้)</p></div>
+        <div class="code-file">src/config.js — ใน lightAttack</div>
+        <pre class="code js">critChance: 0.1,       // โอกาส 10%
+critMultiplier: 2,     // damage × 2</pre>
+        <div class="code-file">src/entities/Player.js — ใน _hitArc() ตรงที่เรียก takeHit</div>
+        <pre class="code js">const crit = !heavy &amp;&amp; Math.random() &lt; LA.critChance;
+const dmg = crit ? Math.round(damage * LA.critMultiplier) : damage;
+const dealt = target.takeHit({ damage: dmg, knockback: knockback * (crit ? 1.8 : 1), dir, heavy, charge, crit, source: this });
+// ...หลังคำนวณตำแหน่ง hp ของประกายไฟ
+if (crit) {
+  game.hitStop(0.12);                     // หยุดนานกว่าฟันเบาปกติ ~2.5 เท่า
+  game.shake(0.3);
+  game.fx.sparks.burst({ x: hp.x, y: hp.y, z: hp.z, count: 26, speed: 7, up: 3,
+    colors: [0xffd36b, 0xfff2b0], size: 0.15, life: 0.45, gravity: 10 });
+  game.audio.play('chargeFull');          // ใช้เสียงที่มีอยู่แล้ว
+}</pre>
+        <div class="code-file">src/entities/Enemy.js — takeHit() รับ crit แล้วเปลี่ยนสีกระพริบและตัวเลข</div>
+        <pre class="code js">const GOLD = new THREE.Color(0xffd34a);      // ประกาศไว้บนสุดของไฟล์ ข้างๆ WHITE
+
+takeHit({ damage, dir, knockback, heavy, charge, crit }) {
+  // ...
+  this.flashColor = crit ? GOLD : WHITE;    // แล้วใน update() เปลี่ยน lerp(WHITE, ...) เป็น lerp(this.flashColor, ...)
+  const kind = crit ? 'crit' : heavy ? 'heavy' : 'light';
+  this.game.worldUI.damageNumber(pos, damage, kind, crit ? 'คริ!' : label);
+}
+// ใน WorldUI.damageNumber() ให้ป้ายเล็กแสดงกับ crit ด้วย:
+// const html = extra &amp;&amp; (kind === 'heavy' || kind === 'crit') ? `&lt;small>${extra}&lt;/small>${amount}` : `${amount}`;</pre>
+        <div class="code-file">src/style.css</div>
+        <pre class="code">.dmg.crit .inner { font-size: 36px; color: #ffd84a; animation-duration: 1.2s; }
+.dmg.crit .inner small { display: block; font-size: 13px; letter-spacing: 0.15em; }</pre>
+
+        <h3>ตัวอย่างเต็ม 2: slow-motion เมื่อหลบได้ฉิวเฉียด</h3>
+        <div class="prose"><p>เกมมีตัวแปร <code>game.timeScale</code> อยู่แล้ว (dt ทุกเฟรมถูกคูณด้วยค่านี้) แค่ตั้งค่าตอนกลิ้งหลบการโจมตีได้พอดี:</p></div>
+        <div class="code-file">src/entities/Player.js — ใน takeHit() ตรง if (this.isDodgeInvulnerable)</div>
+        <pre class="code js">if (this.isDodgeInvulnerable) {
+  game.timeScale = 0.3;                              // โลกช้าลงเหลือ 30%
+  setTimeout(() => (game.timeScale = 1), 450);       // 0.45 วินาทีจริง แล้วกลับปกติ
+  game.fx.ground.shockwave({ x: this.position.x, z: this.position.z, color: 0x9fe4ff, from: 0.3, to: 2, life: 0.5 });
+  // ...ข้อความ "หลบได้!" เดิม
+  return false;
+}</pre>
+
+        <h3>เช็คลิสต์ก่อนใส่ effect</h3>
+        <ul class="prose checklist">
+          <li><b>อย่าบังข้อมูลสำคัญ:</b> วงเตือนสีแดงต้องมองเห็นเสมอ อนุภาคและตัวเลขห้ามทับมัน</li>
+          <li><b>ความถี่ × ความแรง:</b> สิ่งที่เกิดบ่อย (ฟันเบา) ต้องเบา สิ่งที่เกิดนานๆ ครั้ง (ฆ่าบอส) แรงได้เต็มที่</li>
+          <li><b>สม่ำเสมอ:</b> สีเดียวมีความหมายเดียวทั้งเกม เสียงเดียวมีความหมายเดียว</li>
+          <li><b>มีตัวเลือกลด:</b> เปิด-ปิด/ลดการสั่นจอและแฟลชในเมนู (accessibility)</li>
+          <li><b>ประสิทธิภาพ:</b> ใช้ pool และ instancing อย่าสร้าง object ใหม่ทุกครั้งที่ฟัน</li>
+          <li><b>ทดสอบที่ FPS ต่ำ:</b> effect ที่คูณด้วย dt ทุกตัวจะยาวเท่าเดิมไม่ว่าเครื่องเร็วหรือช้า</li>
+        </ul>
+      </article>
+
+      <div class="prose"><p>อ่านต่อ: Masahiro Sakurai (ผู้สร้าง Kirby, Smash Bros.) อธิบาย hit-stop ไว้ใน <a href="https://www.youtube.com/watch?v=OdVkEOzdCPw" target="_blank" rel="noopener">วิดีโอนี้</a> · Jan Willem Nijman จาก Vlambeer <a href="https://www.youtube.com/watch?v=AJdEqssNZ-U" target="_blank" rel="noopener">The Art of Screenshake</a> · ทอล์ก <a href="https://www.gdcvault.com/play/1016487/juice-it-or-lose" target="_blank" rel="noopener">Juice it or Lose it</a> · บทความ <a href="https://gamedeveloper.com/design/enemy-attacks-and-telegraphing" target="_blank" rel="noopener">Enemy attacks and telegraphing</a></p></div>
     </section>
 
     <!-- ===================================================== 11 -->
@@ -1528,7 +2011,7 @@ for (let i = 1; i &lt; pts.length; i++) {     // ดึงจุดที่ต�
   }
 
   // =====================================================
-  //  บทที่ 10: juice lab
+  //  บทที่ 10: juice lab (ปรับค่าได้ + ฟันคริ)
   // =====================================================
   {
     const C = makeCanvas($('#juice-canvas'), 280);
@@ -1539,50 +2022,117 @@ for (let i = 1; i &lt; pts.length; i++) {     // ดึงจุดที่ต�
     sync();
     $('#juice-all').addEventListener('click', () => { boxes.forEach((b) => (b.checked = true)); sync(); });
     $('#juice-none').addEventListener('click', () => { boxes.forEach((b) => (b.checked = false)); sync(); });
-    const S = { stop: 0, shake: 0, flash: 0, kx: 0, kv: 0, sq: 0, sqv: 0, swing: -1, parts: [], nums: [] };
+
+    // ---------- ค่าที่ปรับได้ ----------
+    const DEF = { hitstop: 0.07, shake: 0.5, shakeDecay: 2.2, flashTime: 0.17, flashColor: '#ffffff', knock: 260, friction: 9, sqK: 80, sqC: 8, sqKick: 6, numSize: 26, pCount: 14, pSpeed: 200, gravity: 600, trail: 1.2 };
+    const P = { ...DEF };
+    const knobs = $$('#juice-knobs [data-k]');
+    const colorNames = { '#ffffff': 'ขาว', '#ff5a4a': 'แดง', '#ffd34a': 'ทอง', '#8cf58c': 'เขียว' };
+    function fmt(k, v) {
+      if (k === 'flashColor') return colorNames[v] || v;
+      if (k === 'hitstop') return `${v.toFixed(3)} (${Math.round(v * 60)} เฟรม)`;
+      if (k === 'sqC') return `${v} (ไม่เด้ง ≈ ${(2 * Math.sqrt(P.sqK)).toFixed(1)})`;
+      if (k === 'knock') return `${v} → ไถล ≈ ${Math.round(v / P.friction)} px`;
+      if (k === 'friction') return `${v} → ไถล ≈ ${Math.round(P.knock / v)} px`;
+      return String(v);
+    }
+    const cfgEl = $('#juice-config');
+    function writeConfig() {
+      cfgEl.textContent =
+        `// ค่าปัจจุบันของห้องทดลอง (เทียบกับ src/config.js ได้)\n` +
+        `juice = {\n` +
+        `  hitStop: ${P.hitstop.toFixed(3)},            // วินาที\n` +
+        `  shake: ${P.shake}, shakeDecay: ${P.shakeDecay},     // trauma ที่บวก, ลดลงต่อวินาที\n` +
+        `  flashTime: ${P.flashTime}, flashColor: '${P.flashColor}',\n` +
+        `  knockback: ${P.knock}, friction: ${P.friction},   // ระยะไถล = ${P.knock} / ${P.friction} = ${Math.round(P.knock / P.friction)}\n` +
+        `  spring: { k: ${P.sqK}, c: ${P.sqC}, kick: ${P.sqKick} },\n` +
+        `  numberSize: ${P.numSize},\n` +
+        `  particles: { count: ${P.pCount}, speed: ${P.pSpeed}, gravity: ${P.gravity} },\n` +
+        `  trailArc: ${P.trail},\n` +
+        `};`;
+    }
+    function readKnobs() {
+      for (const el of knobs) P[el.dataset.k] = el.tagName === 'SELECT' ? el.value : +el.value;
+      for (const el of knobs) el.closest('.knob').querySelector('output').textContent = fmt(el.dataset.k, P[el.dataset.k]);
+      writeConfig();
+    }
+    knobs.forEach((el) => el.addEventListener('input', readKnobs));
+    $('#juice-reset').addEventListener('click', () => { for (const el of knobs) el.value = DEF[el.dataset.k]; readKnobs(); });
+    $('#juice-copy').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      try { await navigator.clipboard.writeText(cfgEl.textContent); btn.textContent = 'คัดลอกแล้ว'; }
+      catch (err) { const r = document.createRange(); r.selectNodeContents(cfgEl); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); btn.textContent = 'เลือกข้อความแล้ว กด Ctrl+C'; }
+      setTimeout(() => (btn.textContent = 'คัดลอกค่าทั้งหมด'), 1800);
+    });
+    readKnobs();
+
+    const hexRgb = (h) => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+    const BASE = [95, 208, 138];
+    const S = { stop: 0, stopTotal: 0, shake: 0, flash: 0, flashCol: '#ffffff', kx: 0, kv: 0, sq: 0, sqv: 0, swing: -1, crit: false, parts: [], nums: [] };
     let audioCtx = null;
-    function blip(heavy) {
+    function blip(crit) {
       try {
         audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
         const t = audioCtx.currentTime, o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.type = 'square'; o.frequency.setValueAtTime(heavy ? 160 : 230, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.1);
+        o.type = 'square'; o.frequency.setValueAtTime(crit ? 330 : 230, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.1);
         g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
         o.connect(g).connect(audioCtx.destination); o.start(t); o.stop(t + 0.15);
+        if (crit) {
+          const o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
+          o2.frequency.setValueAtTime(1320, t + 0.03); g2.gain.setValueAtTime(0.0001, t); g2.gain.exponentialRampToValueAtTime(0.08, t + 0.04); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+          o2.connect(g2).connect(audioCtx.destination); o2.start(t); o2.stop(t + 0.4);
+        }
       } catch (e) { /* ไม่มีเสียงก็เล่นต่อได้ */ }
     }
-    function hit() {
+    function hit(crit = false) {
       S.swing = 0;
+      S.crit = crit;
       setTimeout(() => {
-        const dmg = 8 + Math.floor(Math.random() * 3);
-        if (opt.hitstop) S.stop = 0.07;
-        if (opt.shake) S.shake = 0.5;
-        if (opt.flash) S.flash = 1;
-        if (opt.knock) S.kv = 260;
-        if (opt.squash) S.sqv = -6;
-        if (opt.numbers) S.nums.push({ x: 0, y: 0, t: 0, v: dmg });
-        if (opt.particles) for (let i = 0; i < 14; i++) { const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.4; const sp = 120 + Math.random() * 200; S.parts.push({ x: 0, y: 0, vx: Math.cos(a) * sp + 60, vy: Math.sin(a) * sp, life: 0.4 + Math.random() * 0.2 }); }
-        blip(false);
+        const base = 8 + Math.floor(Math.random() * 3);
+        const dmg = crit ? base * 2 : base;
+        // ฟันคริ = effect เดิมทุกตัว แค่แรงขึ้นและเปลี่ยนสี
+        if (opt.hitstop) { S.stop = crit ? P.hitstop * 2 + 0.05 : P.hitstop; S.stopTotal = S.stop; }
+        if (opt.shake) S.shake = Math.min(1, S.shake + P.shake + (crit ? 0.35 : 0));
+        if (opt.flash) { S.flash = 1; S.flashCol = crit ? '#ffd34a' : P.flashColor; }
+        if (opt.knock) S.kv = P.knock * (crit ? 1.8 : 1);
+        if (opt.squash) S.sqv = -P.sqKick * (crit ? 1.5 : 1);
+        if (opt.numbers) S.nums.push({ t: 0, v: dmg, crit, jx: (Math.random() - 0.5) * 30 });
+        if (opt.particles) {
+          const n = P.pCount * (crit ? 2 : 1);
+          for (let i = 0; i < n; i++) {
+            const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.4;
+            const sp = P.pSpeed * (0.6 + Math.random());
+            S.parts.push({ x: 0, y: 0, vx: Math.cos(a) * sp + 60, vy: Math.sin(a) * sp, life: 0.4 + Math.random() * 0.2, col: crit ? (Math.random() < 0.5 ? '#ffd34a' : '#fff2b0') : '#ffe9a8' });
+          }
+        }
+        blip(crit);
       }, 90);
     }
-    $('#juice-hit').addEventListener('click', hit);
-    C.canvas.addEventListener('pointerdown', hit);
+    $('#juice-hit').addEventListener('click', () => hit(false));
+    $('#juice-crit').addEventListener('click', () => hit(true));
+    C.canvas.addEventListener('pointerdown', () => hit(false));
     addDemo($('#juice-demo'), (rdt) => {
       let dt = rdt;
-      if (S.stop > 0) { S.stop -= rdt; dt = 0; }
+      if (S.stop > 0) { S.stop -= rdt; dt = 0; }           // hit-stop: โลกหยุด แต่จอยังสั่นได้
       if (S.swing >= 0) S.swing += dt * 4;
       if (S.swing > 1.3) S.swing = -1;
-      S.shake = Math.max(0, S.shake - rdt * 2.2);
-      S.flash = Math.max(0, S.flash - dt * 6);
-      S.kx += S.kv * dt; S.kv *= Math.exp(-9 * dt); S.kx += (0 - S.kx) * Math.min(1, dt * 2.5);
-      S.sqv += (-80 * S.sq - 8 * S.sqv) * dt; S.sq += S.sqv * dt;
-      for (const p of S.parts) { p.vy += 600 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; }
+      S.shake = Math.max(0, S.shake - rdt * P.shakeDecay);
+      S.flash = Math.max(0, S.flash - dt / P.flashTime);
+      S.kx += S.kv * dt; S.kv *= Math.exp(-P.friction * dt); S.kx += (0 - S.kx) * Math.min(1, dt * 2.5);
+      S.sqv += (-P.sqK * S.sq - P.sqC * S.sqv) * dt; S.sq += S.sqv * dt;
+      for (const p of S.parts) { p.vy += P.gravity * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; }
       S.parts = S.parts.filter((p) => p.life > 0);
       for (const n of S.nums) n.t += rdt;
-      S.nums = S.nums.filter((n) => n.t < 0.9);
+      S.nums = S.nums.filter((n) => n.t < (n.crit ? 1.2 : 1));
 
       const { ctx, w, h } = C;
-      ctx.save();
       ctx.clearRect(0, 0, w, h);
+      // ป้ายสถานะ (ไม่สั่นตามจอ)
+      ctx.font = '12px "JetBrains Mono", monospace';
+      ctx.fillStyle = T['ink-2'];
+      ctx.fillText(`trauma ${S.shake.toFixed(2)} → สั่น ${(S.shake * S.shake * 14).toFixed(1)} px`, 12, 20);
+      if (S.stop > 0) { ctx.fillStyle = T.lantern; ctx.fillText(`hit-stop: โลกหยุด ${S.stopTotal.toFixed(2)} วิ`, 12, 38); }
+      ctx.save();
       const sh = S.shake * S.shake * 14;
       ctx.translate((Math.random() * 2 - 1) * sh, (Math.random() * 2 - 1) * sh);
       const ground = h * 0.78;
@@ -1598,39 +2148,76 @@ for (let i = 1; i &lt; pts.length; i++) {     // ดึงจุดที่ต�
       const ang = S.swing >= 0 ? -1.9 + sw * 2.6 : 0.9;
       const hx = px + 16, hy = ground - 58, L = 86;
       if (opt.trail && S.swing >= 0) {
-        ctx.fillStyle = 'rgba(190,230,255,0.45)';
+        ctx.fillStyle = S.crit ? 'rgba(255,214,90,0.5)' : 'rgba(190,230,255,0.45)';
         ctx.beginPath(); ctx.moveTo(hx, hy);
-        ctx.arc(hx, hy, L, Math.max(-1.9, ang - 1.2), ang); ctx.closePath(); ctx.fill();
+        ctx.arc(hx, hy, L, Math.max(-1.9, ang - P.trail), ang); ctx.closePath(); ctx.fill();
       }
       ctx.strokeStyle = '#dfe8f0'; ctx.lineWidth = 6; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx + Math.cos(ang) * L, hy + Math.sin(ang) * L); ctx.stroke();
       ctx.strokeStyle = '#e0b04a'; ctx.lineWidth = 4;
       ctx.beginPath(); ctx.moveTo(hx + Math.cos(ang + 1.57) * 9, hy + Math.sin(ang + 1.57) * 9); ctx.lineTo(hx - Math.cos(ang + 1.57) * 9, hy - Math.sin(ang + 1.57) * 9); ctx.stroke();
-      // สไลม์
+      // สไลม์: บีบ-ยืดด้วยสปริง + กระพริบผสมสี
       const sx = w * 0.3 + 118 + S.kx, sy = ground;
-      const sqk = opt.squash ? S.sq : 0;
+      const sqk = opt.squash ? Math.max(-0.6, Math.min(0.8, S.sq)) : 0;
       const rw = 42 * (1 - sqk * 0.6), rh = 36 * (1 + sqk);
-      ctx.fillStyle = S.flash > 0.05 ? `rgb(${Math.round(95 + 160 * S.flash)},${Math.round(208 + 47 * S.flash)},${Math.round(138 + 117 * S.flash)})` : '#5fd08a';
+      const fc = hexRgb(S.flashCol), f = S.flash;
+      ctx.fillStyle = `rgb(${Math.round(BASE[0] + (fc[0] - BASE[0]) * f)},${Math.round(BASE[1] + (fc[1] - BASE[1]) * f)},${Math.round(BASE[2] + (fc[2] - BASE[2]) * f)})`;
       ctx.beginPath(); ctx.ellipse(sx, sy - rh, rw, rh, 0, Math.PI, 0); ctx.lineTo(sx + rw, sy); ctx.lineTo(sx - rw, sy); ctx.closePath(); ctx.fill();
       ctx.fillStyle = '#1d1b2a'; ctx.fillRect(sx - 14, sy - rh - 6, 7, 12); ctx.fillRect(sx + 7, sy - rh - 6, 7, 12);
       // ประกาย
-      ctx.fillStyle = '#ffe9a8';
-      for (const p of S.parts) { ctx.globalAlpha = Math.max(0, p.life * 2); ctx.fillRect(sx - 30 + p.x, sy - 40 + p.y, 5, 5); }
+      for (const p of S.parts) { ctx.globalAlpha = Math.max(0, p.life * 2); ctx.fillStyle = p.col; ctx.fillRect(sx - 30 + p.x, sy - 40 + p.y, 5, 5); }
       ctx.globalAlpha = 1;
-      // ตัวเลข
+      // ตัวเลข (จังหวะเดียวกับ CSS keyframes ในเกม: เกิด → โป่ง → นิ่ง → ลอยและจาง)
       ctx.textAlign = 'center';
       for (const n of S.nums) {
-        const k = n.t / 0.9;
+        const life = n.crit ? 1.2 : 1;
+        const k = n.t / life;
         const sc = k < 0.12 ? 0.5 + k / 0.12 * 0.85 : k < 0.3 ? 1.35 - (k - 0.12) / 0.18 * 0.35 : 1;
         ctx.globalAlpha = k > 0.7 ? 1 - (k - 0.7) / 0.3 : 1;
-        ctx.font = `800 ${Math.round(26 * sc)}px "Mitr", sans-serif`;
-        ctx.lineWidth = 4; ctx.strokeStyle = '#2a1a14'; ctx.fillStyle = '#fff';
-        const y = sy - 90 - k * 60;
-        ctx.strokeText(String(n.v), sx, y); ctx.fillText(String(n.v), sx, y);
+        const size = Math.round(P.numSize * (n.crit ? 1.4 : 1) * sc);
+        ctx.font = `800 ${size}px "Mitr", sans-serif`;
+        ctx.lineWidth = 4; ctx.strokeStyle = '#2a1a14'; ctx.fillStyle = n.crit ? '#ffd84a' : '#fff';
+        const x = sx + n.jx, y = sy - 90 - k * 60;
+        ctx.strokeText(String(n.v), x, y); ctx.fillText(String(n.v), x, y);
+        if (n.crit) { ctx.font = `700 ${Math.round(13 * sc)}px "Mitr", sans-serif`; ctx.lineWidth = 3; ctx.strokeText('คริ!', x, y - size * 0.9); ctx.fillText('คริ!', x, y - size * 0.9); }
       }
       ctx.globalAlpha = 1; ctx.textAlign = 'left';
       ctx.restore();
     });
+  }
+
+  // =====================================================
+  //  บทที่ 10: ไทม์ไลน์ effect ของการฟัน 1 ครั้ง (ตัวเลขจากเกมจริง)
+  // =====================================================
+  {
+    const el = $('#hit-timeline');
+    const T0 = -0.3, T1 = 1.3;
+    const pct = (t) => ((t - T0) / (T1 - T0)) * 100;
+    const STOP = 0.144;
+    // [ชื่อ, รายละเอียด, เริ่ม, จบ, หมวด]
+    const rows = [
+      ['ชาร์จ / ท่าง้าง', 'ชาร์จมา 1.2 วิ', -0.3, 0, 't-time'],
+      ['รอยดาบ', 'อายุ 0.16 วิ', -0.16, 0.5, 't-env'],
+      ['Hit-stop', '0.144 วิ', 0, STOP, 't-time'],
+      ['สั่นจอ', 'trauma 0.7 → 0.32 วิ', 0, 0.32, 't-cam'],
+      ['กระพริบขาว', 'ค้าง + 0.17 วิ', 0, STOP + 0.17, 't-obj'],
+      ['กระเด็น', 'ไถล 1.35 ม.', STOP, STOP + 0.375, 't-obj'],
+      ['สะดุ้ง / บีบตัว', 'hurt 0.6 วิ', STOP, STOP + 0.6, 't-obj'],
+      ['ประกายไฟ', '22 ชิ้น อายุ ~0.35 วิ', 0, STOP + 0.46, 't-env'],
+      ['เสียง heavyHit', '0.35 วิ', 0, 0.35, 't-ui'],
+      ['ตัวเลข damage', '1.2 วิ', 0, 1.2, 't-ui'],
+    ];
+    let html = '';
+    for (const [name, sub, a, b, cls] of rows) {
+      html += `<div class="name">${name}<small>${sub}</small></div><div class="track"><div class="stopband" style="left:${pct(0)}%;width:${pct(STOP) - pct(0)}%"></div><div class="bar ${cls}" style="left:${pct(a)}%;width:${pct(b) - pct(a)}%"></div><div class="zero" style="left:${pct(0)}%"></div></div>`;
+    }
+    html += '<div class="spacer"></div><div class="axis">';
+    for (const t of [-0.2, 0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2]) {
+      const minor = [-0.2, 0.2, 0.6, 1.0].includes(t) ? ' class="minor"' : '';
+      html += `<span${minor} style="left:${pct(t)}%">${t === 0 ? '0' : (t > 0 ? '+' : '') + t.toFixed(1)}</span>`;
+    }
+    html += '</div>';
+    el.innerHTML = html;
   }
 
   // =====================================================
