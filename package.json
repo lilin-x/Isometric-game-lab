@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test \"tests/**/*.test.js\"",
-    "build:single": "vite build && node scripts/build-single.mjs"
+    "build:single": "vite build && node scripts/build-single.mjs",
+    "build:artifact": "node scripts/build-artifact.mjs"
   },
   "license": "MIT",
   "dependencies": {

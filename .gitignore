@@ -4,3 +4,4 @@ dist/
 *.log
 screenshots/tmp/
 dist-single/
+dist-artifact/
