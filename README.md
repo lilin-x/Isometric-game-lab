@@ -5,7 +5,8 @@
 
 ตัวเอก "ไค" เด็กชายนักผจญภัยผ้าพันคอแดง ออกเดินทางจาก **เมืองโคมไฟ** สู่ **ป่าหลากสี** เพื่อปลุกศาลคริสตัล
 
-> 📖 **หน้าสอนสำหรับมือใหม่:** [`docs/tutorial.html`](docs/tutorial.html) — อธิบายหลักการทำเกมทีละส่วน พร้อมแผนภาพและเดโมให้ลองกด
+> 📖 **หน้าสอนสำหรับมือใหม่:** [`docs/tutorial.html`](docs/tutorial.html) — อธิบายหลักการทำเกมทีละส่วน พร้อมแผนภาพและเดโมให้ลองกด 12 ชิ้น
+> เปิดดูได้ด้วย `npm run dev` แล้วไปที่ `http://localhost:5173/docs/tutorial.html`
 
 ---
 
@@ -29,6 +30,7 @@ npm run dev
 | `npm run build` | สร้างไฟล์สำหรับเผยแพร่ที่ `dist/` |
 | `npm run build:single` | รวมทั้งเกมเป็นไฟล์เดียว `dist-single/index.html` (ส่งให้เพื่อนเปิดเล่นได้เลย) |
 | `npm test` | รัน unit test ของระบบ stamina |
+| `npm run build:artifact` / `build:tutorial` | สร้างหน้าเว็บไฟล์เดียว (โหลด three.js จาก CDN) สำหรับเผยแพร่บนเว็บ |
 
 **ตัวช่วยทดสอบผ่าน URL**: `?level=forest` เริ่มที่ด่านป่า · `?skip` ข้ามหน้าแรก · `?debug` เปิดหน้าต่าง debug · `?nobloom` / `?noshadow` ปิดเอฟเฟกต์ถ้าเครื่องช้า
 เช่น `http://localhost:5173/?level=forest&skip&debug`
@@ -92,7 +94,7 @@ src/
 ├── fx/                  เอฟเฟกต์ (อนุภาค, วงเตือน, รอยดาบ)
 └── ui/                  HUD, ตัวเลขลอย, กล่องบทสนทนา
 tests/                   unit test (node --test)
-docs/                    หน้าสอน + โน้ตการค้นคว้า
+docs/                    หน้าสอน (tutorial.html) + ภาพประกอบ + โน้ตการค้นคว้า
 ```
 
 ## ลองแก้ดูเป็นการบ้าน 🛠️

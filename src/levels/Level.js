@@ -34,6 +34,11 @@ export class Level {
   onEnter() {}
   tick() {}
 
+  /** ความสูงของพื้นที่ตำแหน่ง (x, z) — ด่านไหนมีสะพาน/เนิน ให้ override */
+  groundHeight() {
+    return 0;
+  }
+
   // ---------- แสงและบรรยากาศ ----------
   setupLights(o) {
     const scene = this.game.scene;

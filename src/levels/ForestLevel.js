@@ -571,6 +571,15 @@ export class ForestLevel extends Level {
     }
   }
 
+  /** สะพานโค้ง: ความสูงพื้นสะพาน ณ ตำแหน่งนั้น (นอกสะพาน = 0) */
+  groundHeight(x, z) {
+    const u = (x + z) * Math.SQRT1_2; // ระยะตามแนวสะพาน
+    const v = (x - z) * Math.SQRT1_2; // ระยะขวางสะพาน
+    if (Math.abs(v) > 1.3 || Math.abs(u) > 3.4) return 0;
+    const t = (u + 3.4) / 6.8;
+    return 0.2 + Math.sin(t * Math.PI) * 0.35;
+  }
+
   tick() {
     const p = this.player;
     if (!p?.alive) return;

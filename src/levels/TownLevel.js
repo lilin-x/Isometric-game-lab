@@ -97,8 +97,8 @@ export class TownLevel extends Level {
 
     // ฐานถนน (สีปูน) ใต้ก้อนหิน
     const grout = 0x5d5349;
-    this.decor.add(at(box(5.6, 0.04, 42, grout, { castShadow: false }), 0, 0.02, 0));
-    this.decor.add(at(box(42, 0.04, 5.6, grout, { castShadow: false }), 0, 0.02, 0));
+    this.decor.add(at(box(5.6, 0.03, 42, grout, { castShadow: false }), 0, 0.015, 0));
+    this.decor.add(at(box(42, 0.03, 5.6, grout, { castShadow: false }), 0, 0.015, 0));
     const plazaBase = new THREE.Mesh(new THREE.CylinderGeometry(7.6, 7.6, 0.04, 24), mat(grout));
     plazaBase.position.y = 0.02;
     plazaBase.receiveShadow = true;
@@ -107,7 +107,7 @@ export class TownLevel extends Level {
     // ก้อนหินปูถนน (grid) — สุ่มขนาด/สี/มุมเล็กน้อย
     const stoneColors = [0xb9ab96, 0xa89a86, 0xc7baa3, 0x9d907e];
     const addStone = (x, z, s, ry) => {
-      this.decor.add(at(box(s, 0.07, s * rng.range(0.85, 1.1), rng.pick(stoneColors), { castShadow: false }), x, 0.05, z, 0, ry, 0));
+      this.decor.add(at(box(s, 0.06, s * rng.range(0.85, 1.1), rng.pick(stoneColors), { castShadow: false }), x, 0.032, z, 0, ry, 0));
     };
     const step = 0.56;
     for (let x = -20.8; x <= 20.8; x += step) {

@@ -92,7 +92,7 @@ export class Player {
     this.scarf2 = new Scarf(level.root, this.model.scarfAnchor, this.model.scarfMat, { segments: 3, segLen: 0.14, width: 0.11, offsetX: 0.08 });
     this.trail = new SwordTrail(level.root, 0xcfeaff);
     this.chargeRing = new ArcRing(level.root, { inner: 0.62, outer: 0.82 });
-    this.headLoader = createHeadLoader(game.worldUI, () => _v2.copy(this.position).setY(this.model.height + 0.55));
+    this.headLoader = createHeadLoader(game.worldUI, () => _v2.copy(this.position).setY(this.model.height + 0.3));
 
     this._bindStaminaEvents();
     this.fsm = new StateMachine(this._createStates(), 'locomotion');
@@ -119,6 +119,9 @@ export class Player {
 
     // ชนกับฉาก
     this.level.collision.resolve(this.position, this.radius);
+    // ยืนบนพื้น (เช่น เดินขึ้นสะพานโค้ง) + ยกเท้าพ้นก้อนหินปูถนนนิดหน่อย
+    const groundY = this.level.groundHeight(this.position.x, this.position.z) + 0.07;
+    this.position.y += (groundY - this.position.y) * Math.min(1, dt * 18);
     this._updateVisuals(dt);
   }
 

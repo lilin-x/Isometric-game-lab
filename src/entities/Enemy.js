@@ -255,6 +255,7 @@ export class Enemy {
 
     this.position.addScaledVector(this.knock, dt);
     this.knock.multiplyScalar(Math.exp(-8 * dt));
+    this.position.y = this.level.groundHeight(this.position.x, this.position.z) + 0.03;
 
     if (this.flash > 0) this.flash = Math.max(0, this.flash - dt * 6);
     for (const m of this.materials) {

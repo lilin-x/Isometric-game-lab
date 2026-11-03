@@ -1,0 +1,1921 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Red Scarf Game Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Mitr:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* เลย์เอาต์: สารบัญติดข้างซ้าย + เนื้อหาคอลัมน์เดียวอ่านสบาย, เดโมเป็นการ์ดกว้างกว่าเนื้อหาเล็กน้อย */
+:root {
+  --bg: #f3f5fa;
+  --surface: #ffffff;
+  --surface-2: #e9edf6;
+  --ink: #1a2134;
+  --ink-2: #4b556f;
+  --line: #d5dbe8;
+  --scarf: #c8372b;
+  --lantern: #d48a1a;
+  --forest: #23845f;
+  --sky: #2f6fbf;
+  --code-bg: #1a2134;
+  --code-ink: #e6eaf5;
+  --code-dim: #8e9ab8;
+  --hit: #1f9d63;
+  --miss: #c8372b;
+  --font-display: 'Mitr', 'IBM Plex Sans Thai', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10141e; --surface: #171d2b; --surface-2: #1f2739; --ink: #e8ecf6; --ink-2: #a5aec4; --line: #2c3650;
+    --scarf: #ff6b5c; --lantern: #ffbe55; --forest: #4fcf98; --sky: #79a9ff; --code-bg: #0b0f18; --code-ink: #e6eaf5; --code-dim: #7d89a6;
+    --hit: #4fcf98; --miss: #ff6b5c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10141e; --surface: #171d2b; --surface-2: #1f2739; --ink: #e8ecf6; --ink-2: #a5aec4; --line: #2c3650;
+  --scarf: #ff6b5c; --lantern: #ffbe55; --forest: #4fcf98; --sky: #79a9ff; --code-bg: #0b0f18; --code-ink: #e6eaf5; --code-dim: #7d89a6;
+  --hit: #4fcf98; --miss: #ff6b5c; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--sky); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--lantern); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.3; text-wrap: balance; }
+h2 { font-size: 1.85rem; margin: 0 0 0.4em; }
+h3 { font-size: 1.25rem; margin: 1.8em 0 0.4em; }
+p { margin: 0 0 1em; }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surface-2); padding: 0.1em 0.35em; border-radius: 4px; }
+strong { font-weight: 600; }
+.mono { font-family: var(--font-mono); }
+.dim { color: var(--ink-2); }
+
+/* ---------- Hero ---------- */
+.hero { max-width: 1180px; margin: 0 auto; padding-block: 40px 28px; display: grid; grid-template-columns: 1.05fr 1fr; gap: 36px; align-items: center; }
+.hero .eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--scarf); }
+.hero h1 { font-size: clamp(2.1rem, 4.4vw, 3.4rem); margin: 0.2em 0 0.3em; }
+.hero h1 em { font-style: normal; color: var(--scarf); white-space: nowrap; }
+.hero p.lead { font-size: 1.1rem; color: var(--ink-2); max-width: 36em; }
+.hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 1rem; padding: 10px 18px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; }
+.btn:hover { border-color: var(--ink-2); }
+.btn.primary { background: var(--scarf); border-color: var(--scarf); color: #fff; }
+.collage { position: relative; aspect-ratio: 1.25; min-width: 0; max-width: 100%; }
+.collage img { position: absolute; width: 78%; border-radius: 14px; box-shadow: 0 18px 40px rgba(10, 15, 30, 0.28); border: 3px solid var(--surface); }
+.collage img:nth-child(1) { left: 0; top: 0; transform: rotate(-2deg); }
+.collage img:nth-child(2) { right: 0; bottom: 0; transform: rotate(2.5deg); }
+.facts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; padding: 0; list-style: none; }
+.facts li { font-size: 0.86rem; padding: 4px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); }
+
+/* ---------- Layout ---------- */
+.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 48px; padding-block: 10px 80px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow: auto; font-size: 0.92rem; padding-right: 6px; }
+nav.toc .label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 8px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; counter-reset: toc; }
+nav.toc a { display: flex; gap: 10px; padding: 5px 10px; border-radius: 8px; color: var(--ink-2); text-decoration: none; line-height: 1.4; }
+nav.toc a::before { counter-increment: toc; content: counter(toc, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.78em; color: var(--ink-2); opacity: 0.7; padding-top: 2px; }
+nav.toc a:hover, nav.toc a.on { background: var(--surface); color: var(--ink); }
+nav.toc a.on::before { color: var(--scarf); opacity: 1; }
+details.toc-mobile { display: none; }
+main { min-width: 0; }
+section.chapter { padding-top: 44px; scroll-margin-top: 12px; }
+section.chapter > .prose, .prose { max-width: 720px; }
+.chapter-kicker { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--scarf); margin-bottom: 4px; }
+hr.sep { border: 0; border-top: 1px solid var(--line); margin: 56px 0 0; }
+
+/* ---------- Components ---------- */
+.demo { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin: 22px 0 26px; max-width: 900px; }
+.demo-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.demo-head .t { font-family: var(--font-display); font-size: 1.05rem; }
+.demo-head .t::before { content: 'ลองเล่น · '; color: var(--forest); }
+.demo-note { font-size: 0.9rem; color: var(--ink-2); margin: 10px 0 0; }
+.demo canvas { display: block; width: 100%; border-radius: 10px; background: var(--surface-2); touch-action: none; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.controls + canvas, canvas + .controls, .controls + .readout, .readout + .controls { margin-top: 12px; }
+.chip-btn { font-family: var(--font-body); font-size: 0.9rem; padding: 6px 12px; border-radius: 9px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.chip-btn:hover { border-color: var(--ink-2); }
+.chip-btn[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.chip-btn.accent { border-color: var(--scarf); color: var(--scarf); }
+.chip-btn.accent:active { background: var(--scarf); color: #fff; }
+label.toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 0.9rem; padding: 4px 10px; border-radius: 9px; background: var(--surface-2); cursor: pointer; }
+input[type="range"] { accent-color: var(--scarf); }
+.readout { font-family: var(--font-mono); font-size: 0.85rem; background: var(--surface-2); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; line-height: 1.6; overflow-x: auto; }
+.ok { color: var(--hit); font-weight: 600; }
+.bad { color: var(--miss); font-weight: 600; }
+figure { margin: 22px 0; max-width: 900px; }
+figure img { width: 100%; max-width: 100%; border-radius: 14px; border: 1px solid var(--line); display: block; }
+figcaption { font-size: 0.88rem; color: var(--ink-2); margin-top: 8px; }
+.callout { border-left: 4px solid var(--lantern); background: var(--surface); padding: 12px 16px; border-radius: 0 12px 12px 0; margin: 18px 0; max-width: 720px; }
+.callout.tip { border-color: var(--forest); }
+.callout.warn { border-color: var(--scarf); }
+.callout b.k { font-family: var(--font-display); font-weight: 500; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 900px; }
+.grid-2 > * { min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 500; color: var(--ink-2); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); font-size: 0.86rem; }
+.table-wrap { overflow-x: auto; max-width: 900px; margin: 16px 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 8px; }
+kbd { font-family: var(--font-mono); font-size: 0.8em; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line); border-bottom-width: 2.5px; background: var(--surface); }
+
+/* code */
+pre.code { background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.6; margin: 16px 0; max-width: 900px; }
+pre.code .c { color: var(--code-dim); font-style: italic; }
+pre.code .s { color: #f2c27a; }
+pre.code .k { color: #ff8f7f; }
+pre.code .n { color: #8fd3ff; }
+.code-file { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-2); margin: 16px 0 -10px; }
+
+/* architecture diagram */
+.arch { display: grid; gap: 10px; }
+.arch .layer { border: 1.5px dashed var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px; }
+.arch .layer > .cap { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.arch .row { display: flex; flex-wrap: wrap; gap: 8px; }
+.arch button { font-family: var(--font-body); text-align: left; flex: 1 1 140px; padding: 8px 12px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface-2); color: var(--ink); cursor: pointer; line-height: 1.35; }
+.arch button small { display: block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-2); }
+.arch button[aria-pressed="true"] { border-color: var(--scarf); background: var(--surface); box-shadow: 0 0 0 3px color-mix(in srgb, var(--scarf) 18%, transparent); }
+.arch .detail { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; min-height: 96px; }
+.arch .detail .path { font-family: var(--font-mono); font-size: 0.8rem; color: var(--scarf); }
+
+/* frame stepper */
+ol.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; counter-reset: st; }
+ol.steps li { counter-increment: st; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; padding: 8px 10px; border-radius: 10px; background: var(--surface-2); cursor: pointer; transition: background 0.2s, transform 0.2s; }
+ol.steps li::before { content: counter(st); font-family: var(--font-mono); font-size: 0.8rem; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1.5px solid var(--line); }
+ol.steps li.on { background: color-mix(in srgb, var(--lantern) 22%, var(--surface)); }
+ol.steps li.on::before { background: var(--lantern); border-color: var(--lantern); color: #1a1205; }
+ol.steps li b { font-weight: 600; }
+ol.steps li code { background: var(--surface); }
+
+/* fsm */
+.fsm-wrap { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; }
+.fsm-svg { width: 100%; height: auto; background: var(--surface-2); border-radius: 12px; }
+.fsm-svg .node rect { fill: var(--surface); stroke: var(--line); stroke-width: 2; transition: fill 0.15s, stroke 0.15s; }
+.fsm-svg .node text { fill: var(--ink); font-family: var(--font-display); font-size: 15px; text-anchor: middle; dominant-baseline: middle; }
+.fsm-svg .node.active rect { fill: var(--scarf); stroke: var(--scarf); }
+.fsm-svg .node.active text { fill: #fff; }
+.fsm-svg .edge { stroke: var(--ink-2); stroke-width: 1.6; fill: none; opacity: 0.6; }
+.fsm-svg .elabel { fill: var(--ink-2); font-size: 11.5px; font-family: var(--font-body); text-anchor: middle; }
+.fsm-svg .arrowhead { fill: var(--ink-2); opacity: 0.6; }
+.meter { height: 14px; border-radius: 7px; background: var(--surface-2); overflow: hidden; position: relative; }
+.meter i { position: absolute; inset: 0; transform-origin: left; }
+.meter.hp i { background: var(--scarf); }
+.meter.st i { background: linear-gradient(90deg, #e8c42f, #8fcf4f); }
+.meter.st.ex i { background: repeating-linear-gradient(-45deg, #8f8796 0 6px, #6e6476 6px 12px); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 0.78rem; padding: 2px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); }
+.chip.on { background: var(--lantern); color: #1a1205; }
+.chip.red.on { background: var(--scarf); color: #fff; }
+ul.log { list-style: none; margin: 0; padding: 0; font-size: 0.85rem; display: flex; flex-direction: column; gap: 3px; max-height: 168px; overflow: auto; }
+ul.log li { padding: 3px 8px; border-radius: 6px; background: var(--surface-2); }
+.side-panel { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.side-panel .lbl { font-size: 0.8rem; color: var(--ink-2); display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+.state-big { font-family: var(--font-display); font-size: 1.4rem; }
+
+/* 3D viewer */
+.viewer { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 12px; overflow: hidden; background: radial-gradient(ellipse at 50% 30%, var(--surface), var(--surface-2)); }
+.viewer canvas { width: 100%; height: 100%; display: block; background: transparent; }
+.viewer .fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 20px; color: var(--ink-2); font-size: 0.92rem; }
+.viewer .stat { position: absolute; left: 10px; bottom: 8px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-2); background: color-mix(in srgb, var(--surface) 80%, transparent); padding: 2px 8px; border-radius: 6px; }
+
+/* stamina sim */
+.st-bar { height: 26px; border-radius: 13px; background: var(--surface-2); position: relative; overflow: hidden; border: 2px solid var(--line); }
+.st-bar .fill { position: absolute; inset: 0; transform-origin: left; background: linear-gradient(90deg, #e8c42f, #8fcf4f); }
+.st-bar .ghost { position: absolute; inset: 0; transform-origin: left; background: color-mix(in srgb, var(--ink) 25%, transparent); }
+.st-bar.ex { border-color: var(--scarf); }
+.st-bar.ex .fill { background: repeating-linear-gradient(-45deg, #8f8796 0 8px, #6e6476 8px 16px); }
+.st-bar .txt { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: #1a1205; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
+.spinner { width: 18px; height: 18px; }
+.spinner circle { fill: none; stroke-width: 4; }
+.spinner .tr { stroke: rgba(0,0,0,0.25); }
+.spinner .pg { stroke: #fff; stroke-linecap: round; stroke-dasharray: 88; transform: rotate(-90deg); transform-origin: 50% 50%; }
+
+/* glossary */
+dl.gloss { display: grid; grid-template-columns: minmax(130px, 220px) 1fr; gap: 0; max-width: 900px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+dl.gloss dt, dl.gloss dd { margin: 0; padding: 9px 14px; border-bottom: 1px solid var(--line); }
+dl.gloss dt { font-family: var(--font-mono); font-size: 0.86rem; font-weight: 600; background: var(--surface-2); }
+ol.homework { padding-left: 1.3em; max-width: 720px; }
+ol.homework li { margin-bottom: 0.6em; }
+.level-tag { font-family: var(--font-mono); font-size: 0.72rem; padding: 1px 7px; border-radius: 6px; margin-left: 6px; vertical-align: 2px; }
+.level-tag.easy { background: color-mix(in srgb, var(--forest) 20%, transparent); color: var(--forest); }
+.level-tag.mid { background: color-mix(in srgb, var(--lantern) 22%, transparent); color: var(--lantern); }
+.level-tag.hard { background: color-mix(in srgb, var(--scarf) 18%, transparent); color: var(--scarf); }
+footer { max-width: 1180px; margin: 0 auto; padding-block: 30px 50px; color: var(--ink-2); font-size: 0.88rem; border-top: 1px solid var(--line); }
+
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; padding-block: 24px 10px; }
+  .collage { max-width: 560px; }
+  .layout { grid-template-columns: 1fr; gap: 0; }
+  nav.toc { display: none; }
+  details.toc-mobile { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin-top: 10px; }
+  details.toc-mobile summary { font-family: var(--font-display); cursor: pointer; }
+  details.toc-mobile ol { margin: 8px 0 0; padding-left: 1.4em; font-size: 0.95rem; }
+  .fsm-wrap, .grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  h2 { font-size: 1.5rem; }
+  .demo { padding: 12px; }
+  dl.gloss { grid-template-columns: 1fr; }
+  dl.gloss dt { border-bottom: 0; }
+}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"}}</script>
+</head>
+<body>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">Isometric Game Lab · คู่มือสำหรับมือใหม่</div>
+    <h1>ทำเกม 3D มุมเฉียง<br>จากโค้ดเปล่า กับ <em>ผ้าพันคอแดง</em></h1>
+    <p class="lead">หน้านี้พาไล่ดูเกม <b>Red Scarf Adventure</b> ทีละชิ้น ตั้งแต่ game loop, กล้อง isometric, การปั้นโมเดลด้วยโค้ด, state machine, ระบบต่อสู้และ stamina ไปจนถึงเทคนิคที่ทำให้การฟันรู้สึก "หนักมือ" ทุกหัวข้อมีเดโมให้ลองกด และชี้ไปยังไฟล์จริงในโปรเจกต์</p>
+    <div class="actions">
+      <a class="btn primary" href="../index.html" target="_blank" rel="noopener">เล่นเกม</a>
+      <a class="btn" href="https://github.com/lilin-x/Isometric-game-lab" target="_blank" rel="noopener">ดูโค้ดบน GitHub</a>
+    </div>
+    <ul class="facts">
+      <li>Three.js r187 + JavaScript</li>
+      <li>ไม่ใช้ game engine</li>
+      <li>โมเดล 3D และเสียงสร้างจากโค้ดทั้งหมด</li>
+      <li>2 ด่าน · 3 มอนสเตอร์ · 11 NPC</li>
+    </ul>
+  </div>
+  <div class="collage" aria-hidden="true">
+    <img src="img/towers.jpg" alt="">
+    <img src="img/forest.jpg" alt="">
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="สารบัญ">
+    <div class="label">สารบัญ</div>
+    <ol>
+      <li><a href="#start">เริ่มที่นี่</a></li>
+      <li><a href="#big-picture">ภาพรวมทั้งเกม</a></li>
+      <li><a href="#loop">Game Loop และ dt</a></li>
+      <li><a href="#three">พื้นฐาน Three.js</a></li>
+      <li><a href="#camera">กล้อง Isometric</a></li>
+      <li><a href="#modeling">ปั้นโมเดลด้วยโค้ด</a></li>
+      <li><a href="#fsm">State Machine</a></li>
+      <li><a href="#combat">ระบบต่อสู้</a></li>
+      <li><a href="#stamina">ระบบ Stamina</a></li>
+      <li><a href="#juice">Game Feel</a></li>
+      <li><a href="#collision">Collision</a></li>
+      <li><a href="#animation">แอนิเมชันด้วยโค้ด</a></li>
+      <li><a href="#levels">ออกแบบด่าน + ประสิทธิภาพ</a></li>
+      <li><a href="#audio-ui">เสียงและ UI</a></li>
+      <li><a href="#next">ทำต่อเอง</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <details class="toc-mobile">
+      <summary>สารบัญ</summary>
+      <ol>
+        <li><a href="#start">เริ่มที่นี่</a></li><li><a href="#big-picture">ภาพรวมทั้งเกม</a></li><li><a href="#loop">Game Loop และ dt</a></li>
+        <li><a href="#three">พื้นฐาน Three.js</a></li><li><a href="#camera">กล้อง Isometric</a></li><li><a href="#modeling">ปั้นโมเดลด้วยโค้ด</a></li>
+        <li><a href="#fsm">State Machine</a></li><li><a href="#combat">ระบบต่อสู้</a></li><li><a href="#stamina">ระบบ Stamina</a></li>
+        <li><a href="#juice">Game Feel</a></li><li><a href="#collision">Collision</a></li><li><a href="#animation">แอนิเมชันด้วยโค้ด</a></li>
+        <li><a href="#levels">ออกแบบด่าน + ประสิทธิภาพ</a></li><li><a href="#audio-ui">เสียงและ UI</a></li><li><a href="#next">ทำต่อเอง</a></li>
+      </ol>
+    </details>
+
+    <!-- ===================================================== 01 -->
+    <section class="chapter" id="start">
+      <div class="chapter-kicker">บทที่ 1</div>
+      <h2>เริ่มที่นี่</h2>
+      <div class="prose">
+        <p>เกมนี้เขียนด้วย <b>JavaScript</b> และไลบรารี <b>Three.js</b> ซึ่งทำหน้าที่ "วาดภาพ 3D บนเบราว์เซอร์" อย่างเดียว ส่วนอื่นๆ ที่ game engine ปกติมีให้ (game loop, ระบบชน, AI, UI) เราเขียนเองทั้งหมด ข้อดีสำหรับการเรียนคือ <b>ไม่มีเวทมนตร์ซ่อนอยู่</b> ทุกบรรทัดเปิดอ่านได้ และเมื่อเข้าใจแล้ว จะย้ายไปใช้ Godot หรือ Unity ได้ง่ายมาก เพราะแนวคิดเหมือนกัน</p>
+        <p>ต้องมี <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> ก่อน แล้วรันคำสั่งในโฟลเดอร์โปรเจกต์:</p>
+      </div>
+      <pre class="code js">npm install        // ติดตั้ง three.js และ vite (ตัวรันเว็บสำหรับพัฒนา)
+npm run dev        // เปิด http://localhost:5173 แก้โค้ดแล้วหน้าเว็บอัปเดตเอง
+npm test           // รัน unit test ของระบบ stamina</pre>
+      <div class="prose">
+        <p>ระหว่างอ่าน แนะนำให้เปิดเกมไว้อีกแท็บ และเปิดหน้าต่าง debug ด้วย <kbd>F3</kbd> จะเห็นค่า FPS, จำนวน draw call, สถานะของตัวละคร และ stamina แบบสดๆ หรือใช้ URL <code>?level=forest&amp;skip&amp;debug</code> เพื่อข้ามไปด่านป่าทันที</p>
+      </div>
+      <div class="callout tip"><b class="k">วิธีอ่านหน้านี้</b> — ไม่ต้องอ่านเรียงก็ได้ ถ้าอยากเห็นภาพรวมก่อน ไปบทที่ 2 ถ้าอยากรู้ว่าทำไมการฟันในเกมรู้สึกสะใจ ไปบทที่ 10 เลย</div>
+    </section>
+
+    <!-- ===================================================== 02 -->
+    <section class="chapter" id="big-picture">
+      <div class="chapter-kicker">บทที่ 2</div>
+      <h2>ภาพรวมทั้งเกม: ใครทำอะไร</h2>
+      <div class="prose">
+        <p>โปรเจกต์แบ่งเป็นชั้นๆ ชั้นนอกสุดคือ <code>Game</code> ที่คุมจังหวะทั้งหมด ข้างในมี <b>ด่าน (Level)</b> ที่บรรจุ <b>ตัวละคร (Entity)</b> และแต่ละตัวละครประกอบจาก <b>ชิ้นส่วนเล็ก (Component)</b> ที่นำกลับมาใช้ซ้ำได้ เช่น หลอดเลือดใช้ร่วมกันทั้งผู้เล่นและมอนสเตอร์ กดที่กล่องเพื่อดูว่าแต่ละส่วนทำอะไร</p>
+      </div>
+      <div class="demo" id="arch-demo">
+        <div class="demo-head"><span class="t">แผนที่โค้ด</span><span class="dim" style="font-size:.85rem">กดที่กล่อง</span></div>
+        <div class="arch">
+          <div class="layer"><span class="cap">จุดเริ่ม + หัวใจของเกม</span>
+            <div class="row"><button data-k="main">main.js<small>src/main.js</small></button><button data-k="game" aria-pressed="true">Game<small>core/Game.js</small></button><button data-k="config">config<small>src/config.js</small></button></div>
+          </div>
+          <div class="layer"><span class="cap">ระบบบริการ (Game เป็นเจ้าของ)</span>
+            <div class="row"><button data-k="input">Input<small>core/Input.js</small></button><button data-k="camera">IsoCamera<small>core/IsoCamera.js</small></button><button data-k="audio">Audio<small>core/Audio.js</small></button><button data-k="fx">FX<small>fx/*.js</small></button><button data-k="ui">UI<small>ui/*.js</small></button></div>
+          </div>
+          <div class="layer"><span class="cap">ด่าน (สลับได้ทีละด่าน)</span>
+            <div class="row"><button data-k="level">Level<small>levels/Level.js</small></button><button data-k="town">TownLevel<small>levels/TownLevel.js</small></button><button data-k="forest">ForestLevel<small>levels/ForestLevel.js</small></button><button data-k="collision">Collision<small>core/Collision.js</small></button></div>
+          </div>
+          <div class="layer"><span class="cap">ตัวละคร (อยู่ในด่าน)</span>
+            <div class="row"><button data-k="player">Player<small>entities/Player.js</small></button><button data-k="enemy">Enemy ×3<small>entities/Enemy.js</small></button><button data-k="npc">NPC + แมว<small>entities/NPC.js</small></button><button data-k="dummy">หุ่นฟาง<small>entities/TrainingDummy.js</small></button></div>
+          </div>
+          <div class="layer"><span class="cap">ชิ้นส่วนใช้ซ้ำ + โมเดล</span>
+            <div class="row"><button data-k="fsm">StateMachine<small>core/StateMachine.js</small></button><button data-k="health">Health<small>core/Health.js</small></button><button data-k="stamina">Stamina<small>core/Stamina.js</small></button><button data-k="events">Events<small>core/Events.js</small></button><button data-k="models">Models<small>models/*.js</small></button></div>
+          </div>
+          <div class="detail" aria-live="polite"><div class="path"></div><div class="body"></div></div>
+        </div>
+      </div>
+
+      <h3>หนึ่งเฟรมของเกม เกิดอะไรขึ้นบ้าง</h3>
+      <div class="prose"><p>เกมวาดภาพใหม่ประมาณ 60 ครั้งต่อวินาที ในแต่ละครั้ง (เรียกว่า <b>เฟรม</b>) โค้ดจะทำงานตามลำดับเดิมเสมอ กด "เล่น" เพื่อดูทีละขั้น ตัวอย่างนี้คือเฟรมที่ผู้เล่นเพิ่งคลิกซ้ายฟันโดนสไลม์</p></div>
+      <div class="demo" id="frame-demo">
+        <div class="demo-head"><span class="t">ไล่ดูหนึ่งเฟรม</span><div class="controls"><button class="chip-btn" id="frame-play">▶ เล่นทีละขั้น</button></div></div>
+        <ol class="steps">
+          <li><div><b>วัดเวลา</b> — <code>timer.update()</code> หา <code>dt</code> = เวลาที่ผ่านไปจากเฟรมก่อน (เช่น 0.016 วินาที) ถ้ากำลัง hit-stop จะบังคับ dt = 0</div></li>
+          <li><div><b>อ่านปุ่ม</b> — <code>Input</code> รู้ว่า "คลิกซ้ายเพิ่งถูกกด" ผู้เล่นเก็บไว้ใน input buffer 0.22 วินาที</div></li>
+          <li><div><b>อัปเดตผู้เล่น</b> — state machine อยู่ใน <code>locomotion</code> เห็นปุ่มฟันเบา → เช็ค stamina (ใช้ 12) → เปลี่ยนเป็น <code>attack</code></div></li>
+          <li><div><b>ถึงจังหวะดาบโดน</b> — ที่ 0.11 วินาทีของท่า หาเป้าหมายในระยะ 1.75 ม. และมุม 120° แล้วเรียก <code>slime.takeHit()</code></div></li>
+          <li><div><b>มอนสเตอร์ตอบสนอง</b> — ลดเลือด, กระพริบขาว, กระเด็น, เปลี่ยนสถานะเป็น <code>hurt</code> และส่งตัวเลข damage ไปให้ UI</div></li>
+          <li><div><b>Juice</b> — สั่ง hit-stop 0.045 วินาที, สั่นจอ, เล่นเสียง, ปล่อยประกายไฟจาก particle system</div></li>
+          <li><div><b>ชนและดันออก</b> — ทุกตัวที่ซ้อนกันถูกแยกออก แล้วดันออกจากต้นไม้/ตึก/ลำธาร</div></li>
+          <li><div><b>กล้องตามตัวละคร</b> — ค่อยๆ เลื่อนไปหาผู้เล่น + บวกแรงสั่นจอ</div></li>
+          <li><div><b>อัปเดต UI</b> — หลอด HP/stamina, ตัวเลขลอย (แปลงตำแหน่ง 3D เป็นพิกเซลบนจอ)</div></li>
+          <li><div><b>วาดภาพ</b> — วาดฉากทั้งหมด → เพิ่มแสงฟุ้ง (bloom) → แปลงสีขั้นสุดท้าย แล้วล้างสถานะ "เพิ่งกด" ของปุ่ม รอเฟรมถัดไป</div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================================================== 03 -->
+    <section class="chapter" id="loop">
+      <div class="chapter-kicker">บทที่ 3</div>
+      <h2>Game Loop และ delta time</h2>
+      <div class="prose">
+        <p>หัวใจของทุกเกมคือ loop ที่วนไม่รู้จบ: <b>อ่านปุ่ม → อัปเดตโลก → วาดภาพ</b> เบราว์เซอร์ช่วยเราด้วย <code>requestAnimationFrame</code> ที่เรียกฟังก์ชันของเราก่อนจอรีเฟรชทุกครั้ง</p>
+        <p>ปัญหาคือแต่ละเครื่องรีเฟรชไม่เท่ากัน จอทั่วไป 60 ครั้งต่อวินาที จอเกมมิ่ง 144 ครั้ง ถ้าเราเขียนว่า "ทุกเฟรมเดินไป 3 พิกเซล" คนที่ใช้จอ 144Hz จะเดินเร็วกว่าคนอื่นเกือบ 2.5 เท่า วิธีแก้คือคูณทุกการเคลื่อนที่ด้วย <b>dt</b> (เวลาที่ผ่านไปจากเฟรมก่อน)</p>
+      </div>
+      <div class="demo" id="dt-demo">
+        <div class="demo-head"><span class="t">เครื่องเร็ว vs เครื่องช้า</span>
+          <div class="controls" role="group" aria-label="จำลอง FPS"><button class="chip-btn" data-fps="30">30 FPS</button><button class="chip-btn" data-fps="60" aria-pressed="true">60 FPS</button><button class="chip-btn" data-fps="144">144 FPS</button></div></div>
+        <canvas id="dt-canvas" aria-label="ลูกบอลสองลูกวิ่งด้วยวิธีต่างกัน"></canvas>
+        <div class="readout" id="dt-read"></div>
+      </div>
+      <div class="code-file">src/core/Game.js</div>
+      <pre class="code js">frame(timestamp) {
+  this.timer.update(timestamp);
+  // จำกัด dt ไม่เกิน 1/20 วินาที กันตัวละครวาร์ปเวลาเครื่องค้าง
+  const realDt = Math.min(this.timer.getDelta(), 1 / 20);
+
+  // Hit-stop: หยุดโลกชั่วขณะตอนฟันโดน (dt = 0 → ทุกอย่างหยุดขยับ)
+  let dt = realDt * this.timeScale;
+  if (this.hitStopTimer > 0) { this.hitStopTimer -= realDt; dt = 0; }
+
+  this.level.update(dt);      // ขยับทุกอย่างในด่าน
+  this.iso.update(realDt);    // กล้อง
+  this.render();              // วาด
+  this.input.endFrame();      // ล้างสถานะ "เพิ่งกด"
+}</pre>
+      <div class="callout"><b class="k">เกร็ดน่ารู้</b> — สังเกตว่าเราส่ง <code>dt</code> ให้ด่าน แต่ส่ง <code>realDt</code> ให้กล้อง เพราะตอน hit-stop เราอยากให้โลกหยุด แต่จอยังสั่นอยู่ได้ เกมจริงหลายเกมจึงมี "นาฬิกา" มากกว่าหนึ่งเรือน เกมระดับใหญ่บางเกมใช้ <b>fixed timestep</b> (อัปเดตทีละ 1/60 วินาทีเป๊ะๆ) เพื่อให้ฟิสิกส์คงที่ อ่านต่อได้ที่บทความ <a href="https://gafferongames.com/post/fix_your_timestep/" target="_blank" rel="noopener">Fix Your Timestep!</a></div>
+    </section>
+
+    <!-- ===================================================== 04 -->
+    <section class="chapter" id="three">
+      <div class="chapter-kicker">บทที่ 4</div>
+      <h2>พื้นฐาน Three.js ใน 5 คำ</h2>
+      <div class="prose">
+        <p>Three.js ทำงานเหมือนกองถ่ายภาพยนตร์ มี 5 อย่างที่ต้องรู้จัก:</p>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>คำ</th><th>เปรียบเหมือน</th><th>ในเกมนี้</th></tr></thead>
+        <tbody>
+          <tr><td><b>Scene</b></td><td>โรงถ่าย ที่วางทุกอย่างลงไป</td><td><code>game.scene</code> แต่ละด่านเอา <code>level.root</code> มาใส่</td></tr>
+          <tr><td><b>Camera</b></td><td>กล้องถ่ายภาพ</td><td><code>OrthographicCamera</code> มุม isometric (บทถัดไป)</td></tr>
+          <tr><td><b>Renderer</b></td><td>ช่างล้างฟิล์ม แปลงฉากเป็นพิกเซล</td><td><code>WebGLRenderer</code> + bloom ผ่าน <code>EffectComposer</code></td></tr>
+          <tr><td><b>Mesh</b> = Geometry + Material</td><td>นักแสดง = รูปร่าง + เครื่องแต่งกาย</td><td>กล่อง/กรวย/ทรงกลม + วัสดุ <code>flatShading</code></td></tr>
+          <tr><td><b>Light</b></td><td>ไฟส่องฉาก</td><td>แสงฟ้า (Hemisphere) + ดวงอาทิตย์ (Directional) + โคมไฟ (Point)</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="code js">import * as THREE from 'three';
+
+const scene = new THREE.Scene();
+const camera = new THREE.OrthographicCamera(-8, 8, 7, -7, 0.1, 200);
+camera.position.set(40, 40, 40);   // มุม isometric: วางกล้องทิศ (1,1,1)
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+document.body.appendChild(renderer.domElement);
+
+// Mesh = Geometry (รูปร่าง) + Material (ผิว)
+const box = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshStandardMaterial({ color: 0xd63a2f, flatShading: true }),
+);
+scene.add(box);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x445533, 1.5));
+
+renderer.setAnimationLoop(() => {        // game loop แบบง่ายที่สุด
+  box.rotation.y += 0.01;
+  renderer.render(scene, camera);
+});</pre>
+      <div class="prose"><p>แค่ 20 บรรทัดนี้ก็ได้กล่องสีแดงหมุนในมุม isometric แล้ว ทั้งเกม Red Scarf คือการขยายโค้ดนี้ออกไปอย่างเป็นระเบียบนั่นเอง</p></div>
+    </section>
+
+    <!-- ===================================================== 05 -->
+    <section class="chapter" id="camera">
+      <div class="chapter-kicker">บทที่ 5</div>
+      <h2>กล้อง Isometric</h2>
+      <div class="prose">
+        <p>กล้องในชีวิตจริงเป็นแบบ <b>perspective</b> ของไกลดูเล็ก เส้นขนานวิ่งไปบรรจบกัน ส่วนเกม isometric ใช้กล้อง <b>orthographic</b> ที่ไม่มีระยะลึก ของไกลกับใกล้ขนาดเท่ากัน เส้นขนานยังขนานเสมอ ภาพจึงดูเหมือนโมเดลจำลองหรือแผนที่ในบอร์ดเกม</p>
+        <p>สูตร isometric แท้: วางกล้องที่ทิศ <code>(1, 1, 1)</code> ของจุดที่มอง ได้มุมหมุน 45° และมุมก้ม <b>35.264°</b> (= atan(1/√2)) ซึ่งทำให้แกน X, Y, Z ยาวเท่ากันบนจอ</p>
+      </div>
+      <div class="demo" id="proj-demo">
+        <div class="demo-head"><span class="t">Perspective กับ Orthographic</span>
+          <div class="controls" role="group" aria-label="ชนิดกล้อง"><button class="chip-btn" data-mode="persp">Perspective</button><button class="chip-btn" data-mode="ortho" aria-pressed="true">Orthographic (isometric)</button></div></div>
+        <canvas id="proj-canvas" aria-label="เมืองจำลองในกล้องสองแบบ"></canvas>
+        <p class="demo-note">ดูเสาที่อยู่ไกลและใกล้: ใน perspective ขนาดต่างกันและเส้นเอียงเข้าหากัน ใน orthographic ทุกต้นสูงเท่ากันเป๊ะ</p>
+      </div>
+
+      <h3>กด W ต้องเดิน "ขึ้นจอ" ไม่ใช่ "ไปทาง +Z"</h3>
+      <div class="prose"><p>เพราะกล้องเฉียง 45° ทิศ "ขึ้นจอ" จึงไม่ตรงกับแกนใดๆ ในโลก เราต้องแปลงปุ่มเป็นทิศบนพื้นโลก ด้วยเวกเตอร์สองตัวที่คำนวณครั้งเดียว ลองกดปุ่มหรือคลิกที่กล่องนี้แล้วกด <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></p></div>
+      <div class="demo" id="wasd-demo" tabindex="0" aria-label="เดโมทิศ WASD กดปุ่ม W A S D ได้">
+        <div class="demo-head"><span class="t">แปลง WASD เป็นทิศในโลก</span>
+          <div class="controls"><button class="chip-btn" data-key="w">W</button><button class="chip-btn" data-key="a">A</button><button class="chip-btn" data-key="s">S</button><button class="chip-btn" data-key="d">D</button></div></div>
+        <canvas id="wasd-canvas" aria-label="แกนโลกในมุม isometric"></canvas>
+        <div class="readout" id="wasd-read">กดปุ่ม W/A/S/D (กดสองปุ่มพร้อมกันได้)</div>
+      </div>
+      <div class="code-file">src/core/IsoCamera.js</div>
+      <pre class="code js">// กล้องอยู่ที่ทิศ (+1,+1,+1) มองไปทาง (-1,-1,-1)
+// → เดินขึ้นบนจอ = ไปทาง (-x, -z),  เดินไปขวาจอ = ไปทาง (+x, -z)
+export const SCREEN_UP    = new THREE.Vector3(-1, 0, -1).normalize();
+export const SCREEN_RIGHT = new THREE.Vector3( 1, 0, -1).normalize();
+
+// ใน Player.js
+const mv = input.moveVector();               // {x, y} จาก WASD ยาวไม่เกิน 1
+moveDir.addScaledVector(SCREEN_RIGHT, mv.x)  // แปลงเป็นทิศในโลก
+       .addScaledVector(SCREEN_UP, mv.y);</pre>
+      <div class="callout tip"><b class="k">ทริคเล็กๆ</b> — <code>moveVector()</code> หารด้วยความยาว (normalize) เสมอ ไม่งั้นกดเฉียง W+D จะได้เวกเตอร์ยาว √2 ≈ 1.41 แปลว่าเดินเฉียงเร็วกว่าเดินตรง 41% (บั๊กคลาสสิกของเกมมือใหม่)</div>
+    </section>
+
+    <!-- ===================================================== 06 -->
+    <section class="chapter" id="modeling">
+      <div class="chapter-kicker">บทที่ 6</div>
+      <h2>ปั้นโมเดล low poly ด้วยโค้ด</h2>
+      <div class="prose">
+        <p>เกมนี้ไม่มีไฟล์โมเดลเลยสักไฟล์ ทุกอย่างสร้างจาก <b>รูปทรงพื้นฐาน</b> ของ Three.js มาต่อกันเหมือนเลโก้ ลุค low poly มาจาก 4 อย่าง:</p>
+        <ol>
+          <li><b>flatShading</b> — แต่ละหน้าสามเหลี่ยมเป็นสีเรียบสีเดียว เห็นเหลี่ยมชัด</li>
+          <li><b>จำนวนด้านน้อย</b> — ทรงกระบอก 6–8 ด้าน, ทรงกลมแบบ icosahedron ระดับ 0–1</li>
+          <li><b>ชุดสีจำกัด</b> — ไม่ใช้ texture เลย ใช้สีเรียบจาก palette ที่เข้ากัน</li>
+          <li><b>เขย่าจุดยอด (jitter)</b> — ขยับมุมนิดหน่อยแบบสุ่ม หิน/ต้นไม้จะดูเป็นธรรมชาติ ไม่เป๊ะจนแข็ง</li>
+        </ol>
+        <p>ลองกดปุ่มด้านล่างเพื่อเปิด-ปิดแต่ละเทคนิคกับ "ไคจิ๋ว" ที่สร้างด้วยโค้ด 70 บรรทัด (ลากเพื่อหมุนดู)</p>
+      </div>
+      <div class="demo" id="model-demo">
+        <div class="demo-head"><span class="t">ไคจิ๋ว 3D</span>
+          <div class="controls">
+            <button class="chip-btn" id="m-flat" aria-pressed="true">flat shading</button>
+            <button class="chip-btn" id="m-low" aria-pressed="true">low poly</button>
+            <button class="chip-btn" id="m-wire" aria-pressed="false">wireframe</button>
+            <button class="chip-btn" id="m-explode" aria-pressed="false">แยกชิ้นส่วน</button>
+          </div></div>
+        <div class="viewer" id="model-viewer"><div class="fallback">กำลังโหลด three.js…</div><span class="stat" id="model-stat"></span></div>
+        <p class="demo-note">"แยกชิ้นส่วน" ให้เห็นว่าตัวละครหนึ่งตัวคือกล่อง กรวย ทรงกระบอก หลายสิบชิ้นวางซ้อนกัน ส่วน "low poly" ปิดแล้วจำนวนสามเหลี่ยมพุ่งหลายเท่า แต่ความน่ารักลดลง</p>
+      </div>
+
+      <h3>โครงสร้างแบบหุ่นมีข้อต่อ (hierarchy)</h3>
+      <div class="grid-2">
+        <figure style="margin:0"><img src="img/hero.jpg" alt="ไค ตัวละครหลัก เด็กชายผมน้ำตาล ผ้าพันคอแดง ถือดาบ ในมุมใกล้"><figcaption>ไคในเกมจริง ประกอบจากชิ้นส่วนราว 70 ชิ้น</figcaption></figure>
+        <pre class="code" style="margin:0">root (หมุนทั้งตัว = หันหน้า)
+└─ roll (จุดหมุนตอนตีลังกาหลบ)
+   └─ body (ขยับขึ้นลงตอนเดิน)
+      └─ hips
+         ├─ legL / legR    แกว่งตอนเดิน
+         └─ torso          บิดตัวตอนฟัน
+            ├─ neck ─ head  ผม ตา หู ผ้าพันคอ
+            ├─ shoulderL ─ handL
+            └─ shoulderR ─ handR ─ wristR ─ ดาบ</pre>
+      </div>
+      <div class="prose" style="margin-top:14px">
+        <p>หลักสำคัญคือ <b>ลูกจะขยับตามพ่อเสมอ</b> หมุนไหล่ แขน มือ และดาบก็หมุนตาม หมุน root ทั้งตัวก็หันตาม ทำให้แอนิเมชันง่ายมาก (บทที่ 12) ฟังก์ชันเดียว <code>buildHumanoid()</code> สร้างได้ทั้งไคและ NPC อีก 10 คน แค่เปลี่ยนตัวเลือก เช่น สีเสื้อ ทรงผม หมวก หนวด ผ้ากันเปื้อน</p>
+      </div>
+
+      <h3>ตึกแฟนตาซีที่ "ไม่ตั้งตรง"</h3>
+      <figure><img src="img/towers.jpg" alt="ย่านตึกสูงในเมืองโคมไฟ แต่ละชั้นเยื้องและบิดไม่ตรงกัน หน้าต่างเรืองแสง หลังคาหลากสี"><figcaption>ตึกทุกหลังมาจากฟังก์ชัน <code>buildTower()</code> เดียวกัน แค่ใส่ seed ต่างกัน</figcaption></figure>
+      <div class="code-file">src/models/town.js — สร้างทีละชั้น</div>
+      <pre class="code js">for (let i = 0; i &lt; o.floors; i++) {
+  if (i > 0) {
+    fw = fw * rng.range(0.93, 1.14);          // ชั้นบนใหญ่/เล็กลงนิดหน่อย
+    ox = ox + rng.range(-0.4, 0.4);           // เลื่อนจุดกึ่งกลาง = เยื้อง
+    rotY += rng.range(-0.11, 0.11);           // บิดรอบแกนตั้ง ~6°
+  }
+  floor.position.set(ox, y, oz);
+  floor.rotation.set(rng.range(-0.025, 0.025), rotY, rng.range(-0.03, 0.03)); // เอียงนิดๆ
+  // ...ผนัง เสาไม้ คานพื้น หน้าต่าง ระเบียง
+  y += h;                                    // ชั้นถัดไปวางต่อด้านบน
+}</pre>
+      <div class="callout"><b class="k">ทำไมต้องใช้ seed?</b> — <code>Math.random()</code> สุ่มไม่ซ้ำทุกครั้งที่โหลด เมืองจะหน้าตาเปลี่ยนไปเรื่อยๆ เกมนี้ใช้ตัวสุ่มที่ใส่ seed ได้ (<code>makeRng(20261103)</code>) seed เดิม = ผลสุ่มชุดเดิม เมืองจึงหน้าตาเหมือนเดิมทุกครั้ง แต่ถ้าอยากได้เมืองใหม่ แค่เปลี่ยนตัวเลข seed</div>
+    </section>
+
+    <!-- ===================================================== 07 -->
+    <section class="chapter" id="fsm">
+      <div class="chapter-kicker">บทที่ 7</div>
+      <h2>State Machine: สมองของตัวละคร</h2>
+      <div class="prose">
+        <p>ถ้าเขียนแบบมือใหม่ จะได้ตัวแปร true/false เต็มไปหมด เช่น <code>isAttacking</code>, <code>isDodging</code>, <code>isCharging</code> แล้วสักวันจะเจอบั๊กที่ "ฟันไปด้วย กลิ้งไปด้วย" เพราะลืมเช็คสักตัว</p>
+        <p><b>Finite State Machine (FSM)</b> แก้ปัญหานี้: ตัวละครอยู่ใน <b>สถานะเดียว</b> ในแต่ละเวลา แต่ละสถานะรู้เองว่ารับปุ่มอะไรได้ และจะไปสถานะไหนต่อ ลองกดปุ่มด้านล่าง (ตัวเลขทั้งหมดเหมือนในเกมจริง และปรับให้ช้าลงเพื่อดูการเปลี่ยนสถานะได้)</p>
+      </div>
+      <div class="demo" id="fsm-demo">
+        <div class="demo-head"><span class="t">FSM ของไค</span>
+          <div class="controls"><label class="toggle">ความเร็ว <input type="range" id="fsm-speed" min="0.15" max="1" step="0.05" value="0.4" aria-label="ความเร็วเวลา"></label></div></div>
+        <div class="fsm-wrap">
+          <svg class="fsm-svg" id="fsm-svg" viewBox="0 0 520 330" role="img" aria-label="แผนภาพสถานะของตัวละคร"></svg>
+          <div class="side-panel">
+            <div><div class="lbl"><span>สถานะ</span><span id="fsm-time"></span></div><div class="state-big" id="fsm-state">locomotion</div></div>
+            <div><div class="lbl"><span>HP</span><span id="fsm-hp-v"></span></div><div class="meter hp"><i id="fsm-hp"></i></div></div>
+            <div><div class="lbl"><span>Stamina</span><span id="fsm-st-v"></span></div><div class="meter st" id="fsm-st-m"><i id="fsm-st"></i></div></div>
+            <div class="chips"><span class="chip red" id="chip-ex">หมดแรง</span><span class="chip" id="chip-if">อมตะ (i-frame)</span><span class="chip" id="chip-ch">ชาร์จ 0%</span></div>
+            <div class="controls">
+              <button class="chip-btn" data-ev="light">คลิกซ้าย</button>
+              <button class="chip-btn" data-ev="heavyDown">กดค้างคลิกขวา</button>
+              <button class="chip-btn" data-ev="heavyUp">ปล่อยคลิกขวา</button>
+              <button class="chip-btn" data-ev="dodge">Space</button>
+              <button class="chip-btn accent" data-ev="hit">มอนสเตอร์ตี!</button>
+              <button class="chip-btn" data-ev="reset">รีเซ็ต</button>
+            </div>
+            <ul class="log" id="fsm-log" aria-live="polite"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="code-file">src/core/StateMachine.js — ทั้งไฟล์มีแค่นี้</div>
+      <pre class="code js">export class StateMachine {
+  constructor(states, initial) {
+    this.states = states;
+    this.time = 0;            // อยู่ในสถานะนี้มากี่วินาทีแล้ว
+    this.change(initial);
+  }
+  change(name, params) {
+    this.current?.exit?.();   // ออกจากสถานะเดิม
+    this.name = name;
+    this.current = this.states[name];
+    this.time = 0;
+    this.current.enter?.(params);   // เข้าสถานะใหม่
+  }
+  update(dt) {
+    this.time += dt;
+    this.current?.update?.(dt);
+  }
+}</pre>
+      <div class="prose">
+        <p>มอนสเตอร์ก็ใช้ FSM ตัวเดียวกัน แต่สถานะต่างกัน: <code>idle → chase → windup → attack → recover → chase</code> จุดที่สำคัญที่สุดคือ <b>windup</b> (ช่วงง้าง) ที่มีวงสีแดงบนพื้นเตือนผู้เล่น และ <b>recover</b> (ช่วงหอบหลังโจมตี) ที่เปิดให้ผู้เล่นสวนกลับ</p>
+      </div>
+      <figure><img src="img/golem.jpg" alt="โกเลมหินกำลังง้างทุบ มีวงสีแดงบนพื้นเตือนตำแหน่งที่จะโดน"><figcaption>โกเลมอยู่ในสถานะ <code>windup</code> ยกแขนสูงและวงเตือนสีแดงค่อยๆ เต็ม ผู้เล่นมีเวลา 1.05 วินาทีในการหลบ</figcaption></figure>
+      <div class="callout tip"><b class="k">Hysteresis: กันมอนสเตอร์ลังเล</b> — มอนสเตอร์เริ่มไล่เมื่อผู้เล่นเข้าใกล้ 8 เมตร แต่จะเลิกไล่เมื่อห่างเกิน 8 × 1.6 = 12.8 เมตร ถ้าใช้ค่าเดียวกัน มอนสเตอร์ที่ยืนอยู่ตรงเส้นพอดีจะสลับ "ไล่-ไม่ไล่" ทุกเฟรม ดูกระตุกแปลกๆ</div>
+    </section>
+
+    <!-- ===================================================== 08 -->
+    <section class="chapter" id="combat">
+      <div class="chapter-kicker">บทที่ 8</div>
+      <h2>ระบบต่อสู้: ดาบโดนหรือไม่โดน?</h2>
+      <div class="prose">
+        <p>เกมนี้ไม่ได้เช็คว่าใบดาบ 3D ชนกับโมเดลมอนสเตอร์จริงๆ (ยากและช้า) แต่ใช้วิธีที่เกมแอคชันส่วนใหญ่ใช้: เช็ค <b>ระยะ</b> และ <b>มุม</b> บนพื้นราบ ณ จังหวะที่ดาบโดน (active frame)</p>
+        <ul>
+          <li><b>ระยะ</b>: ระยะห่าง ≤ ระยะดาบ + รัศมีของเป้าหมาย</li>
+          <li><b>มุม</b>: ใช้ <b>dot product</b> ระหว่าง "ทิศที่หันหน้า" กับ "ทิศไปหาเป้าหมาย" ได้ค่า cos ของมุม แล้วเทียบกับครึ่งหนึ่งของมุมกวาด</li>
+        </ul>
+        <p>ลองขยับเมาส์ (หรือลากนิ้ว) เพื่อย้ายมอนสเตอร์สีเขียว</p>
+      </div>
+      <div class="demo" id="hit-demo">
+        <div class="demo-head"><span class="t">Hit detection</span>
+          <div class="controls" role="group" aria-label="ชนิดการฟัน"><button class="chip-btn" data-atk="light" aria-pressed="true">ฟันเบา 120°</button><button class="chip-btn" data-atk="heavy">ฟันชาร์จ 360°</button><label class="toggle">ชาร์จ <input type="range" id="hit-charge" min="0" max="1" step="0.05" value="1" aria-label="ระดับการชาร์จ"></label></div></div>
+        <canvas id="hit-canvas" aria-label="ไคอยู่ตรงกลาง มีพื้นที่ดาบเป็นรูปพัด"></canvas>
+        <div class="readout" id="hit-read"></div>
+      </div>
+      <div class="code-file">src/entities/Player.js — _hitArc()</div>
+      <pre class="code js">const dx = target.position.x - this.position.x;
+const dz = target.position.z - this.position.z;
+const dist = Math.hypot(dx, dz);
+if (dist > range + target.radius) continue;          // ไกลเกิน
+
+const fx = Math.sin(this.facing), fz = Math.cos(this.facing);   // ทิศที่หันหน้า
+const cos = (dx * fx + dz * fz) / dist;                         // dot product
+if (Math.acos(cos) > halfArc) continue;               // อยู่นอกมุมกวาด
+
+target.takeHit({ damage, knockback, dir, heavy });   // โดน!</pre>
+      <h3>ตัวเลขของแต่ละท่า</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>ท่า</th><th class="num">Stamina</th><th class="num">Damage</th><th class="num">ระยะ</th><th class="num">มุม</th><th>จุดเด่น</th></tr></thead>
+        <tbody>
+          <tr><td>ฟันเบา จังหวะ 1–2</td><td class="num">12</td><td class="num">8–10</td><td class="num">1.75 ม.</td><td class="num">120°</td><td>เร็ว 0.34 วินาที ต่อคอมโบได้</td></tr>
+          <tr><td>ฟันเบา จังหวะ 3</td><td class="num">12</td><td class="num">12–14</td><td class="num">1.95 ม.</td><td class="num">120°</td><td>ฟันจากบนลงล่าง กระเด็นแรงกว่า</td></tr>
+          <tr><td>ฟันชาร์จ</td><td class="num">20–40</td><td class="num">25–60</td><td class="num">2.0–2.9 ม.</td><td class="num">360°</td><td>หมุนรอบตัว ทำให้โกเลมสะดุ้งได้</td></tr>
+          <tr><td>กลิ้งหลบ</td><td class="num">20</td><td class="num">–</td><td class="num">≈3 ม.</td><td class="num">–</td><td>อมตะช่วง 0.03–0.32 วินาที</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout"><b class="k">Super armor</b> — โกเลมมี <code>superArmor: true</code> ใน config ฟันเบาลดเลือดได้แต่ไม่ทำให้มันสะดุ้ง ผู้เล่นจึงต้องหาจังหวะช่วงที่มันหอบหลังทุบ (recover 1.3 วินาที) แล้วฟันชาร์จใส่ นี่คือวิธีออกแบบให้ศัตรูแต่ละชนิด "บังคับ" ให้ผู้เล่นใช้ท่าต่างกัน</div>
+    </section>
+
+    <!-- ===================================================== 09 -->
+    <section class="chapter" id="stamina">
+      <div class="chapter-kicker">บทที่ 9</div>
+      <h2>ระบบ Stamina</h2>
+      <div class="prose">
+        <p>Stamina ทำให้ผู้เล่นต้อง <b>คิดก่อนกด</b> ถ้าไม่มี ผู้เล่นจะรัวฟันอย่างเดียว กติกาของเกมนี้:</p>
+        <ol>
+          <li>ทำท่าได้เมื่อยังไม่หมดแรงและ stamina &gt; 0 (แรงเหลือน้อยกว่าที่ท่าใช้ก็ยังทำได้ แต่หลอดจะหยุดที่ 0)</li>
+          <li>หยุดใช้แรง <b>1 วินาที</b> แล้วค่อยๆ ฟื้น <b>25 ต่อวินาที</b></li>
+          <li>ระหว่างชาร์จดาบ หลอดจะไม่ฟื้น</li>
+          <li>ถ้าหลอดถึง 0 → <b>หมดแรง 4 วินาที</b> ทำท่าไม่ได้ เดินช้าลงครึ่งหนึ่ง มีวง loading เหนือหัว</li>
+          <li>พ้นช่วงหมดแรง → ได้ stamina คืน <b>50 (ครึ่งหลอด)</b></li>
+        </ol>
+      </div>
+      <div class="demo" id="st-demo">
+        <div class="demo-head"><span class="t">เครื่องจำลอง Stamina</span>
+          <div class="controls">
+            <button class="chip-btn" data-st="light">ฟันเบา −12</button>
+            <button class="chip-btn" data-st="heavy">ฟันชาร์จเต็ม −40</button>
+            <button class="chip-btn" data-st="dodge">กลิ้งหลบ −20</button>
+            <button class="chip-btn accent" data-st="spam">รัวฟันจนหมด</button>
+          </div></div>
+        <div class="st-bar" id="st-bar"><div class="ghost"></div><div class="fill"></div><div class="txt" id="st-txt">100</div></div>
+        <canvas id="st-canvas" style="margin-top:12px" aria-label="กราฟ stamina ตามเวลา"></canvas>
+        <div class="readout" id="st-read"></div>
+      </div>
+      <figure><img src="img/exhausted.jpg" alt="ไคหมดแรง มีวงกลม loading หมุนอยู่เหนือหัว และหลอด stamina เป็นลายทางสีเทาพร้อมเวลานับถอยหลัง"><figcaption>ในเกมจริง: วง loading เหนือหัวค่อยๆ เต็มตามเวลาที่เหลือ หลอดใน HUD เป็นลายทางวิ่งพร้อมนับถอยหลัง</figcaption></figure>
+      <div class="code-file">src/core/Stamina.js — หัวใจของระบบ</div>
+      <pre class="code js">spend(amount) {
+  if (!this.canAct()) return false;           // หมดแรงอยู่ → ทำไม่ได้
+  this.value = Math.max(0, this.value - amount);
+  this.sinceUse = 0;                          // เริ่มนับเวลาพักใหม่
+  if (this.value &lt;= 0) this._becomeExhausted();
+  return true;
+}
+
+update(dt) {
+  if (this.exhausted) {
+    this.exhaustTimer -= dt;
+    if (this.exhaustTimer &lt;= 0) {
+      this.exhausted = false;
+      this.value = this.cfg.recoverTo;        // ฟื้นกลับมาครึ่งหลอด
+      this.events.emit('recovered');          // บอก HUD/เสียง/เอฟเฟกต์
+    }
+    return;
+  }
+  this.sinceUse += dt;
+  if (!this.holdRegen &amp;&amp; this.sinceUse >= this.cfg.regenDelay)
+    this.value = Math.min(this.max, this.value + this.cfg.regenRate * dt);
+}</pre>
+      <div class="callout tip"><b class="k">ทำไมไฟล์นี้ไม่ import three.js เลย?</b> — เพราะเป็น "ตรรกะล้วน" (pure logic) เราจึงเขียน unit test ทดสอบได้โดยไม่ต้องเปิดเกม ดู <code>tests/stamina.test.js</code> มี 8 เทสต์ เช่น "พ้น cooldown แล้วต้องได้ครึ่งหลอดพอดี" ส่วนการแสดงผล (HUD, วง loading, เสียง) ใช้วิธี <b>ฟัง event</b> แทน ทำให้แยกส่วนกันชัดเจน</div>
+    </section>
+
+    <!-- ===================================================== 10 -->
+    <section class="chapter" id="juice">
+      <div class="chapter-kicker">บทที่ 10</div>
+      <h2>Game Feel: ทำให้การฟัน "หนักมือ"</h2>
+      <div class="prose">
+        <p>ตัวเลข damage เท่ากัน แต่ความรู้สึกต่างกันลิบลับ ขึ้นอยู่กับ <b>feedback</b> ที่เกมส่งกลับมา นักพัฒนาเรียกสิ่งนี้ว่า <b>juice</b> ลองปิดเปิดทีละอย่าง แล้วกด "ฟัน!" (หรือคลิกที่ภาพ) เพื่อรู้สึกถึงความต่าง</p>
+      </div>
+      <div class="demo" id="juice-demo">
+        <div class="demo-head"><span class="t">ห้องทดลอง Juice</span>
+          <div class="controls"><button class="chip-btn accent" id="juice-hit">ฟัน!</button><button class="chip-btn" id="juice-all">เปิดทั้งหมด</button><button class="chip-btn" id="juice-none">ปิดทั้งหมด</button></div></div>
+        <div class="controls" id="juice-toggles">
+          <label class="toggle"><input type="checkbox" data-j="hitstop" checked> Hit-stop</label>
+          <label class="toggle"><input type="checkbox" data-j="shake" checked> สั่นจอ</label>
+          <label class="toggle"><input type="checkbox" data-j="flash" checked> กระพริบขาว</label>
+          <label class="toggle"><input type="checkbox" data-j="knock" checked> กระเด็น</label>
+          <label class="toggle"><input type="checkbox" data-j="squash" checked> บีบตัว</label>
+          <label class="toggle"><input type="checkbox" data-j="numbers" checked> ตัวเลข damage</label>
+          <label class="toggle"><input type="checkbox" data-j="particles" checked> ประกายไฟ</label>
+          <label class="toggle"><input type="checkbox" data-j="trail" checked> รอยดาบ</label>
+        </div>
+        <canvas id="juice-canvas" aria-label="ห้องทดลองฟันสไลม์"></canvas>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>เทคนิค</th><th>ทำอะไร</th><th>ในเกมนี้</th></tr></thead>
+        <tbody>
+          <tr><td><b>Hit-stop</b></td><td>หยุดโลกเสี้ยววินาทีตอนดาบโดน สมองจะรับรู้ว่า "มีแรงปะทะ"</td><td>ฟันเบา 0.045 วิ, ฟันชาร์จสูงสุด 0.14 วิ</td></tr>
+          <tr><td><b>Screen shake</b></td><td>สั่นกล้อง ยิ่งแรงยิ่งสั่น ใช้ค่ายกกำลังสอง ให้สั่นแรงแค่ตอนต้นแล้วหายเร็ว</td><td><code>IsoCamera.shake()</code></td></tr>
+          <tr><td><b>Flash</b></td><td>เปลี่ยนสีวัสดุเป็นขาวแป๊บนึง บอกชัดว่า "ตัวนี้โดน"</td><td>ปรับ <code>material.emissive</code></td></tr>
+          <tr><td><b>Knockback</b></td><td>ผลักเป้าหมายตามทิศที่ฟัน ตัวหนักกระเด็นน้อย</td><td>แรง ÷ mass (โกเลม mass 4)</td></tr>
+          <tr><td><b>Squash &amp; stretch</b></td><td>บีบ-ยืดรูปร่าง หลักการแอนิเมชันของดิสนีย์</td><td>สไลม์บีบตัวก่อนกระโดด ยืดตัวกลางอากาศ</td></tr>
+          <tr><td><b>Telegraph</b></td><td>เตือนก่อนโจมตี ให้ผู้เล่นมีเวลาตอบสนอง (ความยุติธรรม)</td><td>วงสีแดงที่ค่อยๆ เต็ม + ท่าง้าง</td></tr>
+          <tr><td><b>Anticipation</b></td><td>ท่าเตรียมก่อนท่าจริง</td><td>โกเลมยกแขน เห็ดพองหมวก ไคดึงดาบไปด้านหลังตอนชาร์จ</td></tr>
+        </tbody>
+      </table></div>
+      <div class="prose"><p>อ่านต่อ: Masahiro Sakurai (ผู้สร้าง Kirby, Smash Bros.) อธิบาย hit-stop ไว้ใน <a href="https://www.youtube.com/watch?v=OdVkEOzdCPw" target="_blank" rel="noopener">วิดีโอนี้</a> และ Jan Willem Nijman จาก Vlambeer มีทอล์กคลาสสิก <a href="https://www.youtube.com/watch?v=AJdEqssNZ-U" target="_blank" rel="noopener">The Art of Screenshake</a></p></div>
+    </section>
+
+    <!-- ===================================================== 11 -->
+    <section class="chapter" id="collision">
+      <div class="chapter-kicker">บทที่ 11</div>
+      <h2>Collision: ไม่เดินทะลุกำแพง</h2>
+      <div class="prose">
+        <p>เกม isometric ส่วนใหญ่ไม่ต้องใช้ physics engine เต็มรูปแบบ เพราะตัวละครเดินบนพื้นราบ เราจึงมองทุกอย่างจาก "ด้านบน" เป็น 2D และใช้รูปทรงแค่ 2 แบบ</p>
+        <ul>
+          <li><b>วงกลม</b>: ตัวละคร ต้นไม้ หิน เสา และลำธาร (วงกลมเรียงต่อกัน)</li>
+          <li><b>กล่องไม่หมุน (AABB)</b>: ตึก แผงร้าน กำแพง</li>
+        </ul>
+        <p>เมื่อซ้อนกัน เราไม่ได้หยุดตัวละคร แต่ <b>ดันออก</b> ไปตามทิศที่สั้นที่สุด ผลลัพธ์คือตัวละคร "ไถลเลียบกำแพง" ได้เองโดยไม่ต้องเขียนโค้ดเพิ่ม ลองลากวงกลมสีส้ม</p>
+      </div>
+      <div class="demo" id="col-demo">
+        <div class="demo-head"><span class="t">ดันออกจากสิ่งกีดขวาง</span>
+          <div class="controls"><label class="toggle"><input type="checkbox" id="col-resolve" checked> ดันออกอัตโนมัติ</label></div></div>
+        <canvas id="col-canvas" aria-label="ลากวงกลมเข้าไปชนกล่องและวงกลม"></canvas>
+        <div class="readout" id="col-read"></div>
+      </div>
+      <div class="code-file">src/core/Collision.js — วงกลมชนกล่อง</div>
+      <pre class="code js">// 1) หาจุดบนกล่องที่ใกล้จุดศูนย์กลางวงกลมที่สุด (clamp)
+const cx = Math.max(b.minX, Math.min(pos.x, b.maxX));
+const cz = Math.max(b.minZ, Math.min(pos.z, b.maxZ));
+// 2) ถ้าระยะถึงจุดนั้น &lt; รัศมี แปลว่าชน
+const dx = pos.x - cx, dz = pos.z - cz;
+const dist = Math.hypot(dx, dz);
+if (dist &lt; radius) {
+  // 3) ดันออกไปตามทิศจากจุดใกล้สุด เป็นระยะเท่าที่ซ้อนอยู่
+  pos.x += (dx / dist) * (radius - dist);
+  pos.z += (dz / dist) * (radius - dist);
+}</pre>
+    </section>
+
+    <!-- ===================================================== 12 -->
+    <section class="chapter" id="animation">
+      <div class="chapter-kicker">บทที่ 12</div>
+      <h2>แอนิเมชันด้วยโค้ด และผ้าพันคอที่ปลิว</h2>
+      <div class="prose">
+        <p>เกมใหญ่ใช้โปรแกรมอย่าง Blender ทำแอนิเมชันเป็นคีย์เฟรม เกมนี้ใช้ <b>procedural animation</b> คือคำนวณท่าทางสดๆ ทุกเฟรมด้วยคณิตศาสตร์ง่ายๆ:</p>
+        <ul>
+          <li><b>เดิน</b>: ขาซ้าย = <code>sin(phase) × 0.75</code>, ขาขวา = <code>−sin(phase) × 0.75</code>, แขนแกว่งสวนทาง, ตัวเด้งขึ้นลงด้วย <code>|cos(phase)|</code></li>
+          <li><b>ฟัน</b>: หมุนไหล่จากมุมหนึ่งไปอีกมุมด้วย easing ตามเวลาของท่า</li>
+          <li><b>เปลี่ยนท่าลื่นๆ</b>: ทุกเฟรมขยับท่าปัจจุบันเข้าหาท่าเป้าหมายทีละนิด <code>pose += (target − pose) × (1 − e<sup>−rate·dt</sup>)</code> สูตรนี้ไม่ขึ้นกับ FPS</li>
+        </ul>
+        <p>ส่วนผ้าพันคอ ใช้ <b>Verlet integration</b> เทคนิคฟิสิกส์ที่ง่ายที่สุดสำหรับเชือกและผ้า: แทนผ้าด้วยจุดหลายจุด แต่ละเฟรมให้ทุกจุดเคลื่อนที่ตามความเร็วเดิม (= ตำแหน่งตอนนี้ − ตำแหน่งเฟรมก่อน) บวกแรงโน้มถ่วง แล้วดึงจุดที่ติดกันให้ห่างเท่าเดิม ขยับเมาส์ในกรอบด้านล่างเพื่อลากคอเสื้อ</p>
+      </div>
+      <div class="demo" id="rope-demo">
+        <div class="demo-head"><span class="t">ผ้าพันคอ Verlet</span>
+          <div class="controls">
+            <label class="toggle">แรงโน้มถ่วง <input type="range" id="rope-g" min="0" max="20" step="0.5" value="9" aria-label="แรงโน้มถ่วง"></label>
+            <label class="toggle">ลม <input type="range" id="rope-w" min="-12" max="12" step="0.5" value="-3" aria-label="ลม"></label>
+            <label class="toggle"><input type="checkbox" id="rope-c" checked> ดึงระยะ (constraint)</label>
+          </div></div>
+        <canvas id="rope-canvas" aria-label="ผ้าพันคอสีแดงห้อยจากจุดที่ตามเมาส์"></canvas>
+        <p class="demo-note">ลองปิด "ดึงระยะ" แล้วจะเห็นว่าจุดแต่ละจุดหลุดออกจากกัน การ constraint คือสิ่งที่ทำให้มันเป็นผ้าผืนเดียว</p>
+      </div>
+      <div class="code-file">src/entities/Scarf.js</div>
+      <pre class="code js">for (let i = 1; i &lt; pts.length; i++) {
+  const vx = (p.x - prev[i].x) * damping;   // ความเร็ว = ตำแหน่งตอนนี้ − ตำแหน่งเฟรมก่อน
+  prev[i].copy(p);
+  p.x += vx + windX * dt * dt;              // เคลื่อนที่ + แรงภายนอก
+  p.y += vy - gravity * dt * dt;
+}
+pts[0].copy(neckPosition);                  // ตรึงจุดแรกไว้ที่คอ
+for (let i = 1; i &lt; pts.length; i++) {     // ดึงจุดที่ติดกันให้ห่าง segLen เท่าเดิม
+  const d = pts[i].clone().sub(pts[i - 1]);
+  pts[i].copy(pts[i - 1]).addScaledVector(d, segLen / d.length());
+}</pre>
+    </section>
+
+    <!-- ===================================================== 13 -->
+    <section class="chapter" id="levels">
+      <div class="chapter-kicker">บทที่ 13</div>
+      <h2>ออกแบบด่าน isometric และทำให้เกมลื่น</h2>
+      <figure><img src="img/plaza.jpg" alt="ลานน้ำพุกลางเมืองโคมไฟ มีไฟประดับห้อยรอบลาน คุณปู่นั่งม้านั่ง ลานฝึกมีหุ่นฟาง"><figcaption>ด่าน 1 เมืองโคมไฟ: ไฟประดับ โคมไฟ ควันปล่องไฟ โคมลอย และ NPC 11 ตัว ช่วยให้เมืองดูมีชีวิต</figcaption></figure>
+      <h3>กฎทองของด่าน isometric</h3>
+      <div class="prose">
+        <ul>
+          <li><b>ของสูงไว้ด้านหลัง ของเตี้ยไว้ด้านหน้า</b> — กล้องมองจากมุมล่างขวาเสมอ ตึกสูงจึงอยู่ฝั่ง −X/−Z (บนจอ) ส่วนฝั่ง +X/+Z (ล่างจอ) เป็นแผงร้าน สวน และรั้วพุ่มไม้เตี้ย ตัวละครจะไม่ถูกบัง</li>
+          <li><b>ผนังด้านที่กล้องมองไม่เห็นไม่ต้องตกแต่ง</b> — ด้าน −X และ −Z ของตึกไม่มีวันอยู่ในภาพ หน้าต่างจึงใส่แค่ 2 ด้าน ประหยัดไปครึ่งหนึ่ง</li>
+          <li><b>เงาทะลุ (silhouette)</b> — ถ้าไคเดินไปหลังต้นไม้ จะเห็นเป็นเงาสีฟ้า ทำโดยวาดโมเดลซ้ำด้วย <code>depthFunc = GreaterDepth</code> ซึ่งวาดเฉพาะส่วนที่ "ถูกบัง"</li>
+          <li><b>ควบคุมเส้นทางด้วยฉาก</b> — ลำธารแบ่งป่าเป็นสองฝั่ง มีสะพานเป็นทางข้ามทางเดียว ผู้เล่นจึงเดินผ่านโซนมอนสเตอร์ตามลำดับที่ออกแบบไว้ โดยไม่ต้องมีกำแพงล่องหน</li>
+          <li><b>อย่ารก</b> — ป่ามีทุ่งหญ้าโล่งเป็นหย่อมๆ (กำหนดในโค้ดว่าห้ามวางต้นไม้) เป็นพื้นที่ต่อสู้ และช่วยให้สายตาได้พัก</li>
+        </ul>
+      </div>
+      <figure><img src="img/forest.jpg" alt="ภาพมุมกว้างของป่าหลากสี ต้นไม้ 5 สี ลำธาร สะพาน น้ำตก และมอนสเตอร์ตามทางเดิน"><figcaption>ด่าน 2 ป่าหลากสี: ต้นไม้ 5 สีจับกลุ่มเป็นหย่อมตามช่องตาราง 8×8 เมตร แทรกสีสุ่ม 30%</figcaption></figure>
+
+      <h3>Draw call: ศัตรูตัวจริงของความลื่น</h3>
+      <div class="prose">
+        <p>ทุกครั้งที่ CPU สั่ง GPU ให้วาดวัตถุหนึ่งชิ้น เรียกว่า <b>draw call</b> GPU วาดสามเหลี่ยมล้านชิ้นได้สบาย แต่ draw call เป็นพันครั้งต่อเฟรมจะทำให้กระตุก เมืองโคมไฟประกอบด้วยชิ้นส่วนเล็กๆ (หน้าต่าง ก้อนหิน กระถาง) <b>8,736 ชิ้น</b></p>
+        <p>เทคนิค <b>vertex color batching</b> ใน <code>bakeStatic()</code> ย้าย "สี" ไปเก็บไว้ที่จุดยอดแต่ละจุด แล้วรวมชิ้นที่ไม่ขยับทั้งหมดเป็นก้อนเดียว ผลลัพธ์เหลือ <b>23 ชิ้น</b> หน้าตาเหมือนเดิมทุกพิกเซล</p>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>เทคนิค</th><th>ใช้กับ</th><th class="num">ก่อน</th><th class="num">หลัง</th></tr></thead>
+        <tbody>
+          <tr><td><code>bakeStatic()</code> รวมของนิ่ง</td><td>ตึก ถนน ต้นไม้ หิน หญ้า</td><td class="num">8,736 mesh</td><td class="num">23 mesh</td></tr>
+          <tr><td><code>compactRig()</code> รวมชิ้นในข้อต่อเดียวกัน</td><td>ไค NPC มอนสเตอร์</td><td class="num">~70 ต่อตัว</td><td class="num">~15 ต่อตัว</td></tr>
+          <tr><td><code>InstancedMesh</code></td><td>อนุภาคประกายไฟ ฝุ่น ใบไม้</td><td class="num">900 mesh</td><td class="num">2 draw call</td></tr>
+          <tr><td>Glow sprite แทนไฟจริง</td><td>โคมไฟส่วนใหญ่</td><td colspan="2" class="num">ใช้ PointLight จริงแค่ 8 ดวง</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout warn"><b class="k">ข้อแลกเปลี่ยน</b> — ของที่ถูก bake แล้วขยับแยกชิ้นไม่ได้ ธงที่โบก น้ำพุ และผลไม้ที่เก็บได้จึงติดป้าย <code>userData.dynamic = true</code> เพื่อไม่ให้ถูกรวม</div>
+    </section>
+
+    <!-- ===================================================== 14 -->
+    <section class="chapter" id="audio-ui">
+      <div class="chapter-kicker">บทที่ 14</div>
+      <h2>เสียงสังเคราะห์ และ UI สองแบบ</h2>
+      <div class="prose">
+        <p>เกมนี้ไม่มีไฟล์เสียงเลย ทุกเสียงสร้างด้วย <b>Web Audio API</b> จากวัตถุดิบ 2 อย่าง: <b>oscillator</b> (คลื่นเสียงโทนต่างๆ) กับ <b>noise</b> (เสียงซ่าที่เอามากรองความถี่) แล้วปั้นความดังด้วย envelope (ดังเร็ว จางช้า) กดฟังได้เลย</p>
+      </div>
+      <div class="demo" id="audio-demo">
+        <div class="demo-head"><span class="t">ซินธิไซเซอร์ของเกม</span></div>
+        <div class="controls">
+          <button class="chip-btn" data-snd="swing">ฟันเบา</button>
+          <button class="chip-btn" data-snd="hit">ฟันโดน</button>
+          <button class="chip-btn" data-snd="heavyHit">ฟันชาร์จโดน</button>
+          <button class="chip-btn" data-snd="dodge">กลิ้งหลบ</button>
+          <button class="chip-btn" data-snd="exhausted">หมดแรง</button>
+          <button class="chip-btn" data-snd="recovered">ฟื้นแรง</button>
+          <button class="chip-btn" data-snd="slam">โกเลมทุบ</button>
+          <button class="chip-btn" data-snd="pickup">เก็บผลไม้</button>
+        </div>
+        <p class="demo-note">เสียง "ฟันเบา" คือ noise ที่ผ่าน bandpass filter แล้วเลื่อนความถี่จาก 900 ไป 3,200 Hz ใน 0.13 วินาที ได้เสียงวืด</p>
+      </div>
+      <h3>UI ติดจอ vs UI ลอยในโลก</h3>
+      <div class="grid-2">
+        <div class="prose">
+          <p><b>HUD</b> (หลอดเลือด stamina เป้าหมาย) เป็น HTML/CSS ธรรมดาวางทับ canvas ตัวหนังสือคมชัด แต่งด้วย CSS ได้ง่าย และใช้ฟอนต์ไทยได้ทันที</p>
+        </div>
+        <div class="prose">
+          <p><b>World UI</b> (ตัวเลข damage, หลอดเลือดมอนสเตอร์, วง loading เหนือหัว) ก็เป็น HTML เช่นกัน แต่ทุกเฟรมเราแปลงตำแหน่ง 3D เป็นพิกเซลด้วย <code>vector.project(camera)</code> แล้วย้าย div ไปวางตรงนั้น</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== 15 -->
+    <section class="chapter" id="next">
+      <div class="chapter-kicker">บทที่ 15</div>
+      <h2>ทำต่อเอง</h2>
+      <div class="prose"><p>วิธีเรียนที่ดีที่สุดคือแก้โค้ดแล้วดูผล เรียงจากง่ายไปยาก:</p></div>
+      <ol class="homework">
+        <li>เปลี่ยนสีผ้าพันคอของไคเป็นสีที่ชอบ (ค้นหา <code>0xd63a2f</code> ใน <code>src/models/humanoid.js</code>)<span class="level-tag easy">ง่าย</span></li>
+        <li>ลดค่า stamina ของฟันเบาเหลือ 5 ใน <code>src/config.js</code> แล้วสังเกตว่าเกมง่ายขึ้นแค่ไหน ทำไมนักออกแบบถึงไม่ทำแบบนั้น<span class="level-tag easy">ง่าย</span></li>
+        <li>เพิ่ม NPC คนใหม่ในเมือง พร้อมบทพูดของตัวเอง ใน <code>_spawnNPCs()</code><span class="level-tag easy">ง่าย</span></li>
+        <li>เพิ่มต้นไม้สีที่ 6 (เช่น สีม่วง) ใน <code>TREE_COLORS</code> ของ <code>src/models/nature.js</code><span class="level-tag mid">กลาง</span></li>
+        <li>ทำให้มอนสเตอร์ดรอปผลไม้ฟื้นเลือดตอนตาย 25%<span class="level-tag mid">กลาง</span></li>
+        <li>เพิ่มท่าวิ่งเร็ว (sprint) ที่กด <kbd>Shift</kbd> ค้างแล้วค่อยๆ ใช้ stamina<span class="level-tag mid">กลาง</span></li>
+        <li>สร้างมอนสเตอร์ชนิดใหม่ เช่น ค้างคาวที่บินพุ่งเป็นเส้นตรง โดยสืบทอดคลาส <code>Enemy</code> แล้ว override <code>startWindup</code> / <code>updateAttack</code><span class="level-tag hard">ยาก</span></li>
+        <li>เปลี่ยน game loop เป็น fixed timestep แล้วเทียบว่า i-frame ของการกลิ้งแม่นขึ้นไหมบนเครื่องที่ FPS ต่ำ<span class="level-tag hard">ยาก</span></li>
+      </ol>
+
+      <h3>แหล่งเรียนต่อ</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>หัวข้อ</th><th>แหล่ง</th></tr></thead>
+        <tbody>
+          <tr><td>Three.js</td><td><a href="https://threejs.org/manual/" target="_blank" rel="noopener">three.js manual</a> (มีบท "Making a Game") · <a href="https://discoverthreejs.com" target="_blank" rel="noopener">Discover three.js</a> · <a href="https://threejs-journey.com/" target="_blank" rel="noopener">Three.js Journey</a> (คอร์สเสียเงิน)</td></tr>
+          <tr><td>รูปแบบโค้ดเกม</td><td><a href="https://gameprogrammingpatterns.com/" target="_blank" rel="noopener">Game Programming Patterns</a> (อ่านฟรี) บท Game Loop, State, Component, Update Method</td></tr>
+          <tr><td>Game feel</td><td><a href="https://www.gdcvault.com/play/1016487/juice-it-or-lose" target="_blank" rel="noopener">Juice it or Lose it</a> · <a href="https://gamedeveloper.com/design/enemy-attacks-and-telegraphing" target="_blank" rel="noopener">Enemy attacks and telegraphing</a></td></tr>
+          <tr><td>Collision</td><td><a href="https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-detection" target="_blank" rel="noopener">LearnOpenGL: Collision detection</a></td></tr>
+          <tr><td>ย้ายไปใช้ engine</td><td><a href="https://docs.godotengine.org/en/stable/getting_started/first_3d_game/" target="_blank" rel="noopener">Godot: Your first 3D game</a> (แนวคิดเดียวกับเกมนี้เกือบทั้งหมด)</td></tr>
+          <tr><td>โมเดลสวยกว่านี้</td><td>ปั้นเองด้วย Blender หรือใช้ asset ฟรี CC0 จาก <a href="https://kenney.nl" target="_blank" rel="noopener">Kenney</a> / <a href="https://quaternius.com" target="_blank" rel="noopener">Quaternius</a> แล้วโหลดไฟล์ <code>.glb</code> ด้วย <code>GLTFLoader</code></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>เทียบกับ Godot และ Unity</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>ในเกมนี้</th><th>Godot</th><th>Unity</th></tr></thead>
+        <tbody>
+          <tr><td><code>Game.frame()</code> + <code>update(dt)</code></td><td><code>_process(delta)</code></td><td><code>Update()</code> + <code>Time.deltaTime</code></td></tr>
+          <tr><td><code>THREE.Group</code> ซ้อนกัน</td><td>Node tree</td><td>GameObject + Transform</td></tr>
+          <tr><td><code>OrthographicCamera</code></td><td>Camera3D, projection = Orthogonal</td><td>Camera, Projection = Orthographic</td></tr>
+          <tr><td><code>CollisionWorld</code> (เขียนเอง)</td><td>CharacterBody3D + CollisionShape3D</td><td>CharacterController / Collider</td></tr>
+          <tr><td><code>StateMachine</code> (เขียนเอง)</td><td>เขียนเอง หรือ AnimationTree</td><td>Animator state machine</td></tr>
+          <tr><td><code>Events</code></td><td>Signals</td><td>C# events / UnityEvent</td></tr>
+          <tr><td>HUD เป็น HTML</td><td>Control nodes</td><td>UI Toolkit / Canvas</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>คำศัพท์</h3>
+      <dl class="gloss">
+        <dt>Frame / FPS</dt><dd>ภาพหนึ่งภาพที่เกมวาด / จำนวนภาพต่อวินาที</dd>
+        <dt>Delta time (dt)</dt><dd>เวลาที่ผ่านไปจากเฟรมก่อน ใช้คูณการเคลื่อนที่ให้เร็วเท่ากันทุกเครื่อง</dd>
+        <dt>Mesh / Geometry / Material</dt><dd>วัตถุ 3D / รูปร่าง (จุดและสามเหลี่ยม) / ผิว (สี ความเงา)</dd>
+        <dt>Orthographic</dt><dd>กล้องไม่มีระยะลึก ของไกล-ใกล้ขนาดเท่ากัน ใช้ทำมุมมอง isometric</dd>
+        <dt>Draw call</dt><dd>คำสั่งวาดที่ CPU ส่งให้ GPU หนึ่งครั้ง ยิ่งน้อยยิ่งลื่น</dd>
+        <dt>FSM</dt><dd>Finite State Machine ตัวละครอยู่ในสถานะเดียวในแต่ละเวลา</dd>
+        <dt>Active frame</dt><dd>ช่วงเวลาในท่าโจมตีที่ทำ damage จริง</dd>
+        <dt>Hit-stop</dt><dd>หยุดภาพเสี้ยววินาทีตอนโจมตีโดน ให้รู้สึกถึงแรงปะทะ</dd>
+        <dt>i-frames</dt><dd>Invincibility frames ช่วงที่ตัวละครไม่รับ damage เช่น กลางท่ากลิ้ง</dd>
+        <dt>Telegraph</dt><dd>สัญญาณเตือนก่อนศัตรูโจมตี</dd>
+        <dt>Knockback</dt><dd>แรงผลักให้กระเด็นเมื่อโดนโจมตี</dd>
+        <dt>Super armor</dt><dd>โดนตีแล้วไม่สะดุ้ง ท่าไม่ถูกขัดจังหวะ</dd>
+        <dt>Input buffer</dt><dd>จำปุ่มที่กดล่วงหน้าไว้สักพัก ให้คอมโบต่อได้ลื่น</dd>
+        <dt>Lerp</dt><dd>Linear interpolation ค่อยๆ ขยับค่าจาก A ไป B</dd>
+        <dt>Verlet</dt><dd>วิธีคำนวณฟิสิกส์จากตำแหน่งปัจจุบันและตำแหน่งก่อนหน้า เหมาะกับเชือกและผ้า</dd>
+        <dt>Seed</dt><dd>ตัวเลขตั้งต้นของตัวสุ่ม seed เดิมได้ผลสุ่มชุดเดิม</dd>
+        <dt>Bloom</dt><dd>เอฟเฟกต์แสงฟุ้งรอบของที่สว่างมาก เช่น โคมไฟ</dd>
+        <dt>Batching / Instancing</dt><dd>รวมหลายวัตถุให้วาดในคำสั่งเดียว เพื่อลด draw call</dd>
+      </dl>
+    </section>
+  </main>
+</div>
+
+<footer>
+  คู่มือประกอบโปรเจกต์ Isometric Game Lab · โค้ดทั้งหมดใช้สัญญาอนุญาต MIT · ตัวเลขในเดโมตรงกับ <code>src/config.js</code> ของเกม
+</footer>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- สีจาก CSS token (อัปเดตเมื่อเปลี่ยนธีม) ----------
+  const T = {};
+  const tokenNames = ['bg', 'surface', 'surface-2', 'ink', 'ink-2', 'line', 'scarf', 'lantern', 'forest', 'sky', 'hit', 'miss'];
+  function readTokens() {
+    const cs = getComputedStyle(document.documentElement);
+    for (const n of tokenNames) T[n] = cs.getPropertyValue('--' + n).trim();
+  }
+  readTokens();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', readTokens);
+  new MutationObserver(readTokens).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // ---------- code highlighting เล็กๆ ----------
+  const KW = /\b(const|let|var|function|return|if|else|for|while|new|class|this|import|from|export|continue|break)\b/;
+  for (const pre of $$('pre.code.js')) {
+    const src = pre.textContent;
+    const re = /(\/\/[^\n]*)|('[^'\n]*'|"[^"\n]*"|`[^`]*`)|\b(const|let|var|function|return|if|else|for|while|new|class|this|import|from|export|continue|break)\b|\b(\d+(?:\.\d+)?)\b/g;
+    let out = '', last = 0, m;
+    const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    while ((m = re.exec(src))) {
+      out += esc(src.slice(last, m.index));
+      const cls = m[1] ? 'c' : m[2] ? 's' : m[3] ? 'k' : 'n';
+      out += `<span class="${cls}">${esc(m[0])}</span>`;
+      last = re.lastIndex;
+    }
+    pre.innerHTML = out + esc(src.slice(last));
+  }
+
+  // ---------- canvas helper ----------
+  function makeCanvas(canvas, height) {
+    const obj = { canvas, ctx: canvas.getContext('2d'), w: 0, h: height };
+    const fit = () => {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      obj.w = canvas.clientWidth || 600;
+      obj.h = typeof height === 'function' ? height(obj.w) : height;
+      canvas.style.height = obj.h + 'px';
+      canvas.width = Math.round(obj.w * dpr);
+      canvas.height = Math.round(obj.h * dpr);
+      obj.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      obj.dirty = true;
+    };
+    new ResizeObserver(fit).observe(canvas);
+    fit();
+    return obj;
+  }
+  function pointer(canvas, cb) {
+    const handler = (e) => {
+      const r = canvas.getBoundingClientRect();
+      cb(e.clientX - r.left, e.clientY - r.top, e.type);
+    };
+    canvas.addEventListener('pointermove', handler);
+    canvas.addEventListener('pointerdown', (e) => { canvas.setPointerCapture?.(e.pointerId); handler(e); });
+    canvas.addEventListener('pointerup', handler);
+  }
+
+  // ---------- loop รวม: อัปเดตเฉพาะเดโมที่มองเห็น ----------
+  const demos = [];
+  function addDemo(el, tick) {
+    const d = { el, tick, visible: false };
+    demos.push(d);
+    new IntersectionObserver((es) => { d.visible = es[0].isIntersecting; }, { rootMargin: '100px' }).observe(el);
+  }
+  let lastT = performance.now();
+  function loop(t) {
+    const dt = Math.min(0.05, (t - lastT) / 1000);
+    lastT = t;
+    for (const d of demos) if (d.visible) d.tick(dt, t / 1000);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  function pressGroup(btns, active) { btns.forEach((b) => b.setAttribute('aria-pressed', String(b === active))); }
+
+  // ---------- TOC highlight ----------
+  const tocLinks = $$('nav.toc a');
+  const sections = tocLinks.map((a) => $(a.getAttribute('href')));
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) {
+      const i = sections.indexOf(e.target);
+      tocLinks.forEach((a, k) => a.classList.toggle('on', k === i));
+    }
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach((s) => s && io.observe(s));
+
+  // =====================================================
+  //  บทที่ 2: แผนที่โค้ด
+  // =====================================================
+  const ARCH = {
+    main: ['src/main.js', 'จุดเริ่มต้นของโปรแกรม อ่านค่าจาก URL (เช่น ?level=forest) สร้าง Game แล้วสั่ง start() มีแค่ไม่กี่บรรทัด และเปิด window.game ให้ลองเล่นใน Console ได้'],
+    game: ['src/core/Game.js', 'หัวใจของเกม: สร้าง renderer + bloom, ถือระบบย่อยทุกตัว, รัน game loop ทุกเฟรม, จัดการสถานะเกม (title / play / pause / dead / win), เปลี่ยนด่านแบบจอค่อยๆ มืด และให้บริการ hitStop() กับ shake() ที่ส่วนอื่นเรียกใช้'],
+    config: ['src/config.js', 'ตัวเลขปรับจูนทั้งหมด ความเร็ว damage stamina เวลาง้างของมอนสเตอร์ ฯลฯ รวมไว้ที่เดียว นักออกแบบเกมแก้ตรงนี้ได้โดยไม่ต้องอ่านโค้ดส่วนอื่น'],
+    input: ['src/core/Input.js', 'แปลง event ของเบราว์เซอร์ (keydown/keyup/mouse) เป็นคำถามที่เกมถามได้ทุกเฟรม: isDown("dodge"), wasPressed("light") และแปลงปุ่มเป็น action ผ่านตาราง BINDINGS'],
+    camera: ['src/core/IsoCamera.js', 'กล้อง orthographic มุม isometric ตามผู้เล่นแบบนุ่มนวล สั่นจอได้ แปลงเมาส์เป็นจุดบนพื้น และแปลงจุด 3D เป็นพิกเซลให้ UI'],
+    audio: ['src/core/Audio.js', 'เสียงทุกเสียงสังเคราะห์สดด้วย Web Audio API (oscillator + noise + filter) ไม่มีไฟล์เสียง'],
+    fx: ['src/fx/Particles.js, GroundFX.js', 'อนุภาค (InstancedMesh + object pool), วงคลื่น, วงเตือนสีแดง (telegraph), วงชาร์จ และรอยดาบ'],
+    ui: ['src/ui/HUD.js, WorldUI.js, Dialogue.js', 'HUD ติดจอ, UI ลอยตามตำแหน่ง 3D (ตัวเลข damage, หลอดเลือดมอนสเตอร์, วง loading เหนือหัว) และกล่องบทสนทนาแบบพิมพ์ทีละตัว'],
+    level: ['src/levels/Level.js', 'แม่แบบของด่าน: สร้างแสง, เก็บรายชื่อตัวละคร, อัปเดตทุกตัวทุกเฟรม, แยกตัวที่ชนกัน, ตรวจของที่กด E ได้ ด่านลูกแค่ override build() กับ tick()'],
+    town: ['src/levels/TownLevel.js', 'ด่าน 1 เมืองโคมไฟ: วางถนน ตึก ตลาด ลานฝึก ไฟประดับ ควันปล่องไฟ โคมลอย และ NPC 11 ตัว (รวมแมว 2 ตัว)'],
+    forest: ['src/levels/ForestLevel.js', 'ด่าน 2 ป่าหลากสี: พื้นที่ระบายสีด้วย vertex color, ลำธารที่น้ำกระเพื่อม, สะพาน, น้ำตก, ภูเขา, ต้นไม้ 5 สี, มอนสเตอร์ 9 ตัว และศาลคริสตัล'],
+    collision: ['src/core/Collision.js', 'โลกของสิ่งกีดขวาง (วงกลม + กล่อง) และฟังก์ชันดันตัวละครออก รวมถึงแยกตัวละครที่ซ้อนกัน (ตัวหนักขยับน้อยกว่า)'],
+    player: ['src/entities/Player.js', 'ไค: อ่าน input, FSM 7 สถานะ, ระบบต่อสู้, hit detection, ท่าทางแบบ procedural, ผ้าพันคอ, รอยดาบ, กระพริบตอนโดนตี'],
+    enemy: ['src/entities/Enemy.js', 'คลาสแม่ Enemy + สไลม์ เห็ด โกเลม ใช้ FSM เดียวกัน ต่างกันแค่ท่าง้างและท่าโจมตี'],
+    npc: ['src/entities/NPC.js', 'ชาวเมืองที่มีพฤติกรรม stand / patrol / wander / circle / sit / hammer มีฟองคำพูดเมื่อเดินผ่าน และบทสนทนาเต็มเมื่อกด E'],
+    dummy: ['src/entities/TrainingDummy.js', 'หุ่นฟางเลือดไม่จำกัด โยกด้วยสปริงหน่วง (damped spring) เมื่อโดนฟัน เหมาะกับการซ้อมคอมโบ'],
+    fsm: ['src/core/StateMachine.js', 'Finite State Machine ขนาด 30 บรรทัด ใช้ทั้งกับผู้เล่นและมอนสเตอร์'],
+    health: ['src/core/Health.js', 'หลอดเลือดที่ใช้ซ้ำได้ ส่ง event "damaged", "died" ให้ใครก็ได้ที่สนใจ'],
+    stamina: ['src/core/Stamina.js', 'ระบบ stamina แบบตรรกะล้วน ไม่แตะกราฟิกเลย จึงมี unit test 8 ข้อใน tests/stamina.test.js'],
+    events: ['src/core/Events.js', 'ระบบส่งข่าว (observer pattern): ส่วนหนึ่ง emit("exhausted") ส่วนอื่น on("exhausted", ...) โดยไม่ต้องรู้จักกัน'],
+    models: ['src/models/*.js', 'ปั้นโมเดล low poly ด้วยโค้ด: kit (เครื่องมือ + รวม mesh), humanoid (คน), monsters, town (ตึก โคมไฟ ...), nature (ต้นไม้ หิน ภูเขา ...)'],
+  };
+  const archBtns = $$('#arch-demo .arch button');
+  const archDetail = $('#arch-demo .detail');
+  function showArch(k, btn) {
+    pressGroup(archBtns, btn);
+    archDetail.querySelector('.path').textContent = ARCH[k][0];
+    archDetail.querySelector('.body').textContent = ARCH[k][1];
+  }
+  archBtns.forEach((b) => b.addEventListener('click', () => showArch(b.dataset.k, b)));
+  showArch('game', archBtns.find((b) => b.dataset.k === 'game'));
+
+  // ---------- frame stepper ----------
+  const steps = $$('#frame-demo ol.steps li');
+  let stepTimer = null;
+  const setStep = (i) => steps.forEach((s, k) => s.classList.toggle('on', k === i));
+  steps.forEach((s, i) => s.addEventListener('click', () => { clearInterval(stepTimer); stepTimer = null; setStep(i); }));
+  $('#frame-play').addEventListener('click', () => {
+    clearInterval(stepTimer);
+    let i = 0;
+    setStep(0);
+    stepTimer = setInterval(() => {
+      i++;
+      if (i >= steps.length) { clearInterval(stepTimer); stepTimer = null; return; }
+      setStep(i);
+    }, 1100);
+  });
+  setStep(0);
+
+  // =====================================================
+  //  บทที่ 3: dt demo
+  // =====================================================
+  {
+    const C = makeCanvas($('#dt-canvas'), 170);
+    const state = { fps: 60, acc: 0, a: 0, b: 0, frames: 0 };
+    const btns = $$('#dt-demo [data-fps]');
+    btns.forEach((b) => b.addEventListener('click', () => { state.fps = +b.dataset.fps; pressGroup(btns, b); state.a = state.b = 0; }));
+    const read = $('#dt-read');
+    function update() {
+      read.textContent =
+        `ลูกแดง  x += 3 ทุกเฟรม       → ${state.fps} เฟรม × 3 = ${state.fps * 3} พิกเซล/วินาที\n` +
+        `ลูกเขียว x += 180 × dt          → 180 พิกเซล/วินาที เสมอ ไม่ว่ากี่ FPS`;
+    }
+    update();
+    btns.forEach((b) => b.addEventListener('click', update));
+    addDemo($('#dt-demo'), (dt) => {
+      const step = 1 / state.fps;
+      state.acc += dt;
+      const span = C.w - 80;
+      while (state.acc >= step) {
+        state.acc -= step;
+        state.a = (state.a + 3) % span;
+        state.b = (state.b + 180 * step) % span;
+      }
+      const { ctx, w, h } = C;
+      ctx.clearRect(0, 0, w, h);
+      ctx.font = '13px "IBM Plex Sans Thai", sans-serif';
+      const rows = [[state.a, T.scarf, 'ไม่ใช้ dt'], [state.b, T.forest, 'ใช้ dt']];
+      rows.forEach(([x, col, label], i) => {
+        const y = 52 + i * 70;
+        ctx.strokeStyle = T.line; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(w - 30, y); ctx.stroke();
+        ctx.fillStyle = T['ink-2']; ctx.fillText(label, 40, y - 22);
+        ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(50 + x, y, 12, 0, Math.PI * 2); ctx.fill();
+      });
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 5: projection demo
+  // =====================================================
+  const ISO_R = [Math.SQRT1_2, 0, -Math.SQRT1_2];
+  const ISO_U = [-1 / Math.sqrt(6), 2 / Math.sqrt(6), -1 / Math.sqrt(6)];
+  const ISO_F = [1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3)];
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  {
+    const C = makeCanvas($('#proj-canvas'), (w) => Math.min(340, Math.max(240, w * 0.45)));
+    let mode = 'ortho', t = 1;
+    const btns = $$('#proj-demo [data-mode]');
+    btns.forEach((b) => b.addEventListener('click', () => { mode = b.dataset.mode; pressGroup(btns, b); }));
+    // เมืองจำลอง: [x, z, สูง]
+    const blocks = [];
+    for (let i = 0; i < 5; i++) for (let k = 0; k < 5; k++) {
+      if ((i + k) % 2 === 0) blocks.push([i * 2 - 4, k * 2 - 4, (i === 2 && k === 2) ? 3 : 1.2 + ((i * 7 + k * 3) % 4) * 0.5]);
+    }
+    function project(p, w, h, tt) {
+      const s = Math.min(w * 0.8, h * 1.25) / 11;
+      const iso = [dot(p, ISO_R) * s, -dot(p, ISO_U) * s];
+      // perspective: กล้องที่ระยะ 9 ตามทิศ (1,1,1)
+      const D = 14;
+      const z = D - dot(p, ISO_F);
+      const f = D * 1.0;
+      const per = [dot(p, ISO_R) * s * f / z, -dot(p, ISO_U) * s * f / z];
+      return [w / 2 + iso[0] + (per[0] - iso[0]) * (1 - tt), h * 0.6 + iso[1] + (per[1] - iso[1]) * (1 - tt), dot(p, ISO_F)];
+    }
+    function shade(hex, k) {
+      const c = parseInt(hex.replace('#', ''), 16);
+      const r = Math.round(((c >> 16) & 255) * k), g = Math.round(((c >> 8) & 255) * k), b = Math.round((c & 255) * k);
+      return `rgb(${Math.min(255, r)},${Math.min(255, g)},${Math.min(255, b)})`;
+    }
+    const PAL = ['#e9c46a', '#f4a3c0', '#7fc6a4', '#8fb8ff', '#f08a5d'];
+    addDemo($('#proj-demo'), (dt) => {
+      const target = mode === 'ortho' ? 1 : 0;
+      t += (target - t) * Math.min(1, dt * (reduceMotion ? 60 : 5));
+      const { ctx, w, h } = C;
+      ctx.clearRect(0, 0, w, h);
+      // พื้น grid
+      ctx.strokeStyle = T.line; ctx.lineWidth = 1;
+      for (let i = -5; i <= 5; i++) {
+        const a = project([i, 0, -5], w, h, t), b = project([i, 0, 5], w, h, t);
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+        const c = project([-5, 0, i], w, h, t), d = project([5, 0, i], w, h, t);
+        ctx.beginPath(); ctx.moveTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.stroke();
+      }
+      // วาดจากไกลไปใกล้ (painter's algorithm)
+      const sorted = blocks.map((b, i) => [b, i]).sort((A, B) => dot([A[0][0], 0, A[0][1]], ISO_F) - dot([B[0][0], 0, B[0][1]], ISO_F));
+      for (const [[x, z, hh], i] of sorted) {
+        const s = 0.7;
+        const P = (dx, dy, dz) => project([x + dx, dy, z + dz], w, h, t);
+        const base = PAL[i % PAL.length];
+        const faces = [
+          [[P(-s, hh, -s), P(s, hh, -s), P(s, hh, s), P(-s, hh, s)], 1.05],
+          [[P(s, 0, -s), P(s, 0, s), P(s, hh, s), P(s, hh, -s)], 0.78],
+          [[P(-s, 0, s), P(s, 0, s), P(s, hh, s), P(-s, hh, s)], 0.62],
+        ];
+        for (const [pts, k] of faces) {
+          ctx.fillStyle = shade(base, k);
+          ctx.beginPath(); pts.forEach((p, j) => (j ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.closePath(); ctx.fill();
+          ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.stroke();
+        }
+      }
+      ctx.fillStyle = T['ink-2'];
+      ctx.font = '13px "JetBrains Mono", monospace';
+      ctx.fillText(t > 0.5 ? 'Orthographic · ขนาดเท่ากันทุกระยะ' : 'Perspective · ไกลเล็ก ใกล้ใหญ่', 14, 22);
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 5: WASD demo
+  // =====================================================
+  {
+    const wrap = $('#wasd-demo');
+    const C = makeCanvas($('#wasd-canvas'), 260);
+    const held = new Set();
+    const read = $('#wasd-read');
+    const map = { w: [0, 1], s: [0, -1], a: [-1, 0], d: [1, 0] };
+    function vec() {
+      let x = 0, y = 0;
+      for (const k of held) { x += map[k][0]; y += map[k][1]; }
+      const len = Math.hypot(x, y);
+      if (len > 0) { x /= len; y /= len; }
+      // SCREEN_RIGHT = (0.707, 0, -0.707), SCREEN_UP = (-0.707, 0, -0.707)
+      const wx = x * Math.SQRT1_2 - y * Math.SQRT1_2;
+      const wz = -x * Math.SQRT1_2 - y * Math.SQRT1_2;
+      return { x, y, wx, wz };
+    }
+    function show() {
+      const v = vec();
+      read.textContent = held.size
+        ? `ปุ่ม: ${[...held].join('+').toUpperCase()}\nทิศบนจอ   (x: ${v.x.toFixed(2)}, y: ${v.y.toFixed(2)})\nทิศในโลก  (x: ${v.wx.toFixed(2)}, y: 0, z: ${v.wz.toFixed(2)})`
+        : 'กดปุ่ม W/A/S/D (กดสองปุ่มพร้อมกันได้)';
+    }
+    $$('#wasd-demo [data-key]').forEach((b) => {
+      const k = b.dataset.key;
+      const down = (e) => { e.preventDefault(); held.add(k); b.setAttribute('aria-pressed', 'true'); show(); };
+      const up = () => { held.delete(k); b.setAttribute('aria-pressed', 'false'); show(); };
+      b.addEventListener('pointerdown', down);
+      b.addEventListener('pointerup', up);
+      b.addEventListener('pointerleave', up);
+    });
+    wrap.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      if (map[k]) { e.preventDefault(); held.add(k); show(); }
+    });
+    wrap.addEventListener('keyup', (e) => { held.delete(e.key.toLowerCase()); show(); });
+    wrap.addEventListener('blur', () => { held.clear(); show(); });
+    const P = (x, y, z, w, h) => [w / 2 + dot([x, y, z], ISO_R) * 46, h / 2 + 20 - dot([x, y, z], ISO_U) * 46];
+    function arrow(ctx, a, b, col, width = 3) {
+      ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = width;
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      const ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
+      ctx.beginPath(); ctx.moveTo(b[0], b[1]);
+      ctx.lineTo(b[0] - 11 * Math.cos(ang - 0.4), b[1] - 11 * Math.sin(ang - 0.4));
+      ctx.lineTo(b[0] - 11 * Math.cos(ang + 0.4), b[1] - 11 * Math.sin(ang + 0.4));
+      ctx.closePath(); ctx.fill();
+    }
+    addDemo(wrap, () => {
+      const { ctx, w, h } = C;
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = T.line; ctx.lineWidth = 1;
+      for (let i = -3; i <= 3; i++) {
+        let a = P(i, 0, -3, w, h), b = P(i, 0, 3, w, h);
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+        a = P(-3, 0, i, w, h); b = P(3, 0, i, w, h);
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      }
+      const o = P(0, 0, 0, w, h);
+      ctx.font = '600 13px "JetBrains Mono", monospace';
+      arrow(ctx, o, P(2.6, 0, 0, w, h), T.scarf, 2); ctx.fillText('+X', P(2.95, 0, 0, w, h)[0] - 8, P(2.95, 0, 0, w, h)[1] + 4);
+      arrow(ctx, o, P(0, 0, 2.6, w, h), T.sky, 2); ctx.fillText('+Z', P(0, 0, 3.0, w, h)[0] - 10, P(0, 0, 3.0, w, h)[1] + 4);
+      arrow(ctx, o, P(0, 1.6, 0, w, h), T.forest, 2); ctx.fillText('+Y', P(0, 1.8, 0, w, h)[0] + 6, P(0, 1.8, 0, w, h)[1]);
+      const v = vec();
+      if (held.size && (v.wx || v.wz)) arrow(ctx, o, P(v.wx * 2.3, 0, v.wz * 2.3, w, h), T.lantern, 5);
+      ctx.fillStyle = T.ink; ctx.beginPath(); ctx.arc(o[0], o[1], 6, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+
+  // =====================================================
+  //  Stamina (ตรรกะเดียวกับ src/core/Stamina.js)
+  // =====================================================
+  class Stamina {
+    constructor(cfg) { this.cfg = cfg; this.max = cfg.max; this.value = cfg.max; this.exhausted = false; this.exhaustTimer = 0; this.sinceUse = Infinity; this.holdRegen = false; this.onExhausted = null; this.onRecovered = null; }
+    canAct() { return !this.exhausted && this.value > 0; }
+    spend(a) { if (!this.canAct()) return false; this.value = Math.max(0, this.value - a); this.sinceUse = 0; if (this.value <= 0) { this.exhausted = true; this.exhaustTimer = this.cfg.exhaustedDuration; this.holdRegen = false; this.onExhausted?.(); } return true; }
+    update(dt) {
+      if (this.exhausted) { this.exhaustTimer -= dt; if (this.exhaustTimer <= 0) { this.exhausted = false; this.exhaustTimer = 0; this.value = this.cfg.recoverTo; this.sinceUse = 0; this.onRecovered?.(); } return; }
+      this.sinceUse += dt;
+      if (!this.holdRegen && this.sinceUse >= this.cfg.regenDelay && this.value < this.max) this.value = Math.min(this.max, this.value + this.cfg.regenRate * dt);
+    }
+  }
+  const ST_CFG = { max: 100, regenDelay: 1, regenRate: 25, exhaustedDuration: 4, recoverTo: 50 };
+
+  // =====================================================
+  //  บทที่ 7: FSM demo
+  // =====================================================
+  {
+    const svg = $('#fsm-svg');
+    const NS = 'http://www.w3.org/2000/svg';
+    const nodes = {
+      locomotion: [260, 165, 'locomotion'], attack: [90, 60, 'attack'], charge: [430, 60, 'charge'], heavy: [430, 270, 'heavy'],
+      dodge: [90, 270, 'dodge'], hurt: [260, 285, 'hurt'], dead: [260, 40, 'dead'],
+    };
+    const edges = [
+      // เส้นไป-กลับคู่เดียวกันใช้ bend เครื่องหมายเดียวกัน → โค้งออกคนละฝั่งเอง (เพราะทิศกลับกัน)
+      ['locomotion', 'attack', 'คลิกซ้าย', 16], ['attack', 'locomotion', 'จบท่า', 16], ['locomotion', 'charge', 'ค้างขวา', -14],
+      ['charge', 'heavy', 'ปล่อย', 0], ['heavy', 'locomotion', 'จบท่า', 0], ['locomotion', 'dodge', 'Space', 16], ['dodge', 'locomotion', 'จบท่า', 16],
+      ['locomotion', 'hurt', 'โดนตี', 18], ['hurt', 'locomotion', 'หายมึน', 18], ['hurt', 'dead', '', 0], ['attack', 'dodge', 'Space', 0],
+    ];
+    const defs = document.createElementNS(NS, 'defs');
+    defs.innerHTML = '<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker>';
+    svg.appendChild(defs);
+    for (const [a, b, label, bend] of edges) {
+      const [x1, y1] = nodes[a], [x2, y2] = nodes[b];
+      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
+      const nx = -dy / len, ny = dx / len;
+      const cx = mx + nx * bend * 2.2, cy = my + ny * bend * 2.2;
+      // ตัดปลายเส้นให้ไม่ทับกล่อง
+      const shrink = (px, py, tx, ty) => { const d = Math.hypot(tx - px, ty - py); const k = Math.min(0.42, 46 / d); return [px + (tx - px) * k, py + (ty - py) * k]; };
+      const [sx, sy] = shrink(x1, y1, cx, cy);
+      const [ex, ey] = shrink(x2, y2, cx, cy);
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`);
+      p.setAttribute('class', 'edge');
+      p.setAttribute('marker-end', 'url(#ah)');
+      svg.appendChild(p);
+      if (label) {
+        const t = document.createElementNS(NS, 'text');
+        t.setAttribute('x', cx); t.setAttribute('y', cy + (bend >= 0 ? 4 : -2));
+        t.setAttribute('class', 'elabel'); t.textContent = label;
+        svg.appendChild(t);
+      }
+    }
+    const nodeEls = {};
+    for (const [k, [x, y, label]] of Object.entries(nodes)) {
+      const g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'node');
+      const w = label.length * 9 + 26;
+      g.innerHTML = `<rect x="${x - w / 2}" y="${y - 17}" width="${w}" height="34" rx="10"></rect><text x="${x}" y="${y + 1}">${label}</text>`;
+      svg.appendChild(g);
+      nodeEls[k] = g;
+    }
+
+    const LA = { cost: 12, duration: 0.34, hitTime: 0.11 };
+    const HA = { minCost: 20, maxCost: 40, chargeTime: 1.2, duration: 0.5 };
+    const DG = { cost: 20, duration: 0.42, i0: 0.03, i1: 0.32 };
+    let st, s;
+    const log = $('#fsm-log');
+    function say(msg) {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      log.prepend(li);
+      while (log.children.length > 7) log.lastChild.remove();
+    }
+    function reset() {
+      st = new Stamina(ST_CFG);
+      st.onExhausted = () => say('หลอด stamina หมด → หมดแรง 4 วินาที');
+      st.onRecovered = () => say('พ้นช่วงหมดแรง → stamina กลับมา 50');
+      s = { state: 'locomotion', t: 0, combo: 0, comboTimer: 0, charge: 0, hp: 100, heavyHeld: false };
+      log.innerHTML = '';
+      say('เริ่มที่สถานะ locomotion (ยืน/เดิน)');
+    }
+    reset();
+    const go = (name, msg) => { s.state = name; s.t = 0; if (msg) say(msg); };
+    const tryStamina = (cost, what) => {
+      if (st.spend(cost)) return true;
+      say(`${what} ไม่ได้: ${st.exhausted ? 'กำลังหมดแรงอยู่' : 'stamina หมด'}`);
+      return false;
+    };
+    const handlers = {
+      light() {
+        if (s.state === 'locomotion') {
+          if (tryStamina(LA.cost, 'ฟัน')) { s.combo = s.comboTimer > 0 ? (s.combo + 1) % 3 : 0; go('attack', `ฟันเบาจังหวะ ${s.combo + 1} (−12)`); }
+        } else if (s.state === 'attack' && s.t > LA.hitTime + 0.07 && s.combo < 2) {
+          if (tryStamina(LA.cost, 'ต่อคอมโบ')) { s.combo++; go('attack', `ต่อคอมโบจังหวะ ${s.combo + 1} (−12)`); }
+        } else say(`กดคลิกซ้ายระหว่าง ${s.state} → ไม่มีผล (สถานะนี้ไม่รับปุ่มนี้)`);
+      },
+      heavyDown() {
+        s.heavyHeld = true;
+        if (s.state !== 'locomotion') return say(`เริ่มชาร์จระหว่าง ${s.state} ไม่ได้`);
+        if (!st.canAct()) return say('ชาร์จไม่ได้: หมดแรงอยู่');
+        st.holdRegen = true; s.charge = 0; go('charge', 'เริ่มชาร์จ (stamina หยุดฟื้น)');
+      },
+      heavyUp() {
+        s.heavyHeld = false;
+        if (s.state !== 'charge') return say('ปล่อยปุ่ม แต่ไม่ได้ชาร์จอยู่');
+        st.holdRegen = false;
+        const cost = HA.minCost + (HA.maxCost - HA.minCost) * s.charge;
+        st.spend(cost);
+        go('heavy', `ปล่อยฟันชาร์จ ${Math.round(s.charge * 100)}% (−${Math.round(cost)})`);
+      },
+      dodge() {
+        const ok = s.state === 'locomotion' || s.state === 'charge' || (s.state === 'attack' && s.t > LA.hitTime + 0.07);
+        if (!ok) return say(`กลิ้งระหว่าง ${s.state} ไม่ได้`);
+        if (s.state === 'charge') st.holdRegen = false;
+        if (tryStamina(DG.cost, 'กลิ้ง')) go('dodge', 'กลิ้งหลบ (−20)');
+      },
+      hit() {
+        if (s.state === 'dead') return;
+        if (s.state === 'dodge' && s.t >= DG.i0 && s.t <= DG.i1) return say('โดนตีระหว่าง i-frame → หลบได้! ไม่เสียเลือด');
+        if (s.state === 'charge') st.holdRegen = false;
+        s.hp = Math.max(0, s.hp - 22);
+        if (s.hp <= 0) return go('dead', 'เลือดหมด → dead');
+        go('hurt', 'โดนตี −22 HP → hurt (มึน 0.32 วิ)');
+      },
+      reset,
+    };
+    $$('#fsm-demo [data-ev]').forEach((b) => b.addEventListener('click', () => handlers[b.dataset.ev]()));
+    const speed = $('#fsm-speed');
+    const ui = { state: $('#fsm-state'), time: $('#fsm-time'), hp: $('#fsm-hp'), hpv: $('#fsm-hp-v'), st: $('#fsm-st'), stv: $('#fsm-st-v'), stm: $('#fsm-st-m'), ex: $('#chip-ex'), iff: $('#chip-if'), ch: $('#chip-ch') };
+    addDemo($('#fsm-demo'), (rdt) => {
+      const dt = rdt * +speed.value;
+      s.t += dt;
+      st.update(dt);
+      if (s.comboTimer > 0) s.comboTimer -= dt;
+      if (s.state === 'attack' && s.t >= LA.duration * (s.combo === 2 ? 1.25 : 1)) { s.comboTimer = s.combo < 2 ? 0.5 : 0; go('locomotion', 'จบท่าฟัน → locomotion'); }
+      if (s.state === 'charge') s.charge = Math.min(1, s.t / HA.chargeTime);
+      if (s.state === 'heavy' && s.t >= HA.duration) go('locomotion', 'จบท่าฟันแรง → locomotion');
+      if (s.state === 'dodge' && s.t >= DG.duration) go('locomotion', 'จบท่ากลิ้ง → locomotion');
+      if (s.state === 'hurt' && s.t >= 0.32) go('locomotion', 'หายมึน → locomotion');
+      for (const [k, el] of Object.entries(nodeEls)) el.classList.toggle('active', k === s.state);
+      ui.state.textContent = s.state === 'attack' ? `attack (จังหวะ ${s.combo + 1})` : s.state;
+      ui.time.textContent = `${s.t.toFixed(2)} วิ`;
+      ui.hp.style.transform = `scaleX(${s.hp / 100})`; ui.hpv.textContent = s.hp;
+      ui.st.style.transform = `scaleX(${st.exhausted ? 1 : st.value / 100})`;
+      ui.stv.textContent = st.exhausted ? `หมดแรง ${st.exhaustTimer.toFixed(1)} วิ` : Math.floor(st.value);
+      ui.stm.classList.toggle('ex', st.exhausted);
+      ui.ex.classList.toggle('on', st.exhausted);
+      ui.iff.classList.toggle('on', s.state === 'dodge' && s.t >= DG.i0 && s.t <= DG.i1);
+      ui.ch.classList.toggle('on', s.state === 'charge');
+      ui.ch.textContent = `ชาร์จ ${Math.round((s.state === 'charge' ? s.charge : 0) * 100)}%`;
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 8: hit detection
+  // =====================================================
+  {
+    const C = makeCanvas($('#hit-canvas'), 330);
+    let mode = 'light';
+    const btns = $$('#hit-demo [data-atk]');
+    btns.forEach((b) => b.addEventListener('click', () => { mode = b.dataset.atk; pressGroup(btns, b); }));
+    const charge = $('#hit-charge');
+    const target = { x: 1.3, z: -0.5, r: 0.5 };
+    const SCALE = () => Math.min(70, C.w / 9);
+    const origin = () => [C.w * 0.42, C.h / 2];
+    pointer(C.canvas, (x, y) => {
+      const [ox, oy] = origin(), s = SCALE();
+      target.x = (x - ox) / s; target.z = (y - oy) / s;
+    });
+    const read = $('#hit-read');
+    addDemo($('#hit-demo'), (dt, time) => {
+      const { ctx, w, h } = C;
+      const [ox, oy] = origin(), s = SCALE();
+      const range = mode === 'light' ? 1.75 : 2.0 + 0.9 * +charge.value;
+      const arc = mode === 'light' ? 120 : 360;
+      const dist = Math.hypot(target.x, target.z);
+      const cos = dist > 0 ? target.x / dist : 1;
+      const angle = Math.acos(Math.max(-1, Math.min(1, cos))) * 180 / Math.PI;
+      const inRange = dist <= range + target.r;
+      const inArc = arc >= 360 || dist < 0.3 || angle <= arc / 2;
+      const hit = inRange && inArc;
+      ctx.clearRect(0, 0, w, h);
+      // grid 1 เมตร
+      ctx.strokeStyle = T.line; ctx.lineWidth = 1;
+      for (let gx = ox % s; gx < w; gx += s) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke(); }
+      for (let gy = oy % s; gy < h; gy += s) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke(); }
+      // พื้นที่ดาบ
+      ctx.fillStyle = hit ? 'rgba(46,170,110,0.22)' : 'rgba(210,120,40,0.18)';
+      ctx.strokeStyle = hit ? T.hit : T.lantern; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(ox, oy);
+      const half = arc / 2 * Math.PI / 180;
+      ctx.arc(ox, oy, range * s, -half, half); ctx.closePath(); ctx.fill(); ctx.stroke();
+      // ระยะ + รัศมีเป้า (เส้นประ)
+      ctx.setLineDash([5, 5]); ctx.strokeStyle = T['ink-2']; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(ox, oy, (range + target.r) * s, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+      // ทิศที่หัน
+      ctx.strokeStyle = T.ink; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + 0.9 * s, oy); ctx.stroke();
+      // ผู้เล่น
+      ctx.fillStyle = T.scarf; ctx.beginPath(); ctx.arc(ox, oy, 0.42 * s, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = '600 12px "IBM Plex Sans Thai", sans-serif'; ctx.textAlign = 'center'; ctx.fillText('ไค', ox, oy + 4);
+      // เป้า
+      const tx = ox + target.x * s, ty = oy + target.z * s;
+      ctx.strokeStyle = T.ink; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(tx, ty); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = hit ? T.hit : '#5fd08a';
+      ctx.beginPath(); ctx.arc(tx, ty, target.r * s * (hit ? 1 + Math.sin(time * 12) * 0.05 : 1), 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#123'; ctx.fillText('สไลม์', tx, ty + 4);
+      ctx.textAlign = 'left';
+      read.innerHTML =
+        `ระยะ  = ${dist.toFixed(2)} ม.   ต้อง ≤ ${range.toFixed(2)} + ${target.r} = ${(range + target.r).toFixed(2)}   → ${inRange ? '<span class="ok">ผ่าน</span>' : '<span class="bad">ไกลเกิน</span>'}\n` +
+        (arc < 360 ? `มุม   = acos(dot) = ${angle.toFixed(0)}°   ต้อง ≤ ${arc / 2}°   → ${inArc ? '<span class="ok">ผ่าน</span>' : '<span class="bad">นอกมุม</span>'}\n` : `มุม   = 360° (หมุนรอบตัว ไม่ต้องเช็ค)\n`) +
+        `ผล   = ${hit ? '<span class="ok">โดน!</span>' : '<span class="bad">ไม่โดน</span>'}`;
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 9: stamina simulator
+  // =====================================================
+  {
+    const st = new Stamina(ST_CFG);
+    const C = makeCanvas($('#st-canvas'), 170);
+    const hist = [];
+    let time = 0, spam = 0, ghost = 1;
+    const bar = $('#st-bar'), fill = bar.querySelector('.fill'), gh = bar.querySelector('.ghost'), txt = $('#st-txt'), read = $('#st-read');
+    const events = [];
+    st.onExhausted = () => events.push([time, 'หมดแรง']);
+    st.onRecovered = () => events.push([time, 'ฟื้น → 50']);
+    const act = { light: 12, heavy: 40, dodge: 20 };
+    $$('#st-demo [data-st]').forEach((b) => b.addEventListener('click', () => {
+      const k = b.dataset.st;
+      if (k === 'spam') { spam = 9; return; }
+      if (!st.spend(act[k])) { bar.animate?.([{ transform: 'translateX(-4px)' }, { transform: 'translateX(4px)' }, { transform: 'translateX(0)' }], { duration: 200 }); }
+    }));
+    let spamT = 0;
+    addDemo($('#st-demo'), (dt) => {
+      time += dt;
+      if (spam > 0) { spamT -= dt; if (spamT <= 0) { spamT = 0.36; spam--; if (!st.spend(12)) spam = 0; } }
+      st.update(dt);
+      hist.push([time, st.value, st.exhausted]);
+      while (hist.length && hist[0][0] < time - 12) hist.shift();
+      // แถบ
+      const ratio = st.exhausted ? 1 : st.value / st.max;
+      if (st.value / st.max < ghost) ghost = Math.max(st.value / st.max, ghost - dt * 0.6); else ghost = st.value / st.max;
+      fill.style.transform = `scaleX(${ratio})`;
+      gh.style.transform = `scaleX(${st.exhausted ? 0 : ghost})`;
+      bar.classList.toggle('ex', st.exhausted);
+      if (st.exhausted) {
+        const p = 1 - st.exhaustTimer / ST_CFG.exhaustedDuration;
+        txt.innerHTML = `<svg class="spinner" viewBox="0 0 36 36"><circle class="tr" cx="18" cy="18" r="14"/><circle class="pg" cx="18" cy="18" r="14" style="stroke-dashoffset:${88 * (1 - p)}"/></svg> หมดแรง! ${st.exhaustTimer.toFixed(1)} วิ`;
+      } else txt.textContent = Math.floor(st.value);
+      // สถานะเป็นข้อความ
+      let phase;
+      if (st.exhausted) phase = `หมดแรง: ทำท่าไม่ได้ เหลือ ${st.exhaustTimer.toFixed(1)} วิ แล้วจะได้คืน 50`;
+      else if (st.value >= st.max) phase = 'เต็มหลอด';
+      else if (st.sinceUse < ST_CFG.regenDelay) phase = `รอฟื้น: พักอีก ${(ST_CFG.regenDelay - st.sinceUse).toFixed(1)} วิ`;
+      else phase = 'กำลังฟื้น +25/วินาที';
+      read.textContent = `ค่า ${st.value.toFixed(1)} / 100   ·   ${phase}`;
+      // กราฟ
+      const { ctx, w, h } = C;
+      ctx.clearRect(0, 0, w, h);
+      const pad = 34, gw = w - pad - 10, gh2 = h - 30;
+      const X = (t) => pad + (t - (time - 12)) / 12 * gw;
+      const Y = (v) => 10 + (1 - v / 100) * gh2;
+      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.strokeStyle = T.line; ctx.fillStyle = T['ink-2']; ctx.lineWidth = 1;
+      for (const v of [0, 50, 100]) { ctx.beginPath(); ctx.moveTo(pad, Y(v)); ctx.lineTo(w - 10, Y(v)); ctx.stroke(); ctx.fillText(String(v), 4, Y(v) + 4); }
+      ctx.fillText('12 วินาทีล่าสุด →', pad, h - 6);
+      // ช่วงหมดแรง
+      ctx.fillStyle = 'rgba(200,55,43,0.15)';
+      for (let i = 0; i < hist.length; i++) if (hist[i][2]) { const x0 = X(hist[i][0]); const x1 = i + 1 < hist.length ? X(hist[i + 1][0]) : x0 + 2; ctx.fillRect(x0, 10, x1 - x0 + 0.5, gh2); }
+      ctx.strokeStyle = T.forest; ctx.lineWidth = 2.5; ctx.beginPath();
+      hist.forEach(([t, v], i) => (i ? ctx.lineTo(X(t), Y(v)) : ctx.moveTo(X(t), Y(v))));
+      ctx.stroke();
+      ctx.fillStyle = T.scarf;
+      for (const [t, label] of events) if (t > time - 12) { ctx.fillText(label, Math.min(w - 70, X(t) + 4), 22); ctx.fillRect(X(t), 10, 1.5, gh2); }
+      while (events.length && events[0][0] < time - 12) events.shift();
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 10: juice lab
+  // =====================================================
+  {
+    const C = makeCanvas($('#juice-canvas'), 280);
+    const opt = {};
+    const boxes = $$('#juice-toggles input');
+    const sync = () => boxes.forEach((b) => (opt[b.dataset.j] = b.checked));
+    boxes.forEach((b) => b.addEventListener('change', sync));
+    sync();
+    $('#juice-all').addEventListener('click', () => { boxes.forEach((b) => (b.checked = true)); sync(); });
+    $('#juice-none').addEventListener('click', () => { boxes.forEach((b) => (b.checked = false)); sync(); });
+    const S = { stop: 0, shake: 0, flash: 0, kx: 0, kv: 0, sq: 0, sqv: 0, swing: -1, parts: [], nums: [] };
+    let audioCtx = null;
+    function blip(heavy) {
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const t = audioCtx.currentTime, o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.type = 'square'; o.frequency.setValueAtTime(heavy ? 160 : 230, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.1);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+        o.connect(g).connect(audioCtx.destination); o.start(t); o.stop(t + 0.15);
+      } catch (e) { /* ไม่มีเสียงก็เล่นต่อได้ */ }
+    }
+    function hit() {
+      S.swing = 0;
+      setTimeout(() => {
+        const dmg = 8 + Math.floor(Math.random() * 3);
+        if (opt.hitstop) S.stop = 0.07;
+        if (opt.shake) S.shake = 0.5;
+        if (opt.flash) S.flash = 1;
+        if (opt.knock) S.kv = 260;
+        if (opt.squash) S.sqv = -6;
+        if (opt.numbers) S.nums.push({ x: 0, y: 0, t: 0, v: dmg });
+        if (opt.particles) for (let i = 0; i < 14; i++) { const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.4; const sp = 120 + Math.random() * 200; S.parts.push({ x: 0, y: 0, vx: Math.cos(a) * sp + 60, vy: Math.sin(a) * sp, life: 0.4 + Math.random() * 0.2 }); }
+        blip(false);
+      }, 90);
+    }
+    $('#juice-hit').addEventListener('click', hit);
+    C.canvas.addEventListener('pointerdown', hit);
+    addDemo($('#juice-demo'), (rdt) => {
+      let dt = rdt;
+      if (S.stop > 0) { S.stop -= rdt; dt = 0; }
+      if (S.swing >= 0) S.swing += dt * 4;
+      if (S.swing > 1.3) S.swing = -1;
+      S.shake = Math.max(0, S.shake - rdt * 2.2);
+      S.flash = Math.max(0, S.flash - dt * 6);
+      S.kx += S.kv * dt; S.kv *= Math.exp(-9 * dt); S.kx += (0 - S.kx) * Math.min(1, dt * 2.5);
+      S.sqv += (-80 * S.sq - 8 * S.sqv) * dt; S.sq += S.sqv * dt;
+      for (const p of S.parts) { p.vy += 600 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; }
+      S.parts = S.parts.filter((p) => p.life > 0);
+      for (const n of S.nums) n.t += rdt;
+      S.nums = S.nums.filter((n) => n.t < 0.9);
+
+      const { ctx, w, h } = C;
+      ctx.save();
+      ctx.clearRect(0, 0, w, h);
+      const sh = S.shake * S.shake * 14;
+      ctx.translate((Math.random() * 2 - 1) * sh, (Math.random() * 2 - 1) * sh);
+      const ground = h * 0.78;
+      ctx.fillStyle = T.line; ctx.fillRect(-20, ground, w + 40, 3);
+      // ไค
+      const px = w * 0.3;
+      ctx.fillStyle = T.scarf; ctx.fillRect(px - 14, ground - 70, 28, 44);
+      ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(px, ground - 86, 16, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#6b4226'; ctx.beginPath(); ctx.arc(px, ground - 92, 16, Math.PI, 0); ctx.fill();
+      ctx.fillStyle = '#5a3a24'; ctx.fillRect(px - 12, ground - 26, 10, 26); ctx.fillRect(px + 2, ground - 26, 10, 26);
+      // ดาบ + รอยดาบ
+      const sw = S.swing >= 0 ? Math.min(1, S.swing) : 0;
+      const ang = S.swing >= 0 ? -1.9 + sw * 2.6 : 0.9;
+      const hx = px + 16, hy = ground - 58, L = 86;
+      if (opt.trail && S.swing >= 0) {
+        ctx.fillStyle = 'rgba(190,230,255,0.45)';
+        ctx.beginPath(); ctx.moveTo(hx, hy);
+        ctx.arc(hx, hy, L, Math.max(-1.9, ang - 1.2), ang); ctx.closePath(); ctx.fill();
+      }
+      ctx.strokeStyle = '#dfe8f0'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx + Math.cos(ang) * L, hy + Math.sin(ang) * L); ctx.stroke();
+      ctx.strokeStyle = '#e0b04a'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(hx + Math.cos(ang + 1.57) * 9, hy + Math.sin(ang + 1.57) * 9); ctx.lineTo(hx - Math.cos(ang + 1.57) * 9, hy - Math.sin(ang + 1.57) * 9); ctx.stroke();
+      // สไลม์
+      const sx = w * 0.3 + 118 + S.kx, sy = ground;
+      const sqk = opt.squash ? S.sq : 0;
+      const rw = 42 * (1 - sqk * 0.6), rh = 36 * (1 + sqk);
+      ctx.fillStyle = S.flash > 0.05 ? `rgb(${Math.round(95 + 160 * S.flash)},${Math.round(208 + 47 * S.flash)},${Math.round(138 + 117 * S.flash)})` : '#5fd08a';
+      ctx.beginPath(); ctx.ellipse(sx, sy - rh, rw, rh, 0, Math.PI, 0); ctx.lineTo(sx + rw, sy); ctx.lineTo(sx - rw, sy); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#1d1b2a'; ctx.fillRect(sx - 14, sy - rh - 6, 7, 12); ctx.fillRect(sx + 7, sy - rh - 6, 7, 12);
+      // ประกาย
+      ctx.fillStyle = '#ffe9a8';
+      for (const p of S.parts) { ctx.globalAlpha = Math.max(0, p.life * 2); ctx.fillRect(sx - 30 + p.x, sy - 40 + p.y, 5, 5); }
+      ctx.globalAlpha = 1;
+      // ตัวเลข
+      ctx.textAlign = 'center';
+      for (const n of S.nums) {
+        const k = n.t / 0.9;
+        const sc = k < 0.12 ? 0.5 + k / 0.12 * 0.85 : k < 0.3 ? 1.35 - (k - 0.12) / 0.18 * 0.35 : 1;
+        ctx.globalAlpha = k > 0.7 ? 1 - (k - 0.7) / 0.3 : 1;
+        ctx.font = `800 ${Math.round(26 * sc)}px "Mitr", sans-serif`;
+        ctx.lineWidth = 4; ctx.strokeStyle = '#2a1a14'; ctx.fillStyle = '#fff';
+        const y = sy - 90 - k * 60;
+        ctx.strokeText(String(n.v), sx, y); ctx.fillText(String(n.v), sx, y);
+      }
+      ctx.globalAlpha = 1; ctx.textAlign = 'left';
+      ctx.restore();
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 11: collision
+  // =====================================================
+  {
+    const C = makeCanvas($('#col-canvas'), 300);
+    const s = () => Math.min(50, C.w / 11);
+    const box = { minX: 1.2, maxX: 4.2, minZ: 0.8, maxZ: 3.2 };
+    const circ = { x: 7.5, z: 2.6, r: 1.1 };
+    const p = { x: 2.2, z: 4.6, r: 0.6 };
+    let raw = { x: p.x, z: p.z };
+    const resolve = $('#col-resolve');
+    const read = $('#col-read');
+    pointer(C.canvas, (x, y) => { raw = { x: x / s(), z: y / s() }; });
+    addDemo($('#col-demo'), () => {
+      const { ctx, w, h } = C;
+      const S = s();
+      let q = { x: raw.x, z: raw.z };
+      // วงกลม-กล่อง
+      const cx = Math.max(box.minX, Math.min(q.x, box.maxX));
+      const cz = Math.max(box.minZ, Math.min(q.z, box.maxZ));
+      const dx = q.x - cx, dz = q.z - cz, d = Math.hypot(dx, dz);
+      const hitBox = d < p.r;
+      // วงกลม-วงกลม
+      const ex = q.x - circ.x, ez = q.z - circ.z, ed = Math.hypot(ex, ez);
+      const hitC = ed < p.r + circ.r;
+      let res = { ...q };
+      if (resolve.checked) {
+        if (hitBox && d > 1e-6) { res.x += dx / d * (p.r - d); res.z += dz / d * (p.r - d); }
+        if (hitC && ed > 1e-6) { res.x += ex / ed * (p.r + circ.r - ed); res.z += ez / ed * (p.r + circ.r - ed); }
+      }
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = T.surface; ctx.strokeStyle = T['ink-2']; ctx.lineWidth = 2;
+      ctx.fillRect(box.minX * S, box.minZ * S, (box.maxX - box.minX) * S, (box.maxZ - box.minZ) * S);
+      ctx.strokeRect(box.minX * S, box.minZ * S, (box.maxX - box.minX) * S, (box.maxZ - box.minZ) * S);
+      ctx.fillStyle = T['ink-2']; ctx.font = '13px "IBM Plex Sans Thai", sans-serif'; ctx.fillText('ตึก (AABB)', box.minX * S + 8, box.minZ * S + 20);
+      ctx.fillStyle = T.surface; ctx.beginPath(); ctx.arc(circ.x * S, circ.z * S, circ.r * S, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = T['ink-2']; ctx.fillText('ต้นไม้', circ.x * S - 20, circ.z * S + 4);
+      // จุดใกล้สุดบนกล่อง
+      ctx.fillStyle = T.sky; ctx.beginPath(); ctx.arc(cx * S, cz * S, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = T.sky; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(cx * S, cz * S); ctx.lineTo(q.x * S, q.z * S); ctx.stroke(); ctx.setLineDash([]);
+      // ตำแหน่งที่ผู้เล่นอยากไป (ผี)
+      ctx.strokeStyle = (hitBox || hitC) ? T.miss : T['ink-2']; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.arc(q.x * S, q.z * S, p.r * S, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+      // ตำแหน่งจริงหลังดันออก
+      ctx.fillStyle = T.lantern; ctx.globalAlpha = 0.9;
+      ctx.beginPath(); ctx.arc(res.x * S, res.z * S, p.r * S, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+      if (resolve.checked && (hitBox || hitC)) {
+        ctx.strokeStyle = T.scarf; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(q.x * S, q.z * S); ctx.lineTo(res.x * S, res.z * S); ctx.stroke();
+      }
+      read.innerHTML = `จุดใกล้สุดบนกล่อง = (${cx.toFixed(2)}, ${cz.toFixed(2)})   ระยะ = ${d.toFixed(2)}   รัศมี = ${p.r}\n` +
+        `ชนกล่อง: ${hitBox ? '<span class="bad">ใช่</span> ดันออก ' + (p.r - d).toFixed(2) + ' ม.' : '<span class="ok">ไม่</span>'}    ชนต้นไม้: ${hitC ? '<span class="bad">ใช่</span> ดันออก ' + (p.r + circ.r - ed).toFixed(2) + ' ม.' : '<span class="ok">ไม่</span>'}`;
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 12: verlet rope
+  // =====================================================
+  {
+    const C = makeCanvas($('#rope-canvas'), 280);
+    const N = 9, SEG = 22;
+    const pts = [], prev = [];
+    for (let i = 0; i < N; i++) { pts.push({ x: 200, y: 60 + i * SEG }); prev.push({ x: 200, y: 60 + i * SEG }); }
+    let anchor = { x: 200, y: 60 }, mouseT = -10;
+    pointer(C.canvas, (x, y) => { anchor = { x, y: Math.min(y, C.h - 40) }; mouseT = performance.now() / 1000; });
+    const g = $('#rope-g'), wind = $('#rope-w'), con = $('#rope-c');
+    addDemo($('#rope-demo'), (dt, time) => {
+      if (dt <= 0) return;
+      // ไม่มีเมาส์ → คอขยับเอง
+      if (time - mouseT > 2.5) anchor = { x: C.w / 2 + Math.sin(time * 1.3) * C.w * 0.3, y: 80 + Math.sin(time * 2.6) * 20 };
+      const gy = +g.value * 60, wx = +wind.value * 60 + Math.sin(time * 2.3) * 40;
+      const damp = Math.pow(0.9, dt * 60);
+      for (let i = 1; i < N; i++) {
+        const p = pts[i], q = prev[i];
+        const vx = (p.x - q.x) * damp, vy = (p.y - q.y) * damp;
+        q.x = p.x; q.y = p.y;
+        p.x += vx + wx * dt * dt; p.y += vy + gy * dt * dt;
+      }
+      pts[0].x = anchor.x; pts[0].y = anchor.y;
+      if (con.checked) for (let it = 0; it < 4; it++) for (let i = 1; i < N; i++) {
+        const a = pts[i - 1], b = pts[i];
+        const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.001;
+        b.x = a.x + dx / d * SEG; b.y = a.y + dy / d * SEG;
+      }
+      for (const p of pts) { p.x = Math.max(4, Math.min(C.w - 4, p.x)); p.y = Math.min(C.h - 4, p.y); }
+      const { ctx, w, h } = C;
+      ctx.clearRect(0, 0, w, h);
+      // หัวไค
+      ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(anchor.x, anchor.y - 34, 26, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#6b4226'; ctx.beginPath(); ctx.arc(anchor.x, anchor.y - 42, 27, Math.PI, 0); ctx.fill();
+      // ผ้า
+      ctx.strokeStyle = '#d63a2f'; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      for (let i = 1; i < N; i++) {
+        ctx.lineWidth = 16 - i * 0.9;
+        ctx.beginPath(); ctx.moveTo(pts[i - 1].x, pts[i - 1].y); ctx.lineTo(pts[i].x, pts[i].y); ctx.stroke();
+      }
+      ctx.fillStyle = '#b22a22'; ctx.beginPath(); ctx.ellipse(anchor.x, anchor.y, 26, 9, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = T.ink;
+      for (const p of pts) { ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2); ctx.fill(); }
+    });
+  }
+
+  // =====================================================
+  //  บทที่ 14: synth sounds (ย่อจาก src/core/Audio.js)
+  // =====================================================
+  {
+    let ac = null, master = null, noise = null;
+    function init() {
+      if (ac) return;
+      ac = new (window.AudioContext || window.webkitAudioContext)();
+      master = ac.createGain(); master.gain.value = 0.5; master.connect(ac.destination);
+      noise = ac.createBuffer(1, ac.sampleRate, ac.sampleRate);
+      const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    function tone({ type = 'sine', freq = 440, freqEnd = null, dur = 0.15, vol = 0.3, delay = 0 }) {
+      const t = ac.currentTime + delay, o = ac.createOscillator(), g = ac.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t); if (freqEnd) o.frequency.exponentialRampToValueAtTime(freqEnd, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(master); o.start(t); o.stop(t + dur + 0.02);
+    }
+    function burst({ dur = 0.15, vol = 0.3, filter = 'bandpass', freq = 1200, freqEnd = null, q = 1 }) {
+      const t = ac.currentTime, src = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+      src.buffer = noise; f.type = filter; f.Q.value = q; f.frequency.setValueAtTime(freq, t); if (freqEnd) f.frequency.exponentialRampToValueAtTime(freqEnd, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f).connect(g).connect(master); src.start(t); src.stop(t + dur + 0.02);
+    }
+    const SND = {
+      swing: () => burst({ dur: 0.13, vol: 0.25, freq: 900, freqEnd: 3200, q: 1.2 }),
+      hit: () => { tone({ type: 'square', freq: 220, freqEnd: 90, dur: 0.09, vol: 0.18 }); burst({ dur: 0.08, vol: 0.3, filter: 'highpass', freq: 1800 }); },
+      heavyHit: () => { tone({ freq: 140, freqEnd: 40, dur: 0.35, vol: 0.5 }); burst({ dur: 0.25, vol: 0.4, filter: 'lowpass', freq: 2400, freqEnd: 300 }); },
+      dodge: () => burst({ dur: 0.22, vol: 0.22, freq: 600, freqEnd: 1800, q: 0.7 }),
+      exhausted: () => { tone({ type: 'triangle', freq: 520, freqEnd: 260, dur: 0.25, vol: 0.18 }); tone({ type: 'triangle', freq: 390, freqEnd: 180, dur: 0.35, vol: 0.16, delay: 0.18 }); },
+      recovered: () => [523, 659, 784].forEach((f, i) => tone({ freq: f, dur: 0.16, vol: 0.15, delay: i * 0.08 })),
+      slam: () => { tone({ freq: 90, freqEnd: 30, dur: 0.5, vol: 0.6 }); burst({ dur: 0.45, vol: 0.45, filter: 'lowpass', freq: 800, freqEnd: 100 }); },
+      pickup: () => [523, 659, 784, 1046].forEach((f, i) => tone({ freq: f, dur: 0.14, vol: 0.13, delay: i * 0.06 })),
+    };
+    $$('#audio-demo [data-snd]').forEach((b) => b.addEventListener('click', () => {
+      try { init(); if (ac.state === 'suspended') ac.resume(); SND[b.dataset.snd](); } catch (e) { b.textContent += ' (เบราว์เซอร์ไม่รองรับ)'; }
+    }));
+  }
+})();
+</script>
+
+<script type="module">
+// =====================================================
+//  บทที่ 6: ไคจิ๋ว 3D (three.js จาก CDN)
+// =====================================================
+const viewer = document.getElementById('model-viewer');
+const stat = document.getElementById('model-stat');
+try {
+  const THREE = await import('three');
+  const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+  viewer.querySelector('.fallback').remove();
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  viewer.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 16 / 9, 0.1, 50);
+  camera.position.set(3.2, 2.4, 4.2);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0.8, 0);
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.minDistance = 2.5;
+  controls.maxDistance = 9;
+  controls.autoRotate = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  controls.autoRotateSpeed = 1.6;
+  scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x6a5a40, 1.4));
+  const sun = new THREE.DirectionalLight(0xfff0d8, 2.4);
+  sun.position.set(3, 5, 4);
+  scene.add(sun);
+  const floor = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.5, 0.12, 8), new THREE.MeshStandardMaterial({ color: 0x7fb356, flatShading: true }));
+  floor.position.y = -0.06;
+  scene.add(floor);
+
+  const opts = { flat: true, low: true, wire: false, explode: false };
+  let hero = null;
+  let explodeK = 0;
+
+  // --- โค้ดสร้างตัวละคร (ย่อจาก src/models/humanoid.js) ---
+  function buildMiniKai() {
+    const seg = (lo, hi) => (opts.low ? lo : hi);
+    const g = new THREE.Group();
+    const parts = [];
+    const M = (color) => new THREE.MeshStandardMaterial({ color, flatShading: opts.flat, roughness: 0.85, wireframe: opts.wire });
+    const add = (geo, color, x, y, z, rx = 0, ry = 0, rz = 0, sx = 1, sy = 1, sz = 1) => {
+      const m = new THREE.Mesh(geo, M(color));
+      m.position.set(x, y, z); m.rotation.set(rx, ry, rz); m.scale.set(sx, sy, sz);
+      m.userData.home = m.position.clone();
+      g.add(m); parts.push(m);
+      return m;
+    };
+    // ขา + รองเท้า
+    for (const s of [1, -1]) {
+      add(new THREE.BoxGeometry(0.15, 0.46, 0.16), 0x6e5a45, s * 0.11, 0.37, 0);
+      add(new THREE.BoxGeometry(0.17, 0.17, 0.25), 0x5a3a24, s * 0.11, 0.09, 0.03);
+    }
+    // ลำตัว (ทูนิก) + ชายเสื้อ + เข็มขัด
+    add(new THREE.CylinderGeometry(0.22, 0.26, 0.42, seg(8, 32)), 0x3b5f8f, 0, 0.81, 0);
+    add(new THREE.CylinderGeometry(0.265, 0.35, 0.2, seg(8, 32)), 0x2f4c75, 0, 0.63, 0);
+    add(new THREE.CylinderGeometry(0.255, 0.255, 0.06, seg(8, 32)), 0x4a2f1f, 0, 0.72, 0);
+    // แขน + มือ
+    for (const s of [1, -1]) {
+      add(new THREE.CylinderGeometry(0.07, 0.062, 0.31, seg(6, 24)), 0xefe2c2, s * 0.29, 0.83, 0, 0, 0, s * 0.12);
+      add(new THREE.IcosahedronGeometry(0.075, seg(0, 4)), 0xf2c9a0, s * 0.31, 0.63, 0);
+    }
+    // หัว + ผม + ตา
+    add(new THREE.IcosahedronGeometry(0.27, seg(1, 5)), 0xf2c9a0, 0, 1.32, 0, 0, 0, 0, 1, 0.95, 0.96);
+    add(new THREE.SphereGeometry(0.29, seg(8, 32), seg(5, 16), 0, Math.PI * 2, 0, Math.PI * 0.52), 0x6b4226, 0, 1.39, -0.02, -0.25, 0, 0, 1.05, 1, 1.08);
+    for (const [x, rz] of [[-0.12, -0.25], [0, 0], [0.12, 0.25]]) add(new THREE.ConeGeometry(0.08, 0.15, seg(4, 16)), 0x6b4226, x, 1.52, 0.15, 1.9, 0, rz);
+    add(new THREE.ConeGeometry(0.08, 0.26, seg(4, 16)), 0x6b4226, 0.03, 1.63, -0.02, -0.5, 0, -0.2);
+    for (const s of [1, -1]) add(new THREE.BoxGeometry(0.065, 0.1, 0.03), 0x2b1d14, s * 0.1, 1.255, 0.24);
+    // ผ้าพันคอ: ห่วงรอบคอ + หาง 2 ท่อน
+    add(new THREE.TorusGeometry(0.15, 0.075, seg(5, 16), seg(9, 40)), 0xd63a2f, 0, 1.08, 0, Math.PI / 2);
+    add(new THREE.BoxGeometry(0.13, 0.32, 0.03), 0xd63a2f, 0.05, 0.92, -0.24, 0.35, 0, 0.1);
+    add(new THREE.BoxGeometry(0.1, 0.24, 0.03), 0xb22a22, -0.06, 0.94, -0.23, 0.3, 0, -0.15);
+    // ดาบ
+    add(new THREE.BoxGeometry(0.075, 0.6, 0.025), 0xdfe8f0, -0.31, 0.47, 0.36, 2.0, 0, 0);
+    add(new THREE.BoxGeometry(0.24, 0.045, 0.07), 0xe0b04a, -0.31, 0.6, 0.06, 2.0, 0, 0);
+    g.userData.parts = parts;
+    return g;
+  }
+
+  function rebuild() {
+    if (hero) {
+      scene.remove(hero);
+      hero.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
+    }
+    hero = buildMiniKai();
+    scene.add(hero);
+    let tris = 0;
+    for (const p of hero.userData.parts) {
+      const geo = p.geometry;
+      tris += (geo.index ? geo.index.count : geo.attributes.position.count) / 3;
+    }
+    stat.textContent = `${hero.userData.parts.length} ชิ้นส่วน · ${tris.toLocaleString()} สามเหลี่ยม`;
+  }
+  rebuild();
+
+  const bind = (id, key, needRebuild = true) => {
+    const b = document.getElementById(id);
+    b.addEventListener('click', () => {
+      opts[key] = !opts[key];
+      b.setAttribute('aria-pressed', String(opts[key]));
+      if (needRebuild) rebuild();
+    });
+  };
+  bind('m-flat', 'flat');
+  bind('m-low', 'low');
+  bind('m-wire', 'wire');
+  bind('m-explode', 'explode', false);
+
+  function resize() {
+    const w = viewer.clientWidth, h = viewer.clientHeight;
+    renderer.setSize(w, h, false);
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(viewer);
+  resize();
+
+  let visible = false;
+  new IntersectionObserver((es) => (visible = es[0].isIntersecting)).observe(viewer);
+  const center = new THREE.Vector3(0, 0.85, 0);
+  const dir = new THREE.Vector3();
+  renderer.setAnimationLoop(() => {
+    if (!visible) return;
+    explodeK += ((opts.explode ? 1 : 0) - explodeK) * 0.08;
+    for (const p of hero.userData.parts) {
+      dir.copy(p.userData.home).sub(center);
+      p.position.copy(p.userData.home).addScaledVector(dir, explodeK * 0.75);
+    }
+    controls.update();
+    renderer.render(scene, camera);
+  });
+} catch (err) {
+  const fb = viewer.querySelector('.fallback');
+  if (fb) fb.textContent = 'โหลด three.js จาก CDN ไม่สำเร็จ (อาจไม่มีอินเทอร์เน็ต) ลองดูโมเดลจริงได้ในเกมแทน';
+  console.warn(err);
+}
+</script>
+</body>
+</html>
